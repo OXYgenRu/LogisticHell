@@ -20,7 +20,7 @@ public:
 
 private:
     sf::RenderWindow *window;
-    EngineContext ctx;
+    EngineContext *ctx;
 };
 
 

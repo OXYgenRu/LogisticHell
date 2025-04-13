@@ -14,9 +14,9 @@ class Node {
 public:
     virtual ~Node() = default;
 
-    explicit Node(std::shared_ptr<ContainerNode> &parent);
+    explicit Node(std::shared_ptr<ContainerNode> parent);
 
-    virtual void get_tree(EngineContext ctx) = 0;
+    virtual void get_tree(EngineContext &ctx) = 0;
 
 //    void add_node(const std::shared_ptr<Node> &new_node);
 
@@ -24,7 +24,7 @@ public:
 
     virtual void update(float dt) = 0;
 
-    [[nodiscard]] virtual bool isLeaf() const = 0;
+    [[nodiscard]] virtual bool is_leaf() const = 0;
 
     std::vector<std::shared_ptr<Node>> children;
     std::weak_ptr<ContainerNode> parent;

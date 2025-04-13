@@ -3,11 +3,14 @@
 //
 
 #include "Application.h"
+#include "EngineContext.h"
 
 Application::Application(const sf::VideoMode &videoMode, const std::string &title) {
-    this->ctx.app = this;
+    this->ctx = new EngineContext();
+    this->ctx->app = this;
     this->video_mode = videoMode;
     this->title = title;
+    this->window = nullptr;
 }
 
 void Application::start() {

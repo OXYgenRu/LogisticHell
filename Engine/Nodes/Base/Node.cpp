@@ -3,7 +3,7 @@
 //
 #include "Node.h"
 
-Node::Node(std::shared_ptr<ContainerNode> &parent) {
+Node::Node(std::shared_ptr<ContainerNode> parent) {
     this->parent = parent;
 }
 
