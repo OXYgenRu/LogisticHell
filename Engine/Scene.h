@@ -13,6 +13,12 @@ public:
     Scene() : ContainerNode(nullptr) {
 
     }
+
+    static std::shared_ptr<Scene> create(int render_priority_layers);
+
+    int get_node_type() const override;
+
+    virtual void init_tree();
 };
 
 

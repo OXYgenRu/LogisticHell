@@ -9,17 +9,17 @@
 
 class ContentNode : public Node, public std::enable_shared_from_this<ContentNode> {
 public:
-    static std::shared_ptr<ContentNode> create(std::shared_ptr<ContainerNode> parent);
+    static std::shared_ptr<ContentNode> create(std::shared_ptr<ContainerNode> parent, int render_priority = 0);
 
-    explicit ContentNode(std::shared_ptr<ContainerNode> parent) : Node(parent) {}
+    explicit ContentNode(std::shared_ptr<ContainerNode> parent, int render_priority = 0) : Node(parent,
+                                                                                                render_priority) {}
 
-    void get_tree(EngineContext &ctx) override;
 
     void render() override;
 
     void update(float dt) override;
 
-    bool is_leaf() const override;
+    int get_node_type() const override;
 };
 
 

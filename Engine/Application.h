@@ -4,6 +4,8 @@
 
 #include "SFML/Graphics.hpp"
 #include "EngineContext.h"
+#include "Systems/SceneSystem.h"
+#include "Systems/Tree.h"
 
 #ifndef LOGISTICHELL_APPLICATION_H
 #define LOGISTICHELL_APPLICATION_H
@@ -18,6 +20,9 @@ public:
 
     void start();
 
+    SceneSystem *scene_system;
+
+    Tree *tree;
 private:
     sf::RenderWindow *window;
     EngineContext *ctx;
