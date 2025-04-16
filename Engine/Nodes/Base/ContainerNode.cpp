@@ -49,7 +49,7 @@ void ContainerNode::set_render_layers_count(int render_layers_count) {
 
 void ContainerNode::render(EngineContext &ctx) {}
 
-void ContainerNode::update(float dt) {}
+void ContainerNode::update(EngineContext &ctx) {}
 
 int ContainerNode::get_node_type() const {
     return 2;

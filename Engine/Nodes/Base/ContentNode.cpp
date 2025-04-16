@@ -17,7 +17,7 @@ std::shared_ptr<ContentNode> ContentNode::create(std::shared_ptr<ContainerNode> 
 
 void ContentNode::render(EngineContext &ctx) {}
 
-void ContentNode::update(float dt) {}
+void ContentNode::update(EngineContext &ctx) {}
 
 int ContentNode::get_node_type() const {
     return 1;

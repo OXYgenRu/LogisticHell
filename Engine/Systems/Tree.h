@@ -24,6 +24,8 @@ public:
 
     void render(EngineContext &ctx);
 
+    void update(EngineContext &ctx);
+
 };
 
 

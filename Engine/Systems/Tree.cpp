@@ -61,3 +61,27 @@ void Tree::render(EngineContext &ctx) {
         }
     }
 }
+
+void Tree::update(EngineContext &ctx) {
+    int update_delay = 0;
+    for (int i = 0; i < this->free_tree_index; i++) {
+        if (!this->flatten_tree[i]->get_update_flag() and !update_delay) {
+            if (this->flatten_tree[i]->get_node_type() == 2) {
+                auto node = std::static_pointer_cast<ContainerNode>(this->flatten_tree[i]);
+                update_delay += node->get_container_volume() + 1;
+            } else {
+                update_delay++;
+            }
+        } else if (update_delay) {
+            if (this->flatten_tree[i]->get_node_type() == 2) {
+                auto node = std::static_pointer_cast<ContainerNode>(this->flatten_tree[i]);
+                update_delay += node->get_container_volume();
+            }
+        }
+        if (update_delay) {
+            update_delay--;
+        } else {
+            this->flatten_tree[i]->update(ctx);
+        }
+    }
+}

@@ -23,7 +23,7 @@ void Application::start() {
 
     while (this->window->isOpen()) {
         float delta_time = clock.restart().asSeconds();
-
+        ctx.last_frame_delta_time = delta_time;
         this->tree->drop_tree();
         scene = this->scene_system->currentScene;
         this->tree->traverse(scene);
@@ -33,7 +33,7 @@ void Application::start() {
                 window->close();
             }
         }
-
+        this->tree->update(this->ctx);
         window->clear();
         this->tree->render(this->ctx);
         window->display();

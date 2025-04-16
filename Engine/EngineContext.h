@@ -10,6 +10,7 @@ class Application;
 class EngineContext {
 public:
     Application *app = nullptr;
+    float last_frame_delta_time = 0;
 };
 
 

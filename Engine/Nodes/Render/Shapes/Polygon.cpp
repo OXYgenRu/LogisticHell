@@ -25,7 +25,7 @@ void Polygon::render(EngineContext &ctx) {
     ctx.app->window->draw(this->polygon);
 }
 
-void Polygon::update(float dt) {
+void Polygon::update(EngineContext &ctx) {
 
 }
 

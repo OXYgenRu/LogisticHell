@@ -18,7 +18,7 @@ public:
 
     virtual void render(EngineContext &ctx) = 0;
 
-    virtual void update(float dt) = 0;
+    virtual void update(EngineContext &ctx) = 0;
 
 
     [[nodiscard]] virtual int get_node_type() const = 0;
