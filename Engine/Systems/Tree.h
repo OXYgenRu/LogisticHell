@@ -22,6 +22,8 @@ public:
 
     std::vector<std::shared_ptr<Node>> &get_tree();
 
+    void render(EngineContext &ctx);
+
 };
 
 

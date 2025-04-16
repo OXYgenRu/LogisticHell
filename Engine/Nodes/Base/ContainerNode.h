@@ -25,17 +25,28 @@ public:
 
     void add_node(std::shared_ptr<ContentNode> new_node);
 
-    void render() override;
+    std::vector<std::shared_ptr<ContainerNode>> &get_render_layer(int render_layer);
+
+    int get_container_volume();
+
+    std::vector<std::shared_ptr<ContentNode>> &get_content_layer();
+
+    int get_render_layers_count();
+
+    void set_render_layers_count(int render_layers_count);
+
+    void render(EngineContext &ctx) override;
 
     void update(float dt) override;
 
     int get_node_type() const override;
 
-    std::vector<std::vector<std::shared_ptr<ContainerNode>>> container_nodes;
-    std::vector<std::shared_ptr<ContentNode>> content_nodes;
 
     sf::View view_point;
-
+private:
+    int container_volume = 0;
+    std::vector<std::vector<std::shared_ptr<ContainerNode>>> container_nodes;
+    std::vector<std::shared_ptr<ContentNode>> content_nodes;
 };
 
 

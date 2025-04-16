@@ -6,8 +6,8 @@
 #include "EngineContext.h"
 
 Application::Application(const sf::VideoMode &videoMode, const std::string &title) {
-    this->ctx = new EngineContext();
-    this->ctx->app = this;
+    this->ctx = EngineContext();
+    this->ctx.app = this;
     this->video_mode = videoMode;
     this->title = title;
     this->window = nullptr;
@@ -20,6 +20,7 @@ void Application::start() {
     sf::Clock clock;
     sf::Event event{};
     std::shared_ptr<ContainerNode> scene = this->scene_system->currentScene;
+
     while (this->window->isOpen()) {
         float delta_time = clock.restart().asSeconds();
 
@@ -34,6 +35,7 @@ void Application::start() {
         }
 
         window->clear();
+        this->tree->render(this->ctx);
         window->display();
     }
 }

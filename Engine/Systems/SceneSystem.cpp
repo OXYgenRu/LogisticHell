@@ -12,6 +12,7 @@ void SceneSystem::set_new_scene(int id) {
     auto it = factories.find(id);
     if (it != factories.end()) {
         currentScene = it->second();
+        currentScene->init_tree();
         loaded_scenes[id] = currentScene;
     } else {
         std::cout << "Scene ID " << id << " not found\n";

@@ -20,8 +20,6 @@ public:
 
     void set_loaded_scene(int id);
 
-    void updateCurrentScene();
-
     std::shared_ptr<Scene> currentScene;
 
 private:

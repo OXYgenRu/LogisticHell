@@ -6,8 +6,7 @@
 
 std::shared_ptr<Scene> Scene::create(int render_priority_layers) {
     auto node = std::make_shared<Scene>();
-    node->container_nodes.resize(render_priority_layers + 1);
-    node->init_tree();
+    node->set_render_layers_count(render_priority_layers + 1);
     return node;
 }
 

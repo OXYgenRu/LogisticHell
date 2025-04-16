@@ -23,9 +23,10 @@ public:
     SceneSystem *scene_system;
 
     Tree *tree;
-private:
+
     sf::RenderWindow *window;
-    EngineContext *ctx;
+private:
+    EngineContext ctx;
 };
 
 

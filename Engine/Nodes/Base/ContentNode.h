@@ -15,7 +15,7 @@ public:
                                                                                                 render_priority) {}
 
 
-    void render() override;
+    void render(EngineContext &ctx) override;
 
     void update(float dt) override;
 
