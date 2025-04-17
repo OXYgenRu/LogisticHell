@@ -29,7 +29,7 @@ public:
 
     virtual void on_mouse_release(sf::Event &event);
 
-    virtual void on_mouse_motion(sf::Event &event);
+    virtual void on_mouse_moved(sf::Event &event);
 
     virtual void on_mouse_wheel_scrolled(sf::Event &event);
 

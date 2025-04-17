@@ -13,6 +13,7 @@ Application::Application(const sf::VideoMode &videoMode, const std::string &titl
     this->window = nullptr;
     this->tree = new Tree();
     this->scene_system = new SceneSystem();
+    this->control_system = new ControlSystem();
 }
 
 void Application::start() {
@@ -24,16 +25,19 @@ void Application::start() {
     while (this->window->isOpen()) {
         float delta_time = clock.restart().asSeconds();
         ctx.last_frame_delta_time = delta_time;
+
         this->tree->drop_tree();
-        scene = this->scene_system->currentScene;
+//        scene = this->scene_system->currentScene;
         this->tree->traverse(scene);
 
         while (window->pollEvent(event)) {
             if (event.type == sf::Event::Closed) {
                 window->close();
             }
+            this->control_system->collect_event(event);
         }
         this->tree->update(this->ctx);
+        this->control_system->update(this->ctx);
         window->clear();
         this->tree->render(this->ctx);
         window->display();

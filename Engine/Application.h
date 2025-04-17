@@ -6,6 +6,7 @@
 #include "EngineContext.h"
 #include "Systems/SceneSystem.h"
 #include "Systems/Tree.h"
+#include "Systems/ControlSystem.h"
 
 #ifndef LOGISTICHELL_APPLICATION_H
 #define LOGISTICHELL_APPLICATION_H
@@ -21,6 +22,8 @@ public:
     void start();
 
     SceneSystem *scene_system;
+
+    ControlSystem *control_system;
 
     Tree *tree;
 

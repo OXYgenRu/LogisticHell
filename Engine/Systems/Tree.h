@@ -13,6 +13,7 @@ class Tree {
 private:
     int free_tree_index = 0;
     std::vector<std::shared_ptr<Node>> flatten_tree;
+    std::vector<bool> active_render_indices, active_update_indices;
 public:
     void add_node(std::shared_ptr<Node> node);
 
@@ -26,6 +27,13 @@ public:
 
     void update(EngineContext &ctx);
 
+    std::vector<bool> &get_active_render_indices();
+
+    std::vector<bool> &get_active_update_indices();
+
+    [[nodiscard]] int get_free_tree_index() const;
+
+    std::vector<std::shared_ptr<Node>> &get_flatten_tree();
 };
 
 

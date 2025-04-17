@@ -10,10 +10,14 @@
 void Tree::add_node(std::shared_ptr<Node> node) {
     if (this->free_tree_index == this->flatten_tree.size()) {
         this->flatten_tree.push_back(node);
+        this->active_render_indices.push_back(true);
+        this->active_update_indices.push_back(true);
         this->free_tree_index++;
         return;
     }
     this->flatten_tree[free_tree_index] = node;
+    this->active_render_indices[free_tree_index] = true;
+    this->active_update_indices[free_tree_index] = true;
     this->free_tree_index++;
 }
 
@@ -56,7 +60,9 @@ void Tree::render(EngineContext &ctx) {
         }
         if (render_delay) {
             render_delay--;
+            this->active_render_indices[i] = false;
         } else {
+            this->active_render_indices[i] = true;
             this->flatten_tree[i]->render(ctx);
         }
     }
@@ -80,8 +86,26 @@ void Tree::update(EngineContext &ctx) {
         }
         if (update_delay) {
             update_delay--;
+            this->active_update_indices[i] = false;
         } else {
+            this->active_update_indices[i] = true;
             this->flatten_tree[i]->update(ctx);
         }
     }
+}
+
+std::vector<bool> &Tree::get_active_render_indices() {
+    return this->active_render_indices;
+}
+
+std::vector<bool> &Tree::get_active_update_indices() {
+    return this->active_update_indices;
+}
+
+int Tree::get_free_tree_index() const {
+    return this->free_tree_index;
+}
+
+std::vector<std::shared_ptr<Node>> &Tree::get_flatten_tree() {
+    return this->flatten_tree;
 }

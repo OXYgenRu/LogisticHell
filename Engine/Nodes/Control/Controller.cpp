@@ -31,6 +31,6 @@ void Controller::on_mouse_press(sf::Event &event) {}
 
 void Controller::on_mouse_release(sf::Event &event) {}
 
-void Controller::on_mouse_motion(sf::Event &event) {}
+void Controller::on_mouse_moved(sf::Event &event) {}
 
 void Controller::on_mouse_wheel_scrolled(sf::Event &event) {}
