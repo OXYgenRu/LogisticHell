@@ -16,7 +16,8 @@ public:
 
     static std::shared_ptr<PolygonControll> create(std::shared_ptr<ContainerNode> parent, int render_priority = 0);
 
-    void on_key_press(sf::Event &event);
+
+    void update(EngineContext &ctx);
 };
 
 

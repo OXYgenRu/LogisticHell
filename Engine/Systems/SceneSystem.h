@@ -5,6 +5,7 @@
 #include "memory"
 #include "functional"
 #include "../Scene.h"
+#include "../EngineContext.h"
 
 #ifndef LOGISTICHELL_SCENESYSTEM_H
 #define LOGISTICHELL_SCENESYSTEM_H
@@ -16,9 +17,9 @@ public:
 
     void registerScene(int id, SceneFactory factory);
 
-    void set_new_scene(int id);
+    void set_new_scene(int id, EngineContext &ctx);
 
-    void set_loaded_scene(int id);
+    void set_loaded_scene(int id, EngineContext &ctx);
 
     std::shared_ptr<Scene> currentScene;
 

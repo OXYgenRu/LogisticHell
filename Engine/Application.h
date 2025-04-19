@@ -21,6 +21,12 @@ public:
 
     void start();
 
+    void set_new_scene(int id);
+
+    void set_loaded_scene(int id);
+
+    std::shared_ptr<Scene> get_current_scene() const;
+
     SceneSystem *scene_system;
 
     ControlSystem *control_system;
@@ -28,6 +34,8 @@ public:
     Tree *tree;
 
     sf::RenderWindow *window;
+
+    sf::View standard_view;
 private:
     EngineContext ctx;
 };

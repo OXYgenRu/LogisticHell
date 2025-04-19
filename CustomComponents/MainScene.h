@@ -10,6 +10,7 @@
 #include "../Engine/Nodes/Render/Shapes/Polygon.h"
 #include "../Engine/Nodes/Base/ContainerNode.h"
 #include "PolygonControll.h"
+#include "../Engine/Nodes/Base/CameraNode.h"
 
 class MainScene : public Scene {
 public:
@@ -21,13 +22,15 @@ public:
 
     MainScene() : Scene() {}
 
-    void init_tree();
+    void init_tree(EngineContext &ctx);
 
-    void update(EngineContext &ctx) override {
-    }
+    void update(EngineContext &ctx) override;
 
     std::shared_ptr<PolygonControll> polygon_controller;
     std::shared_ptr<Polygon> polygon_1;
+    std::shared_ptr<CameraNode> camera_node;
+    std::shared_ptr<Polygon> ui_test_node;
+    std::shared_ptr<ContainerNode> ui_layer;
 };
 
 

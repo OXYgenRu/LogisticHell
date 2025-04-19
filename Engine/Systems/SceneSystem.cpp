@@ -8,18 +8,18 @@ void SceneSystem::registerScene(int id, SceneFactory factory) {
     factories[id] = factory;
 }
 
-void SceneSystem::set_new_scene(int id) {
+void SceneSystem::set_new_scene(int id, EngineContext &ctx) {
     auto it = factories.find(id);
     if (it != factories.end()) {
         currentScene = it->second();
-        currentScene->init_tree();
+        currentScene->init_tree(ctx);
         loaded_scenes[id] = currentScene;
     } else {
         std::cout << "Scene ID " << id << " not found\n";
     }
 }
 
-void SceneSystem::set_loaded_scene(int id) {
+void SceneSystem::set_loaded_scene(int id, EngineContext &ctx) {
     auto it = loaded_scenes.find(id);
     if (it != loaded_scenes.end()) {
         currentScene = loaded_scenes[id];

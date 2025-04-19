@@ -41,8 +41,6 @@ public:
 
     int get_node_type() const override;
 
-
-    sf::View view_point;
 private:
     int container_volume = 0;
     std::vector<std::vector<std::shared_ptr<ContainerNode>>> container_nodes;

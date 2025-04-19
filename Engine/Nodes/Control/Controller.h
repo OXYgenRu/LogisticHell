@@ -21,18 +21,17 @@ public:
 
     int get_node_type() const override;
 
-    virtual void on_key_press(sf::Event &event);
+    virtual void on_key_press(sf::Event &event, EngineContext &ctx);
 
-    virtual void on_key_release(sf::Event &event);
+    virtual void on_key_release(sf::Event &event, EngineContext &ctx);
 
-    virtual void on_mouse_press(sf::Event &event);
+    virtual void on_mouse_press(sf::Event &event, EngineContext &ctx);
 
-    virtual void on_mouse_release(sf::Event &event);
+    virtual void on_mouse_release(sf::Event &event, EngineContext &ctx);
 
-    virtual void on_mouse_moved(sf::Event &event);
+    virtual void on_mouse_moved(sf::Event &event, EngineContext &ctx);
 
-    virtual void on_mouse_wheel_scrolled(sf::Event &event);
-
+    virtual void on_mouse_wheel_scrolled(sf::Event &event, EngineContext &ctx);
 };
 
 

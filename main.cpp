@@ -12,13 +12,10 @@
 #include "CustomComponents/MainScene.h"
 
 
-
-
-
 int main() {
     Application app(sf::VideoMode(1600, 900), "LogisticHell");
     app.scene_system->registerScene(0, []() { return MainScene::create(10); });
-    app.scene_system->set_new_scene(0);
+    app.set_new_scene(0);
     app.start();
 
 

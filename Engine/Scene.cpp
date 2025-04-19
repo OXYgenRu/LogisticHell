@@ -14,6 +14,6 @@ int Scene::get_node_type() const {
     return 3;
 }
 
-void Scene::init_tree() {
+void Scene::init_tree(EngineContext &ctx) {
 
 }

@@ -14,6 +14,7 @@ private:
     int free_tree_index = 0;
     std::vector<std::shared_ptr<Node>> flatten_tree;
     std::vector<bool> active_render_indices, active_update_indices;
+    std::vector<std::pair<int, int>> brunch_tracker;
 public:
     void add_node(std::shared_ptr<Node> node);
 

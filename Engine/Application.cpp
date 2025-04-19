@@ -14,6 +14,8 @@ Application::Application(const sf::VideoMode &videoMode, const std::string &titl
     this->tree = new Tree();
     this->scene_system = new SceneSystem();
     this->control_system = new ControlSystem();
+    this->standard_view = sf::View(sf::Vector2f(float(videoMode.width) / 2, float(videoMode.height) / 2),
+                                   sf::Vector2f(float(videoMode.width), float(videoMode.height)));
 }
 
 void Application::start() {
@@ -42,4 +44,16 @@ void Application::start() {
         this->tree->render(this->ctx);
         window->display();
     }
+}
+
+void Application::set_new_scene(int id) {
+    this->scene_system->set_new_scene(id, this->ctx);
+}
+
+void Application::set_loaded_scene(int id) {
+    this->scene_system->set_loaded_scene(id, this->ctx);
+}
+
+std::shared_ptr<Scene> Application::get_current_scene() const {
+    return this->scene_system->currentScene;
 }

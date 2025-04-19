@@ -7,6 +7,7 @@
 #ifndef LOGISTICHELL_SCENE_H
 #define LOGISTICHELL_SCENE_H
 
+#include "EngineContext.h"
 
 class Scene : public ContainerNode {
 public:
@@ -18,7 +19,7 @@ public:
 
     int get_node_type() const override;
 
-    virtual void init_tree();
+    virtual void init_tree(EngineContext &ctx);
 };
 
 

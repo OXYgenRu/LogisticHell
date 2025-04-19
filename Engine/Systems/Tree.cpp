@@ -6,6 +6,7 @@
 #include "../Nodes/Base/ContainerNode.h"
 #include "../Nodes/Base/ContentNode.h"
 #include "iostream"
+#include "../Nodes/Base/CameraNode.h"
 
 void Tree::add_node(std::shared_ptr<Node> node) {
     if (this->free_tree_index == this->flatten_tree.size()) {
@@ -58,13 +59,32 @@ void Tree::render(EngineContext &ctx) {
                 render_delay += node->get_container_volume();
             }
         }
+        if ((this->flatten_tree[i]->get_node_type() == 2 or this->flatten_tree[i]->get_node_type() == 3 or
+             this->flatten_tree[i]->get_node_type() == 6) and !this->brunch_tracker.empty()) {
+            auto node = std::static_pointer_cast<ContainerNode>(this->flatten_tree[i]);
+            this->brunch_tracker.back().second += node->get_container_volume();
+        }
+
+        if (!this->brunch_tracker.empty()) {
+            this->brunch_tracker.back().second--;
+            if (this->brunch_tracker.back().second == 0) {
+                auto node = std::static_pointer_cast<CameraNode>(this->flatten_tree[brunch_tracker.back().first]);
+                node->rollback_view_point(ctx);
+                this->brunch_tracker.pop_back();
+            }
+        }
         if (render_delay) {
             render_delay--;
             this->active_render_indices[i] = false;
         } else {
             this->active_render_indices[i] = true;
             this->flatten_tree[i]->render(ctx);
+            if (this->flatten_tree[i]->get_node_type() == 6) {
+                auto node = std::static_pointer_cast<CameraNode>(this->flatten_tree[i]);
+                this->brunch_tracker.emplace_back(i, node->get_container_volume());
+            }
         }
+
     }
 }
 
