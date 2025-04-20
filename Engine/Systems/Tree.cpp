@@ -47,14 +47,14 @@ void Tree::render(EngineContext &ctx) {
     int render_delay = 0;
     for (int i = 0; i < this->free_tree_index; i++) {
         if (!this->flatten_tree[i]->get_render_flag() and !render_delay) {
-            if (this->flatten_tree[i]->get_node_type() == 2) {
+            if (this->flatten_tree[i]->get_node_type() == 2 or this->flatten_tree[i]->get_node_type() == 6) {
                 auto node = std::static_pointer_cast<ContainerNode>(this->flatten_tree[i]);
                 render_delay += node->get_container_volume() + 1;
             } else {
                 render_delay++;
             }
         } else if (render_delay) {
-            if (this->flatten_tree[i]->get_node_type() == 2) {
+            if (this->flatten_tree[i]->get_node_type() == 2 or this->flatten_tree[i]->get_node_type() == 6) {
                 auto node = std::static_pointer_cast<ContainerNode>(this->flatten_tree[i]);
                 render_delay += node->get_container_volume();
             }
@@ -64,15 +64,6 @@ void Tree::render(EngineContext &ctx) {
             auto node = std::static_pointer_cast<ContainerNode>(this->flatten_tree[i]);
             this->brunch_tracker.back().second += node->get_container_volume();
         }
-
-        if (!this->brunch_tracker.empty()) {
-            this->brunch_tracker.back().second--;
-            if (this->brunch_tracker.back().second == 0) {
-                auto node = std::static_pointer_cast<CameraNode>(this->flatten_tree[brunch_tracker.back().first]);
-                node->rollback_view_point(ctx);
-                this->brunch_tracker.pop_back();
-            }
-        }
         if (render_delay) {
             render_delay--;
             this->active_render_indices[i] = false;
@@ -81,10 +72,17 @@ void Tree::render(EngineContext &ctx) {
             this->flatten_tree[i]->render(ctx);
             if (this->flatten_tree[i]->get_node_type() == 6) {
                 auto node = std::static_pointer_cast<CameraNode>(this->flatten_tree[i]);
-                this->brunch_tracker.emplace_back(i, node->get_container_volume());
+                this->brunch_tracker.emplace_back(i, node->get_container_volume() + 1);
             }
         }
-
+        if (!this->brunch_tracker.empty()) {
+            this->brunch_tracker.back().second--;
+            if (this->brunch_tracker.back().second == 0) {
+                auto node = std::static_pointer_cast<CameraNode>(this->flatten_tree[brunch_tracker.back().first]);
+                node->rollback_view_point(ctx);
+                this->brunch_tracker.pop_back();
+            }
+        }
     }
 }
 
@@ -92,14 +90,14 @@ void Tree::update(EngineContext &ctx) {
     int update_delay = 0;
     for (int i = 0; i < this->free_tree_index; i++) {
         if (!this->flatten_tree[i]->get_update_flag() and !update_delay) {
-            if (this->flatten_tree[i]->get_node_type() == 2) {
+            if (this->flatten_tree[i]->get_node_type() == 2 or this->flatten_tree[i]->get_node_type() == 6) {
                 auto node = std::static_pointer_cast<ContainerNode>(this->flatten_tree[i]);
                 update_delay += node->get_container_volume() + 1;
             } else {
                 update_delay++;
             }
         } else if (update_delay) {
-            if (this->flatten_tree[i]->get_node_type() == 2) {
+            if (this->flatten_tree[i]->get_node_type() == 2 or this->flatten_tree[i]->get_node_type() == 6) {
                 auto node = std::static_pointer_cast<ContainerNode>(this->flatten_tree[i]);
                 update_delay += node->get_container_volume();
             }
@@ -128,4 +126,17 @@ int Tree::get_free_tree_index() const {
 
 std::vector<std::shared_ptr<Node>> &Tree::get_flatten_tree() {
     return this->flatten_tree;
+}
+
+void Tree::print_tree(std::shared_ptr<ContainerNode> &node, const std::string &indent) {
+    std::cout << indent << Node::get_node_type_str(node) << '\n';
+    for (int i = 0; i < node->get_content_layer().size(); i++) {
+        std::cout << indent << "-" << Node::get_node_type_str(node->get_content_layer()[i]) << '\n';
+    }
+    for (int i = 0; i < node->get_render_layers_count(); i++) {
+        for (auto &child: node->get_render_layer(i)) {
+            this->print_tree(child, indent + "-");
+        }
+    }
+
 }

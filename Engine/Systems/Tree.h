@@ -35,6 +35,9 @@ public:
     [[nodiscard]] int get_free_tree_index() const;
 
     std::vector<std::shared_ptr<Node>> &get_flatten_tree();
+
+    void print_tree(std::shared_ptr<ContainerNode> &node, const std::string& indent = "");
+
 };
 
 

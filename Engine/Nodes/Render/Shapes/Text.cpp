@@ -1,0 +1,25 @@
+//
+// Created by EgorRychkov on 20.04.2025.
+//
+
+#include "Text.h"
+#include "../../Base/ContainerNode.h"
+#include "../../../Application.h"
+
+std::shared_ptr<Text> Text::create(std::shared_ptr<ContainerNode> parent, int render_priority) {
+    auto node = std::make_shared<Text>(parent, render_priority);
+    parent->add_node(node);
+    return node;
+}
+
+void Text::render(EngineContext &ctx) {
+    ctx.app->window->draw(this->text);
+}
+
+void Text::update(EngineContext &ctx) {
+
+}
+
+int Text::get_node_type() const {
+    return 8;
+}

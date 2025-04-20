@@ -33,6 +33,9 @@ public:
 
     std::weak_ptr<ContainerNode> parent;
     int render_priority = 0;
+
+    static std::string get_node_type_str(std::shared_ptr<Node> node);
+
 private:
     bool render_enabled = true;
     bool update_enabled = true;

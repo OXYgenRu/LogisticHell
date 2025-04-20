@@ -11,6 +11,7 @@
 #include "../Engine/Nodes/Base/ContainerNode.h"
 #include "PolygonControll.h"
 #include "../Engine/Nodes/Base/CameraNode.h"
+#include "HexTest.h"
 
 class MainScene : public Scene {
 public:
@@ -26,8 +27,8 @@ public:
 
     void update(EngineContext &ctx) override;
 
-    std::shared_ptr<PolygonControll> polygon_controller;
-    std::shared_ptr<Polygon> polygon_1;
+
+    std::shared_ptr<HexTest> hex;
     std::shared_ptr<CameraNode> camera_node;
     std::shared_ptr<Polygon> ui_test_node;
     std::shared_ptr<ContainerNode> ui_layer;

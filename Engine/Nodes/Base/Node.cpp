@@ -27,3 +27,31 @@ bool Node::get_render_flag() {
 bool Node::get_update_flag() {
     return this->update_enabled;
 }
+
+std::string Node::get_node_type_str(std::shared_ptr<Node> node) {
+    if (node->get_node_type() == 1) {
+        return "ContentNode";
+    }
+    if (node->get_node_type() == 2) {
+        return "ContainerNode";
+    }
+    if (node->get_node_type() == 3) {
+        return "Scene";
+    }
+    if (node->get_node_type() == 4) {
+        return "Polygon";
+    }
+    if (node->get_node_type() == 5) {
+        return "Controller";
+    }
+    if (node->get_node_type() == 6) {
+        return "Camera";
+    }
+    if (node->get_node_type() == 7) {
+        return "CameraController";
+    }
+    if (node->get_node_type() == 8) {
+        return "Text";
+    }
+    return "Not found";
+}

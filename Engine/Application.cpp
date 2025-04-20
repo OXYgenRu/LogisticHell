@@ -48,6 +48,8 @@ void Application::start() {
 
 void Application::set_new_scene(int id) {
     this->scene_system->set_new_scene(id, this->ctx);
+    auto to = std::static_pointer_cast<ContainerNode>(this->scene_system->currentScene);
+    this->tree->print_tree(to);
 }
 
 void Application::set_loaded_scene(int id) {
