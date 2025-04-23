@@ -18,3 +18,7 @@ void PolygonControll::update(EngineContext &ctx) {
     auto to = ctx.app->get_current_scene();
 
 }
+
+void PolygonControll::on_mouse_press(sf::Event &event, EngineContext &ctx) {
+
+}

@@ -7,6 +7,7 @@
 #include "Systems/SceneSystem.h"
 #include "Systems/Tree.h"
 #include "Systems/ControlSystem.h"
+#include "Systems/UICollidersSystem.h"
 
 #ifndef LOGISTICHELL_APPLICATION_H
 #define LOGISTICHELL_APPLICATION_H
@@ -30,6 +31,8 @@ public:
     SceneSystem *scene_system;
 
     ControlSystem *control_system;
+
+    UICollidersSystem *ui_colliders_system;
 
     Tree *tree;
 

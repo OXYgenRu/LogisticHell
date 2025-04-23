@@ -39,7 +39,6 @@ void ControlSystem::update(EngineContext &ctx) {
     while (!this->control_events.empty()) {
         this->control_events.pop_back();
     }
-    ctx.app->tree->get_active_update_indices();
 }
 
 void ControlSystem::collect_event(sf::Event &event) {

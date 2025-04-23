@@ -32,6 +32,7 @@ public:
     std::shared_ptr<CameraNode> camera_node;
     std::shared_ptr<Polygon> ui_test_node;
     std::shared_ptr<ContainerNode> ui_layer;
+    std::shared_ptr<PolygonControll> polygon_controller;
 };
 
 

@@ -4,6 +4,7 @@
 
 #include "Application.h"
 #include "EngineContext.h"
+#include "Systems/UICollidersSystem.h"
 
 Application::Application(const sf::VideoMode &videoMode, const std::string &title) {
     this->ctx = EngineContext();
@@ -14,6 +15,7 @@ Application::Application(const sf::VideoMode &videoMode, const std::string &titl
     this->tree = new Tree();
     this->scene_system = new SceneSystem();
     this->control_system = new ControlSystem();
+    this->ui_colliders_system = new UICollidersSystem();
     this->standard_view = sf::View(sf::Vector2f(float(videoMode.width) / 2, float(videoMode.height) / 2),
                                    sf::Vector2f(float(videoMode.width), float(videoMode.height)));
 }
@@ -30,16 +32,21 @@ void Application::start() {
 
         this->tree->drop_tree();
 //        scene = this->scene_system->currentScene;
-        this->tree->traverse(scene);
+        this->tree->traverse(scene, ctx);
+        this->tree->update_view_tracker(ctx);
 
         while (window->pollEvent(event)) {
             if (event.type == sf::Event::Closed) {
                 window->close();
             }
             this->control_system->collect_event(event);
+            this->ui_colliders_system->collect_event(event);
         }
-        this->tree->update(this->ctx);
         this->control_system->update(this->ctx);
+        this->ui_colliders_system->update(this->ctx);
+
+        this->tree->update(this->ctx);
+
         window->clear();
         this->tree->render(this->ctx);
         window->display();

@@ -12,10 +12,7 @@ CameraNode::create(std::shared_ptr<ContainerNode> parent, EngineContext &ctx, in
     auto node = std::make_shared<CameraNode>(parent, render_priority);
     node->set_render_layers_count(render_priority_layers + 1);
     parent->add_node(node);
-    node->view_point = sf::View(
-            sf::FloatRect(0, 0, float(ctx.app->video_mode.width), float(ctx.app->video_mode.height)));
-    node->view_point.setCenter(0, 0);
-    node->view_point.zoom(1);
+    node->view_point = ctx.app->standard_view;
     node->zoom = 1;
     node->original_size = sf::Vector2f(float(ctx.app->video_mode.width), float(ctx.app->video_mode.height));
     node->camera_controller = CameraController::create(node, node, 0);

@@ -53,5 +53,8 @@ std::string Node::get_node_type_str(std::shared_ptr<Node> node) {
     if (node->get_node_type() == 8) {
         return "Text";
     }
+    if (node->get_node_type() == 9) {
+        return "UICollider";
+    }
     return "Not found";
 }

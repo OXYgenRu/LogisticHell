@@ -18,6 +18,8 @@ public:
 
 
     void update(EngineContext &ctx);
+
+    void on_mouse_press(sf::Event &event, EngineContext &ctx);
 };
 
 

@@ -10,11 +10,11 @@
 #include "Engine/Nodes/Render/Shapes/Polygon.h"
 #include "Engine/Nodes/Control/Controller.h"
 #include "CustomComponents/MainScene.h"
-
+#include "Game/Tests/UITest/UIScene.h"
 
 int main() {
     Application app(sf::VideoMode(1600, 900), "LogisticHell");
-    app.scene_system->registerScene(0, []() { return MainScene::create(10); });
+    app.scene_system->registerScene(0, []() { return UIScene::create(10); });
     app.set_new_scene(0);
     app.start();
 

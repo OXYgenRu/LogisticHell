@@ -14,6 +14,8 @@ void MainScene::init_tree(EngineContext &ctx) {
     camera_node = CameraNode::create(scene, ctx, 0, 10);
 //    camera_node->set_render_flag(false);
     hex = HexTest::create(camera_node);
+
+    polygon_controller = PolygonControll::create(camera_node);
 //    ui_test_node = Polygon::create(camera_node, 1);
 //    std::vector<sf::Vector2<float>> c = {{0,    0},
 //                                         {1000, 0},
