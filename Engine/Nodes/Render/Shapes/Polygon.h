@@ -17,6 +17,8 @@ public:
 
     void set_polygon(std::vector<sf::Vector2<float>> &new_polygon);
 
+    void set_polygon();
+
     void render(EngineContext &ctx) override;
 
     void update(EngineContext &ctx) override;

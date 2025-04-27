@@ -12,5 +12,5 @@ std::shared_ptr<TestCollider> TestCollider::create(std::shared_ptr<ContainerNode
 }
 
 void TestCollider::on_mouse_press(sf::Event &event, EngineContext &ctx) {
-    std::cout << "adfsadf" << '\n';
+    std::cout << "Click!" << '\n';
 }

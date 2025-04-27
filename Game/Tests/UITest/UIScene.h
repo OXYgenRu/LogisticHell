@@ -21,7 +21,7 @@ public:
 
     UIScene() : Scene() {}
 
-    void init_tree(EngineContext &ctx);
+    void init_tree(EngineContext &ctx) override;
 
     void update(EngineContext &ctx) override;
 

@@ -15,7 +15,7 @@ void SceneSystem::set_new_scene(int id, EngineContext &ctx) {
         currentScene->init_tree(ctx);
         loaded_scenes[id] = currentScene;
     } else {
-        std::cout << "Scene ID " << id << " not found\n";
+        std::cout << "TestScene ID " << id << " not found\n";
     }
 }
 
@@ -24,7 +24,7 @@ void SceneSystem::set_loaded_scene(int id, EngineContext &ctx) {
     if (it != loaded_scenes.end()) {
         currentScene = loaded_scenes[id];
     } else {
-        std::cout << "Scene ID " << id << " not found\n";
+        std::cout << "TestScene ID " << id << " not found\n";
     }
 }
 

@@ -25,7 +25,7 @@ void Application::start() {
     sf::Clock clock;
     sf::Event event{};
     std::shared_ptr<ContainerNode> scene = this->scene_system->currentScene;
-
+    this->window->setFramerateLimit(60);
     while (this->window->isOpen()) {
         float delta_time = clock.restart().asSeconds();
         ctx.last_frame_delta_time = delta_time;

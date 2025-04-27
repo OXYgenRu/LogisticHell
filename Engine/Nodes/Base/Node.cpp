@@ -36,7 +36,7 @@ std::string Node::get_node_type_str(std::shared_ptr<Node> node) {
         return "ContainerNode";
     }
     if (node->get_node_type() == 3) {
-        return "Scene";
+        return "TestScene";
     }
     if (node->get_node_type() == 4) {
         return "Polygon";
@@ -55,6 +55,9 @@ std::string Node::get_node_type_str(std::shared_ptr<Node> node) {
     }
     if (node->get_node_type() == 9) {
         return "UICollider";
+    }
+    if (node->get_node_type() == 10) {
+        return "Sprite";
     }
     return "Not found";
 }
