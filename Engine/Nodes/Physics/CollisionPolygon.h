@@ -20,7 +20,8 @@ public:
 
     b2ShapeDef shape_def;
     b2Polygon polygon;
-    b2BodyId rigid_body;
+    b2BodyId rigid_body_id;
+    std::weak_ptr<RigidBody> rigid_body;
 };
 
 

@@ -19,6 +19,9 @@ public:
     explicit RigidBody(std::shared_ptr<ContainerNode> parent, int render_priority = 0)
             : ContainerNode(parent, render_priority) {}
 
+    static void setup(std::shared_ptr<RigidBody> node, std::shared_ptr<World> world, b2BodyDef &body_def,
+                      int render_priority_layers);
+
     sf::Vector2f sf_get_world_point(b2Vec2 &local_point, EngineContext &ctx);
 
     b2Vec2 b2_get_world_point(b2Vec2 &local_point, EngineContext &ctx);

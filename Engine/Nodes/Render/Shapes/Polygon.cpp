@@ -23,10 +23,10 @@ void Polygon::set_polygon(std::vector<sf::Vector2<float>> &new_polygon) {
 
 void Polygon::set_polygon() {
     this->polygon.setPointCount(4);
-    std::vector<sf::Vector2<float>> new_polygon = {{100, 100},
-                                                   {200, 100},
-                                                   {200, 200},
-                                                   {100, 200}};
+    std::vector<sf::Vector2<float>> new_polygon = {{0, 100},
+                                                   {1600, 100},
+                                                   {1600, 200},
+                                                   {0, 200}};
     this->polygon.setFillColor(sf::Color::Green);
     for (int i = 0; i < this->polygon.getPointCount(); i++) {
         this->polygon.setPoint(i, new_polygon[i]);

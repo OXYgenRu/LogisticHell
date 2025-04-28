@@ -12,7 +12,8 @@ CollisionPolygon::create(std::shared_ptr<ContainerNode> parent, std::shared_ptr<
     auto node = std::make_shared<CollisionPolygon>(parent, render_priority);
     node->shape_def = shape_def;
     node->polygon = polygon;
-    node->rigid_body = rigid_body->body;
+    node->rigid_body_id = rigid_body->body;
+    node->rigid_body = rigid_body;
     b2CreatePolygonShape(rigid_body->body, &node->shape_def, &node->polygon);
     parent->add_node(node);
     return node;

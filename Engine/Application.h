@@ -18,7 +18,7 @@ public:
     sf::VideoMode video_mode;
     std::string title;
 
-    Application(const sf::VideoMode &videoMode, const std::string &title);
+    Application(const sf::VideoMode &videoMode, const std::string &title, int frame_limit);
 
     void start();
 
@@ -39,6 +39,8 @@ public:
     sf::RenderWindow *window;
 
     sf::View standard_view;
+
+    int frame_limit;
 private:
     EngineContext ctx;
 };

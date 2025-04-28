@@ -16,8 +16,8 @@ public:
                                                                                                       render_priority) {}
 
     void render(EngineContext &ctx) override;
-
     void update(EngineContext &ctx) override;
+
 
     int get_node_type() const override;
 

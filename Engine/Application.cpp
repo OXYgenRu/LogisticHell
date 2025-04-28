@@ -6,7 +6,7 @@
 #include "EngineContext.h"
 #include "Systems/UICollidersSystem.h"
 
-Application::Application(const sf::VideoMode &videoMode, const std::string &title) {
+Application::Application(const sf::VideoMode &videoMode, const std::string &title, int frame_limit) {
     this->ctx = EngineContext();
     this->ctx.app = this;
     this->video_mode = videoMode;
@@ -18,6 +18,7 @@ Application::Application(const sf::VideoMode &videoMode, const std::string &titl
     this->ui_colliders_system = new UICollidersSystem();
     this->standard_view = sf::View(sf::Vector2f(float(videoMode.width) / 2, float(videoMode.height) / 2),
                                    sf::Vector2f(float(videoMode.width), float(videoMode.height)));
+    this->frame_limit = frame_limit;
 }
 
 void Application::start() {
@@ -25,7 +26,7 @@ void Application::start() {
     sf::Clock clock;
     sf::Event event{};
     std::shared_ptr<ContainerNode> scene = this->scene_system->currentScene;
-    this->window->setFramerateLimit(60);
+    this->window->setFramerateLimit(this->frame_limit);
     while (this->window->isOpen()) {
         float delta_time = clock.restart().asSeconds();
         ctx.last_frame_delta_time = delta_time;
@@ -47,7 +48,7 @@ void Application::start() {
 
         this->tree->update(this->ctx);
 
-        window->clear();
+        window->clear(sf::Color(1, 2, 74));
         this->tree->render(this->ctx);
         window->display();
     }

@@ -8,6 +8,7 @@
 #include "../../../Engine/Nodes/Base/ContainerNode.h"
 #include "../../../Engine/Nodes/Render/Shapes/Polygon.h"
 #include "../../../Engine/Nodes/Physics/CollisionPolygon.h"
+#include "../../../Engine/Nodes/Render/Shapes/TexturedQuad.h"
 
 class TestBox : public ContainerNode {
 public:
@@ -22,9 +23,11 @@ public:
 
     void update(EngineContext &ctx) override;
 
+    b2Vec2 vertices[4];
     std::vector<sf::Vector2f> step;
     std::shared_ptr<Polygon> render_polygon;
     std::shared_ptr<Polygon> center_polygon;
+    std::shared_ptr<TexturedQuad> textured_quad;
     std::shared_ptr<CollisionPolygon> collision;
 };
 

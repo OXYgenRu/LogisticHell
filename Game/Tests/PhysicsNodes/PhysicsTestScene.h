@@ -9,6 +9,7 @@
 #include "../../../Engine/Nodes/Base/CameraNode.h"
 #include "../../../Engine/Nodes/Physics/World.h"
 #include "../../../Engine/Nodes/Physics/RigidBody.h"
+#include "TestController.h"
 #include "TestBox.h"
 
 class PhysicsTestScene : public Scene {
@@ -32,6 +33,8 @@ public:
     std::shared_ptr<RigidBody> body, body2;
 
     std::shared_ptr<TestBox> box1, box2, box3;
+
+    std::shared_ptr<TestController> controller;
 };
 
 
