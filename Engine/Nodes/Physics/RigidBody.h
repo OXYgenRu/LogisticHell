@@ -22,9 +22,11 @@ public:
     static void setup(std::shared_ptr<RigidBody> node, std::shared_ptr<World> world, b2BodyDef &body_def,
                       int render_priority_layers);
 
-    sf::Vector2f sf_get_world_point(b2Vec2 &local_point, EngineContext &ctx);
+    sf::Vector2f sf_get_world_point(b2Vec2 local_point, EngineContext &ctx);
 
-    b2Vec2 b2_get_world_point(b2Vec2 &local_point, EngineContext &ctx);
+    b2Vec2 b2_get_local_point(sf::Vector2f &world_point, EngineContext &ctx);
+
+    b2Vec2 b2_get_world_point(b2Vec2 local_point, EngineContext &ctx);
 
     b2BodyId body;
     float pixel_per_meter;

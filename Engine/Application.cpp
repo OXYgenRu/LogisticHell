@@ -48,7 +48,7 @@ void Application::start() {
 
         this->tree->update(this->ctx);
 
-        window->clear(sf::Color(1, 2, 74));
+        window->clear(this->background_color);
         this->tree->render(this->ctx);
         window->display();
     }
@@ -66,4 +66,8 @@ void Application::set_loaded_scene(int id) {
 
 std::shared_ptr<Scene> Application::get_current_scene() const {
     return this->scene_system->currentScene;
+}
+
+void Application::set_background_color(sf::Color new_color) {
+    this->background_color = new_color;
 }

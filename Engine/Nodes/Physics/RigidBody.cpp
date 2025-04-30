@@ -24,11 +24,19 @@ void RigidBody::setup(std::shared_ptr<RigidBody> node, std::shared_ptr<World> wo
     node->pixel_per_meter = world->pixel_per_meter;
 }
 
-sf::Vector2f RigidBody::sf_get_world_point(b2Vec2 &local_point, EngineContext &ctx) {
+sf::Vector2f RigidBody::sf_get_world_point(b2Vec2 local_point, EngineContext &ctx) {
     b2Vec2 worldVertex = b2Body_GetWorldPoint(this->body, local_point);
     return {worldVertex.x * pixel_per_meter, -worldVertex.y * pixel_per_meter + ctx.app->window->getSize().y};
 }
 
-b2Vec2 RigidBody::b2_get_world_point(b2Vec2 &local_point, EngineContext &ctx) {
+b2Vec2 RigidBody::b2_get_world_point(b2Vec2 local_point, EngineContext &ctx) {
     return b2Body_GetWorldPoint(this->body, local_point);
+}
+
+b2Vec2 RigidBody::b2_get_local_point(sf::Vector2f &world_point, EngineContext &ctx) {
+    b2Vec2 world_vertex = b2Vec2(
+            {world_point.x / pixel_per_meter,
+             (ctx.app->window->getSize().y - world_point.y) / pixel_per_meter});
+
+    return b2Body_GetLocalPoint(this->body, world_vertex);
 }

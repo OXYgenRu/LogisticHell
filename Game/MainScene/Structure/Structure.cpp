@@ -19,3 +19,10 @@ Structure::create(std::shared_ptr<ContainerNode> parent, std::shared_ptr<World> 
 void Structure::setup(std::shared_ptr<Structure> node, sf::Vector2i grid_size, float cell_size) {
     node->grid = Grid::create(node, grid_size, cell_size, node);
 }
+
+void Structure::set_block(sf::Vector2i grid_position) {
+    if (!this->grid->valid_block_attachment(grid_position)) {
+        return;
+    }
+    this->grid->set_block(grid_position);
+}

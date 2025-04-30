@@ -24,6 +24,8 @@ public:
     static void
     setup(std::shared_ptr<Structure> node, sf::Vector2i grid_size, float cell_size);
 
+    void set_block(sf::Vector2i grid_position);
+
     std::shared_ptr<Grid> grid;
 };
 

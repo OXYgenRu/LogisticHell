@@ -4,6 +4,7 @@
 
 #include "GridViewer.h"
 #include "../../../../Engine/Nodes/Base/ContainerNode.h"
+#include "../Structure.h"
 
 std::shared_ptr<GridViewer>
 GridViewer::create(std::shared_ptr<ContainerNode> parent, std::shared_ptr<Grid> grid, b2Vec2 grid_position,
@@ -18,7 +19,7 @@ GridViewer::create(std::shared_ptr<ContainerNode> parent, std::shared_ptr<Grid> 
 
 void
 GridViewer::setup(std::shared_ptr<GridViewer> node, std::shared_ptr<Grid> grid, b2Vec2 grid_position, float cell_size) {
-    node->texture.loadFromFile("EmptyGridBlock.png");
+    node->texture.loadFromFile("blocks/EmptyGridBlockBlue.png");
     node->quad[0].texCoords = sf::Vector2f(0.f, 0.f);
     node->quad[1].texCoords = sf::Vector2f(0.f, node->texture.getSize().y);
     node->quad[2].texCoords = sf::Vector2f(node->texture.getSize().x,

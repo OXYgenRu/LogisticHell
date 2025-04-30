@@ -4,9 +4,10 @@
 
 #include "BaseBlock.h"
 #include "../../../../Engine/Nodes/Base/ContainerNode.h"
+#include "../Structure.h"
 
 std::shared_ptr<BaseBlock> BaseBlock::create(std::shared_ptr<ContainerNode> parent,
-                                             std::shared_ptr<RigidBody> rigid_body, b2Vec2 grid_position,
+                                             std::shared_ptr<Structure> rigid_body, b2Vec2 grid_position,
                                              float cell_size,
                                              int render_priority,
                                              int render_priority_layers) {
@@ -23,7 +24,7 @@ void BaseBlock::setup(std::shared_ptr<BaseBlock> node, b2Vec2 grid_position, std
     node->grid_position = grid_position;
 
     node->textured_quad = TexturedQuad::create(node);
-    node->textured_quad->texture.loadFromFile("TestConstructionBlock.png");
+    node->textured_quad->texture.loadFromFile("blocks/TestConstructionBlock.png");
 
     node->textured_quad->quad[0].texCoords = sf::Vector2f(0.f, 0.f);
     node->textured_quad->quad[1].texCoords = sf::Vector2f(0.f, node->textured_quad->texture.getSize().y);

@@ -29,6 +29,7 @@ void UICollidersSystem::update(EngineContext &ctx) {
                 if (!is_point_in_polygon(worldPos, node->vertices)) {
                     continue;
                 }
+                ctx.app->window->setView(ctx.app->tree->get_view_tracker()[i]);
                 if (event.type == sf::Event::MouseButtonReleased) {
                     node->on_mouse_release(event, ctx);
                     was_used = true;

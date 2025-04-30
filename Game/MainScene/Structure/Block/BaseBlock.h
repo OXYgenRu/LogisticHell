@@ -10,10 +10,12 @@
 #include "../../../../Engine/Nodes/Physics/CollisionPolygon.h"
 #include "../../../../Engine/Nodes/Render/Shapes/TexturedQuad.h"
 
+class Structure;
+
 class BaseBlock : public ContainerNode {
 public:
     static std::shared_ptr<BaseBlock>
-    create(std::shared_ptr<ContainerNode> parent, std::shared_ptr<RigidBody> rigid_body, b2Vec2 grid_position,
+    create(std::shared_ptr<ContainerNode> parent, std::shared_ptr<Structure> rigid_body, b2Vec2 grid_position,
            float cell_size,
            int render_priority = 0,
            int render_priority_layers = 10);

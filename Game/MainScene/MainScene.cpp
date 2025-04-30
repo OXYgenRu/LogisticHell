@@ -2,10 +2,13 @@
 // Created by EgorRychkov on 27.04.2025.
 //
 
+#include <iostream>
 #include "MainScene.h"
+#include "../../Engine/Application.h"
 
 void MainScene::init_tree(EngineContext &ctx) {
     auto scene = shared_from_this();
+    ctx.app->set_background_color(sf::Color(1, 2, 74));
     camera = CameraNode::create(scene, ctx);
     world = World::create(camera, b2Vec2({0, 0}), 60);
 
@@ -20,8 +23,8 @@ void MainScene::init_tree(EngineContext &ctx) {
     b2Body_SetLinearDamping(structure->body, 1);
 
     for (int i = 0; i < 5; i++) {
-        for (int j = 0; j < 5; j++) {
-            BaseBlock::create(structure->grid, structure, b2Vec2({float(i), float(j)}), 0.2, 1);
+        for (int j = 0; j < 2; j++) {
+            structure->set_block(sf::Vector2i({i, j}));
         }
     }
 
@@ -33,9 +36,9 @@ void MainScene::init_tree(EngineContext &ctx) {
     b2Body_SetLinearDamping(static_structure->body, 1);
 
 
-    for (int i = 0; i < 5; i++) {
-        for (int j = 0; j < 5; j++) {
-            BaseBlock::create(structure->grid, static_structure, b2Vec2({float(i), float(j)}), 0.2, 1);
+    for (int i = 0; i < 2; i++) {
+        for (int j = 0; j < 2; j++) {
+            static_structure->set_block(sf::Vector2i({i, j}));
         }
     }
 
@@ -46,8 +49,6 @@ void MainScene::init_tree(EngineContext &ctx) {
 
 void MainScene::update(EngineContext &ctx) {
 //    std::cout << 1 / ctx.last_frame_delta_time << '\n';
-//    b2Vec2 c = b2Body_GetLocalCenterOfMass(body->body);
-//    b2Vec2 point = this->body->b2_get_world_point(c,ctx);
 
     b2World_Step(world->world_id, ctx.last_frame_delta_time, 1);
 }

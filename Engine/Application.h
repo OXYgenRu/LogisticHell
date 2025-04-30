@@ -26,6 +26,8 @@ public:
 
     void set_loaded_scene(int id);
 
+    void set_background_color(sf::Color new_color);
+
     std::shared_ptr<Scene> get_current_scene() const;
 
     SceneSystem *scene_system;
@@ -41,6 +43,8 @@ public:
     sf::View standard_view;
 
     int frame_limit;
+
+    sf::Color background_color = sf::Color::Black;
 private:
     EngineContext ctx;
 };

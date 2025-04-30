@@ -22,6 +22,7 @@ int main() {
     app.scene_system->registerScene(1, []() { return PhysicsScene::create(10); });
     app.scene_system->registerScene(2, []() { return PhysicsTestScene::create(10); });
     app.scene_system->registerScene(3, []() { return MainScene::create(10); });
+
     app.set_new_scene(3);
     app.start();
 

@@ -62,6 +62,7 @@ void Tree::render(EngineContext &ctx) {
                 render_delay += node->get_container_volume();
             }
         }
+        ctx.app->window->setView(this->get_view_tracker()[i]);
         if (render_delay) {
             render_delay--;
             this->active_render_indices[i] = false;
@@ -88,6 +89,7 @@ void Tree::update(EngineContext &ctx) {
                 update_delay += node->get_container_volume();
             }
         }
+        ctx.app->window->setView(this->get_view_tracker()[i]);
         if (update_delay) {
             update_delay--;
             this->active_update_indices[i] = false;
@@ -140,6 +142,7 @@ void Tree::update_view_tracker(EngineContext &ctx) {
         }
         if (this->flatten_tree[i]->get_node_type() == 6) {
             auto node = std::static_pointer_cast<CameraNode>(this->flatten_tree[i]);
+            this->flatten_tree[i]->render(ctx);
             this->brunch_tracker.emplace_back(i, node->get_container_volume() + 1);
         }
         this->view_tracker[i] = ctx.app->window->getView();
