@@ -54,3 +54,29 @@ void ContainerNode::update(EngineContext &ctx) {}
 int ContainerNode::get_node_type() const {
     return 2;
 }
+
+void ContainerNode::delete_node(std::shared_ptr<ContainerNode> node) {
+    if (node == nullptr) {
+        return;
+    }
+    auto it = std::find(this->container_nodes[node->render_priority].begin(),
+                        this->container_nodes[node->render_priority].end(), node);
+    if (it != this->container_nodes[node->render_priority].end()) {
+        this->container_nodes[node->render_priority].erase(it);
+        this->container_volume--;
+    }
+
+}
+
+void ContainerNode::delete_node(std::shared_ptr<ContentNode> node) {
+    if (node == nullptr) {
+        return;
+    }
+    auto it = std::find(this->content_nodes.begin(),
+                        this->content_nodes.end(), node);
+    if (it != this->content_nodes.end()) {
+        this->content_nodes.erase(it);
+        this->container_volume--;
+    }
+
+}

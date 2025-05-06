@@ -21,6 +21,10 @@ public:
 
     int get_node_type() const override;
 
+    void set_font(const std::string &path);
+
+
+    sf::Font font;
     sf::Text text;
 };
 

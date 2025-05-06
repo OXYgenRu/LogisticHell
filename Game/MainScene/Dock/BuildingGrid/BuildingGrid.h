@@ -1,0 +1,48 @@
+//
+// Created by EgorRychkov on 03.05.2025.
+//
+
+#ifndef LOGISTICHELL_BUILDINGGRID_H
+#define LOGISTICHELL_BUILDINGGRID_H
+
+
+#include "../../../../Engine/Nodes/Base/ContainerNode.h"
+#include "BuildingBlock.h"
+
+class Dock;
+
+
+class BuildingGrid : public ContainerNode {
+public:
+    static std::shared_ptr<BuildingGrid>
+    create(std::shared_ptr<ContainerNode> parent, std::shared_ptr<Dock> dock, sf::Vector2f position,
+           float sf_cell_size,
+           float b2_cell_size, sf::Vector2i grid_size,
+           int render_priority = 0,
+           int render_priority_layers = 10
+    );
+
+
+    explicit BuildingGrid(std::shared_ptr<ContainerNode> parent, int render_priority = 0)
+            : ContainerNode(parent, render_priority) {}
+
+    static void
+    setup(std::shared_ptr<BuildingGrid> node, std::shared_ptr<Dock> dock, sf::Vector2f position,
+          float sf_cell_size,
+          float b2_cell_size, sf::Vector2i grid_size
+    );
+
+    void clear();
+
+    void set_block(sf::Vector2i position, int block_id);
+
+    std::weak_ptr<Dock> dock;
+    std::vector<std::vector<std::shared_ptr<BuildingBlock>>> cells;
+    sf::Vector2f position;
+    sf::Vector2i grid_size;
+    float sf_cell_size;
+    float b2_cell_size;
+};
+
+
+#endif //LOGISTICHELL_BUILDINGGRID_H

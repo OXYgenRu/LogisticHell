@@ -9,11 +9,12 @@
 #include "../../../../Engine/Nodes/Base/ContainerNode.h"
 #include "box2d/box2d.h"
 #include "../Block/BaseBlock.h"
-#include "GridCollider/GridCollider.h"
+#include "GridCell/GridCell.h"
 
 class GridViewer;
 
 class Structure;
+
 
 class Grid : public ContainerNode {
 public:
@@ -30,15 +31,11 @@ public:
     static void
     setup(std::shared_ptr<Grid> node, sf::Vector2i grid_size, float cell_size, std::shared_ptr<Structure> &structure);
 
-    bool valid_block_attachment(sf::Vector2i grid_position);
 
-    void set_block(sf::Vector2i grid_position);
-
-    std::vector<std::vector<std::shared_ptr<BaseBlock>>> blocks;
-    std::vector<std::vector<std::shared_ptr<GridViewer>>> grid_view;
+    std::vector<std::vector<std::shared_ptr<GridCell>>> grid_cells;
     std::shared_ptr<ContainerNode> grid_view_layer;
-    std::shared_ptr<GridCollider> grid_collider;
     std::weak_ptr<Structure> structure;
+    sf::Vector2i grid_size;
     float cell_size;
 };
 

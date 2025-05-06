@@ -26,3 +26,18 @@ void TexturedQuad::render(EngineContext &ctx) {
 void TexturedQuad::update(EngineContext &ctx) {
 
 }
+
+void TexturedQuad::set_texture(const std::string &path) {
+    this->texture.loadFromFile(path);
+    this->quad[0].texCoords = sf::Vector2f(0.f, this->texture.getSize().y);
+    this->quad[1].texCoords = sf::Vector2f(0.f, 0.f);
+    this->quad[2].texCoords = sf::Vector2f(this->texture.getSize().x,
+                                           0.f);
+    this->quad[3].texCoords = sf::Vector2f(this->texture.getSize().x, this->texture.getSize().y);
+}
+
+void TexturedQuad::set_quad(std::vector<sf::Vector2f> &vertices) {
+    for (int i = 0; i < 4; i++) {
+        this->quad[i].position = vertices[i];
+    }
+}

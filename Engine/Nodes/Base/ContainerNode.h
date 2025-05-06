@@ -25,6 +25,10 @@ public:
 
     void add_node(std::shared_ptr<ContentNode> new_node);
 
+    void delete_node(std::shared_ptr<ContainerNode> node);
+
+    void delete_node(std::shared_ptr<ContentNode> node);
+
     std::vector<std::shared_ptr<ContainerNode>> &get_render_layer(int render_layer);
 
     int get_container_volume();
@@ -41,7 +45,8 @@ public:
 
     int get_node_type() const override;
 
-private:
+
+protected:
     int container_volume = 0;
     std::vector<std::vector<std::shared_ptr<ContainerNode>>> container_nodes;
     std::vector<std::shared_ptr<ContentNode>> content_nodes;

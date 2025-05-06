@@ -15,7 +15,7 @@ bool is_point_in_polygon(const sf::Vector2f &point, const std::vector<sf::Vector
         const sf::Vector2f &a = polygon[i];
         const sf::Vector2f &b = polygon[(i + 1) % n];
 
-        if ((a.y > point.y) != (b.y > point.y)) {
+        if ((a.y > point.y) != (b.y > point.y) and (b.y - a.y) != 0) {
             float t = (point.y - a.y) / (b.y - a.y);
             float xIntersection = a.x + t * (b.x - a.x);
 

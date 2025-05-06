@@ -16,15 +16,15 @@ TestController::create(std::shared_ptr<ContainerNode> parent, b2BodyId body, int
 
 void TestController::update(EngineContext &ctx) {
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::W)) {
-        b2Body_ApplyForceToCenter(this->body, b2Vec2({0, 1000}), true);
+        b2Body_ApplyForceToCenter(this->body, b2Vec2({0, 10000}), true);
     }
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::S)) {
-        b2Body_ApplyForceToCenter(this->body, b2Vec2({0, -1000}), true);
+        b2Body_ApplyForceToCenter(this->body, b2Vec2({0, -10000}), true);
     }
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::D)) {
-        b2Body_ApplyForceToCenter(this->body, b2Vec2({1000, 0}), true);
+        b2Body_ApplyForceToCenter(this->body, b2Vec2({10000, 0}), true);
     }
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::A)) {
-        b2Body_ApplyForceToCenter(this->body, b2Vec2({-1000, 0}), true);
+        b2Body_ApplyForceToCenter(this->body, b2Vec2({-10000, 0}), true);
     }
 }

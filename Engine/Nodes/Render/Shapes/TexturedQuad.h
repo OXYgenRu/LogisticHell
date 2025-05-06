@@ -18,6 +18,10 @@ public:
 
     static void setup(std::shared_ptr<TexturedQuad> node);
 
+    void set_texture(const std::string &path);
+
+    void set_quad(std::vector<sf::Vector2f> &vertices);
+
     void render(EngineContext &ctx) override;
 
     void update(EngineContext &ctx) override;

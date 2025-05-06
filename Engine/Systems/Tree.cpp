@@ -134,6 +134,7 @@ std::vector<sf::View> &Tree::get_view_tracker() {
 }
 
 void Tree::update_view_tracker(EngineContext &ctx) {
+    ctx.app->window->setView(ctx.app->standard_view);
     for (int i = 0; i < this->free_tree_index; i++) {
         if ((this->flatten_tree[i]->get_node_type() == 2 or this->flatten_tree[i]->get_node_type() == 3 or
              this->flatten_tree[i]->get_node_type() == 6) and !this->brunch_tracker.empty()) {

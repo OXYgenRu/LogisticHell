@@ -4,10 +4,10 @@
 
 #include "BaseBlock.h"
 #include "../../../../Engine/Nodes/Base/ContainerNode.h"
-#include "../Structure.h"
+#include "../Component/Component.h"
 
 std::shared_ptr<BaseBlock> BaseBlock::create(std::shared_ptr<ContainerNode> parent,
-                                             std::shared_ptr<Structure> rigid_body, b2Vec2 grid_position,
+                                             std::shared_ptr<RigidBody> rigid_body, b2Vec2 grid_position,
                                              float cell_size,
                                              int render_priority,
                                              int render_priority_layers) {
@@ -53,3 +53,4 @@ void BaseBlock::update(EngineContext &ctx) {
         this->textured_quad->quad[i].position = rigid_body->sf_get_world_point(this->vertices[i], ctx);
     }
 }
+

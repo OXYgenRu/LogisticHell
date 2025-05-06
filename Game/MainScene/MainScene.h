@@ -11,6 +11,7 @@
 #include "../../Engine/Nodes/Base/CameraNode.h"
 #include "../../Engine/Nodes/Physics/World.h"
 #include "../Tests/PhysicsNodes/TestController.h"
+#include "Dock/Dock.h"
 
 class MainScene : public Scene {
 public:
@@ -28,9 +29,10 @@ public:
 
     std::shared_ptr<Structure> structure;
     std::shared_ptr<Structure> static_structure;
-    std::shared_ptr<CameraNode> camera;
     std::shared_ptr<World> world;
     std::shared_ptr<TestController> test_controller;
+    std::shared_ptr<Component> component;
+    std::shared_ptr<Dock> dock;
 
 };
 

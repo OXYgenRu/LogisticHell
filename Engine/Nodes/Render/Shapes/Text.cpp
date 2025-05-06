@@ -23,3 +23,10 @@ void Text::update(EngineContext &ctx) {
 int Text::get_node_type() const {
     return 8;
 }
+
+void Text::set_font(const std::string &path) {
+    if (!this->font.loadFromFile(path)) {
+        exit(0);
+    }
+    this->text.setFont(this->font);
+}
