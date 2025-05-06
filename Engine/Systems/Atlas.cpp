@@ -4,6 +4,7 @@
 
 #include "Atlas.h"
 
+
 bool compare_by_width(const std::pair<std::string, sf::Image> &a, const std::pair<std::string, sf::Image> &b) {
     return a.second.getSize().y < b.second.getSize().y;
 }
@@ -40,7 +41,36 @@ void Atlas::build() {
         }
 
         atlas.copy(element.second, position.x, position.y);
+        this->regions[element.first] = AtlasRegion(position.x, position.y, position.x + int(size.x),
+                                                   position.y + int(size.y));
         position.x += int(size.x);
     }
     atlas.saveToFile("atlas.png");
+    this->texture = std::make_unique<sf::Texture>();
+    if (!this->texture->loadFromFile("atlas.png")) {
+        throw std::runtime_error("Atlas cant load texture!");
+    }
+
+}
+
+const AtlasRegion &Atlas::get_region(const std::string &name) const {
+    const auto &found = this->regions.find(name);
+    if (found == this->regions.end()) {
+        throw std::runtime_error("Region not found!");
+    }
+    return found->second;
+}
+
+sf::Texture *Atlas::get_texture() const {
+    return this->texture.get();
+}
+
+
+std::vector<sf::Vector2f> AtlasRegion::get_rect() const {
+    std::vector<sf::Vector2f> vertices(4);
+    vertices[0] = {float(x1), float(y2)};
+    vertices[1] = {float(x1), float(y1)};
+    vertices[2] = {float(x2), float(y1)};
+    vertices[3] = {float(x2), float(y2)};
+    return vertices;
 }

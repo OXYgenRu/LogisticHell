@@ -22,6 +22,12 @@ int main() {
     app.scene_system->registerScene(2, []() { return PhysicsTestScene::create(10); });
     app.scene_system->registerScene(3, []() { return MainScene::create(10); });
     app.set_new_scene(3);
+
+    app.texture_atlas->register_texture("empty_block", "blocks/EmptyGridBlockBlue.png");
+    app.texture_atlas->register_texture("discarded_block", "blocks/DiscardedGridBlockBlue.png");
+    app.texture_atlas->register_texture("icon", "blocks/Icon.png");
+    app.texture_atlas->register_texture("construction_block", "blocks/TestConstructionBlock.png");
+    app.texture_atlas->register_texture("hull", "blocks/Hull.png");
     app.start();
 
 

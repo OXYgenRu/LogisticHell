@@ -6,18 +6,23 @@
 #define LOGISTICHELL_ATLAS_H
 
 #include "SFML/Graphics.hpp"
+#include "memory"
 
 struct AtlasRegion {
-    float x1, y1, x2, y2;
+    int x1, y1, x2, y2;
 
-    AtlasRegion(float x1, float y1, float x2, float y2) : x1(x1), y1(y1), x2(x2), y2(y2) {}
+    AtlasRegion() = default;
+
+    AtlasRegion(int x1, int y1, int x2, int y2) : x1(x1), y1(y1), x2(x2), y2(y2) {}
+
+    std::vector<sf::Vector2f> get_rect() const;
 };
 
 class Atlas {
 private:
     std::vector<std::pair<std::string, sf::Image>> images;
     std::unordered_map<std::string, AtlasRegion> regions;
-    sf::Texture texture;
+    std::unique_ptr<sf::Texture> texture;
     sf::Image atlas;
 public:
 
@@ -26,6 +31,10 @@ public:
     void register_texture(const std::string &id, const std::string &image_name);
 
     void build();
+
+    const AtlasRegion &get_region(const std::string &name) const;
+
+    sf::Texture *get_texture() const;
 };
 
 

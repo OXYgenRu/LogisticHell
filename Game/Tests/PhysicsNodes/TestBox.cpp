@@ -21,7 +21,7 @@ TestBox::create(std::shared_ptr<ContainerNode> parent, std::shared_ptr<RigidBody
     node->center_polygon->set_polygon();
     node->center_polygon->polygon.setFillColor(sf::Color::Yellow);
     node->textured_quad = TexturedQuad::create(node);
-    node->textured_quad->texture.loadFromFile("TestConstructionBlock.png");
+//    node->textured_quad->texture.loadFromFile("TestConstructionBlock.png");
 
     node->textured_quad->quad[0].texCoords = sf::Vector2f(0.f, 0.f);
     node->textured_quad->quad[1].texCoords = sf::Vector2f(0.f, 32.f);

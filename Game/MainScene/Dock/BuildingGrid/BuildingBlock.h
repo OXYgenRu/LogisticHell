@@ -12,7 +12,7 @@
 class BuildingBlock : public ContainerNode {
 public:
     static std::shared_ptr<BuildingBlock>
-    create(std::shared_ptr<ContainerNode> parent, sf::Vector2i cell_position, float sf_cell_size,
+    create(std::shared_ptr<ContainerNode> parent, EngineContext &ctx, sf::Vector2i cell_position, float sf_cell_size,
            sf::Vector2f grid_position,
            int render_priority = 0,
            int render_priority_layers = 10);
@@ -22,9 +22,9 @@ public:
             : ContainerNode(parent, render_priority) {}
 
     static void
-    setup(std::shared_ptr<BuildingBlock> node, sf::Vector2i cell_position, float sf_cell_size,
+    setup(std::shared_ptr<BuildingBlock> node, EngineContext &ctx, sf::Vector2i cell_position, float sf_cell_size,
           sf::Vector2f grid_position,
-          const std::string &texture_path);
+          const std::string &texture_name);
 
 
     std::vector<sf::Vector2f> vertices;
@@ -34,7 +34,7 @@ public:
 class EmptyBlock : public BuildingBlock {
 public:
     static std::shared_ptr<EmptyBlock>
-    create(std::shared_ptr<ContainerNode> parent, sf::Vector2i cell_position, float sf_cell_size,
+    create(std::shared_ptr<ContainerNode> parent, EngineContext &ctx, sf::Vector2i cell_position, float sf_cell_size,
            sf::Vector2f grid_position,
            int render_priority = 0,
            int render_priority_layers = 10);
@@ -48,7 +48,7 @@ public:
 class TestConstructionBlock : public BuildingBlock {
 public:
     static std::shared_ptr<TestConstructionBlock>
-    create(std::shared_ptr<ContainerNode> parent, sf::Vector2i cell_position, float sf_cell_size,
+    create(std::shared_ptr<ContainerNode> parent, EngineContext &ctx, sf::Vector2i cell_position, float sf_cell_size,
            sf::Vector2f grid_position,
            int render_priority = 0,
            int render_priority_layers = 10);

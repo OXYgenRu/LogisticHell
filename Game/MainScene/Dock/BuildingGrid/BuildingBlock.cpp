@@ -5,20 +5,22 @@
 #include "BuildingBlock.h"
 
 std::shared_ptr<BuildingBlock>
-BuildingBlock::create(std::shared_ptr<ContainerNode> parent, sf::Vector2i cell_position, float sf_cell_size,
+BuildingBlock::create(std::shared_ptr<ContainerNode> parent, EngineContext &ctx, sf::Vector2i cell_position,
+                      float sf_cell_size,
                       sf::Vector2f grid_position,
                       int render_priority,
                       int render_priority_layers) {
     auto node = std::make_shared<BuildingBlock>(parent, render_priority);
     node->set_render_layers_count(render_priority_layers + 1);
-    BuildingBlock::setup(node, cell_position, sf_cell_size, grid_position, "blocks/EmptyGridBlockBlue.png");
+    BuildingBlock::setup(node, ctx, cell_position, sf_cell_size, grid_position, "empty_block");
     parent->add_node(node);
     return node;
 }
 
-void BuildingBlock::setup(std::shared_ptr<BuildingBlock> node, sf::Vector2i cell_position, float sf_cell_size,
+void BuildingBlock::setup(std::shared_ptr<BuildingBlock> node, EngineContext &ctx, sf::Vector2i cell_position,
+                          float sf_cell_size,
                           sf::Vector2f grid_position,
-                          const std::string &texture_path) {
+                          const std::string &texture_name) {
     node->vertices.resize(4);
     sf::Vector2f quad_position = {float(cell_position.x) * sf_cell_size, float(cell_position.y) * sf_cell_size};
     node->vertices[0] = sf::Vector2f(
@@ -35,33 +37,35 @@ void BuildingBlock::setup(std::shared_ptr<BuildingBlock> node, sf::Vector2i cell
             grid_position.y - quad_position.y + sf_cell_size / 2);
 
     node->textured_quad = TexturedQuad::create(node);
-    node->textured_quad->set_texture(texture_path);
+    node->textured_quad->set_texture(texture_name, ctx);
     node->textured_quad->set_quad(node->vertices);
 
 }
 
 
 std::shared_ptr<EmptyBlock>
-EmptyBlock::create(std::shared_ptr<ContainerNode> parent, sf::Vector2i cell_position, float sf_cell_size,
+EmptyBlock::create(std::shared_ptr<ContainerNode> parent, EngineContext &ctx, sf::Vector2i cell_position,
+                   float sf_cell_size,
                    sf::Vector2f grid_position,
                    int render_priority,
                    int render_priority_layers) {
     auto node = std::make_shared<EmptyBlock>(parent, render_priority);
     node->set_render_layers_count(render_priority_layers + 1);
-    BuildingBlock::setup(node, cell_position, sf_cell_size, grid_position, "blocks/DiscardedGridBlockBlue.png");
+    BuildingBlock::setup(node, ctx, cell_position, sf_cell_size, grid_position, "discarded_block");
     parent->add_node(node);
     return node;
 }
 
 
 std::shared_ptr<TestConstructionBlock>
-TestConstructionBlock::create(std::shared_ptr<ContainerNode> parent, sf::Vector2i cell_position, float sf_cell_size,
+TestConstructionBlock::create(std::shared_ptr<ContainerNode> parent, EngineContext &ctx, sf::Vector2i cell_position,
+                              float sf_cell_size,
                               sf::Vector2f grid_position,
                               int render_priority,
                               int render_priority_layers) {
     auto node = std::make_shared<TestConstructionBlock>(parent, render_priority);
     node->set_render_layers_count(render_priority_layers + 1);
-    BuildingBlock::setup(node, cell_position, sf_cell_size, grid_position, "blocks/TestConstructionBlock.png");
+    BuildingBlock::setup(node, ctx, cell_position, sf_cell_size, grid_position, "construction_block");
     parent->add_node(node);
     return node;
 }

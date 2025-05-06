@@ -29,6 +29,6 @@ void Structure::setup(std::shared_ptr<Structure> node, std::shared_ptr<World> wo
     body_def.position = b2Vec2({0, 0});
 
     node->components.push_back(Component::create(node, node));
-    node->grid->grid_cells[0][0]->textured_quad->set_texture("blocks/TestConstructionBlock.png");
+//    node->grid->grid_cells[0][0]->textured_quad->set_texture("blocks/TestConstructionBlock.png",ctx);
     node->components[0]->grid->grid_cells[0][0] = node->grid->grid_cells[0][0];
 }

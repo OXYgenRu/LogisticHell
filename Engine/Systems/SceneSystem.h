@@ -21,12 +21,16 @@ public:
 
     void set_loaded_scene(int id, EngineContext &ctx);
 
+    void update_scene_selection(std::shared_ptr<ContainerNode> &scene, EngineContext &ctx);
+
     std::shared_ptr<Scene> currentScene;
 
 private:
     std::unordered_map<int, SceneFactory> factories;
     std::unordered_map<int, std::shared_ptr<Scene>> loaded_scenes;
-
+    bool need_to_set_new_scene = false;
+    bool need_to_load_new_scene = false;
+    int selected_scene_id;
 };
 
 #endif //LOGISTICHELL_SCENESYSTEM_H

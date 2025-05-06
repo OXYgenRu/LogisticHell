@@ -48,6 +48,7 @@ public:
     sf::Color background_color = sf::Color::Black;
 
     Atlas *texture_atlas;
+
 private:
     EngineContext ctx;
 };

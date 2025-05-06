@@ -21,8 +21,9 @@ class Structure;
 class Dock : public ContainerNode {
 public:
     static std::shared_ptr<Dock>
-    create(std::shared_ptr<ContainerNode> parent, std::shared_ptr<World> world, sf::Vector2f position,
-           sf::Vector2i grid_size, float b2_cell_size, EngineContext &ctx,
+    create(std::shared_ptr<ContainerNode> parent, EngineContext &ctx, std::shared_ptr<World> world,
+           sf::Vector2f position,
+           sf::Vector2i grid_size, float b2_cell_size,
            int render_priority = 0,
            int render_priority_layers = 10);
 
@@ -31,9 +32,8 @@ public:
             : ContainerNode(parent, render_priority) {}
 
     static void
-    setup(std::shared_ptr<Dock> node, std::shared_ptr<World> world, sf::Vector2f position,
-          sf::Vector2i grid_size, float b2_cell_size, EngineContext &ctx);
-
+    setup(std::shared_ptr<Dock> node, EngineContext &ctx, std::shared_ptr<World> world, sf::Vector2f position,
+          sf::Vector2i grid_size, float b2_cell_size);
 
 
     std::shared_ptr<Builder> builder;

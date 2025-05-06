@@ -32,9 +32,9 @@ public:
           float b2_cell_size, sf::Vector2i grid_size
     );
 
-    void clear();
+    void clear(EngineContext &ctx);
 
-    void set_block(sf::Vector2i position, int block_id);
+    void set_block(sf::Vector2i position, int block_id, EngineContext &ctx);
 
     std::weak_ptr<Dock> dock;
     std::vector<std::vector<std::shared_ptr<BuildingBlock>>> cells;

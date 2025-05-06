@@ -48,6 +48,6 @@ void DockGridCollider::on_mouse_release(sf::Event &event, EngineContext &ctx) {
     sf::Vector2i cell_pos = {int((local_pos.x + sf_cell_size / 2) / sf_cell_size),
                              abs(int((local_pos.y - sf_cell_size / 2) / sf_cell_size))};
     auto builder = dock.lock()->builder;
-    builder->attach_block(cell_pos);
+    builder->attach_block(cell_pos, ctx);
 
 }

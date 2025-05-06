@@ -16,9 +16,9 @@ public:
 
     explicit Builder(std::shared_ptr<BuildingGrid> building_grid);
 
-    void set_default_blueprint();
+    void set_default_blueprint(EngineContext &ctx);
 
-    void attach_block(sf::Vector2i position);
+    void attach_block(sf::Vector2i position, EngineContext &ctx);
 
     bool validate_block_attachment(sf::Vector2i position);
 

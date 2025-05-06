@@ -20,18 +20,18 @@ Builder::Builder(std::shared_ptr<BuildingGrid> building_grid) {
     this->attach_direction_index = 0;
 }
 
-void Builder::set_default_blueprint() {
+void Builder::set_default_blueprint(EngineContext &ctx) {
     this->blueprint = std::make_shared<Blueprint>(this->building_grid->grid_size);
     this->blueprint->add_component()->get_block({0, 0}).block_id = 1;;
-    this->building_grid->clear();
-    this->building_grid->set_block({0, 0}, 1);
+    this->building_grid->clear(ctx);
+    this->building_grid->set_block({0, 0}, 1, ctx);
 }
 
-void Builder::attach_block(sf::Vector2i position) {
+void Builder::attach_block(sf::Vector2i position, EngineContext &ctx) {
     if (!this->validate_block_attachment(position)) {
         return;
     }
-    this->building_grid->set_block(position, 1);
+    this->building_grid->set_block(position, 1, ctx);
     this->get_block_attachment_component(position)->set_block(position, BlueprintBlock(1, {0, 0}));
 }
 

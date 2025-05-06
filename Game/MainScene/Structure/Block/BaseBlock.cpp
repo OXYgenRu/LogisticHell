@@ -24,13 +24,13 @@ void BaseBlock::setup(std::shared_ptr<BaseBlock> node, b2Vec2 grid_position, std
     node->grid_position = grid_position;
 
     node->textured_quad = TexturedQuad::create(node);
-    node->textured_quad->texture.loadFromFile("blocks/TestConstructionBlock.png");
-
-    node->textured_quad->quad[0].texCoords = sf::Vector2f(0.f, 0.f);
-    node->textured_quad->quad[1].texCoords = sf::Vector2f(0.f, node->textured_quad->texture.getSize().y);
-    node->textured_quad->quad[2].texCoords = sf::Vector2f(node->textured_quad->texture.getSize().x,
-                                                          node->textured_quad->texture.getSize().y);
-    node->textured_quad->quad[3].texCoords = sf::Vector2f(node->textured_quad->texture.getSize().x, 0.f);
+//    node->textured_quad->texture.loadFromFile("blocks/TestConstructionBlock.png");
+//
+//    node->textured_quad->quad[0].texCoords = sf::Vector2f(0.f, 0.f);
+//    node->textured_quad->quad[1].texCoords = sf::Vector2f(0.f, node->textured_quad->texture.getSize().y);
+//    node->textured_quad->quad[2].texCoords = sf::Vector2f(node->textured_quad->texture.getSize().x,
+//                                                          node->textured_quad->texture.getSize().y);
+//    node->textured_quad->quad[3].texCoords = sf::Vector2f(node->textured_quad->texture.getSize().x, 0.f);
 
     b2ShapeDef shape_def = b2DefaultShapeDef();
     shape_def.density = 300.0f;

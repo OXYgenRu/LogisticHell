@@ -20,20 +20,19 @@ void TexturedQuad::setup(std::shared_ptr<TexturedQuad> node) {
 }
 
 void TexturedQuad::render(EngineContext &ctx) {
-    ctx.app->window->draw(quad, &texture);
+    ctx.app->window->draw(quad, ctx.app->texture_atlas->get_texture());
 }
 
 void TexturedQuad::update(EngineContext &ctx) {
 
 }
 
-void TexturedQuad::set_texture(const std::string &path) {
-    this->texture.loadFromFile(path);
-    this->quad[0].texCoords = sf::Vector2f(0.f, this->texture.getSize().y);
-    this->quad[1].texCoords = sf::Vector2f(0.f, 0.f);
-    this->quad[2].texCoords = sf::Vector2f(this->texture.getSize().x,
-                                           0.f);
-    this->quad[3].texCoords = sf::Vector2f(this->texture.getSize().x, this->texture.getSize().y);
+void TexturedQuad::set_texture(const std::string &new_texture_name, EngineContext &ctx) {
+    std::vector<sf::Vector2f> vertices = ctx.app->texture_atlas->get_region(new_texture_name).get_rect();
+    this->quad[0].texCoords = vertices[0];
+    this->quad[1].texCoords = vertices[1];
+    this->quad[2].texCoords = vertices[2];
+    this->quad[3].texCoords = vertices[3];
 }
 
 void TexturedQuad::set_quad(std::vector<sf::Vector2f> &vertices) {

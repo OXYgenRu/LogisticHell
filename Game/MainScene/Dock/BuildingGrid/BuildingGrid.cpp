@@ -33,7 +33,7 @@ void BuildingGrid::setup(std::shared_ptr<BuildingGrid> node, std::shared_ptr<Doc
 //    }
 }
 
-void BuildingGrid::clear() {
+void BuildingGrid::clear(EngineContext &ctx) {
     for (int i = 0; i < this->grid_size.y; i++) {
         for (int j = 0; j < this->grid_size.x; j++) {
             this->delete_node(this->cells[i][j]);
@@ -41,15 +41,15 @@ void BuildingGrid::clear() {
     }
     for (int i = 0; i < this->grid_size.y; i++) {
         for (int j = 0; j < this->grid_size.x; j++) {
-            this->cells[i][j] = EmptyBlock::create(shared_from_this(), {j, i}, this->sf_cell_size, this->position);
+            this->cells[i][j] = EmptyBlock::create(shared_from_this(), ctx, {j, i}, this->sf_cell_size, this->position);
         }
     }
 }
 
-void BuildingGrid::set_block(sf::Vector2i position, int block_id) {
+void BuildingGrid::set_block(sf::Vector2i position, int block_id, EngineContext &ctx) {
     this->delete_node(this->cells[position.y][position.x]);
     if (block_id == 1) {
-        this->cells[position.y][position.x] = TestConstructionBlock::create(shared_from_this(), position,
+        this->cells[position.y][position.x] = TestConstructionBlock::create(shared_from_this(), ctx, position,
                                                                             this->sf_cell_size, this->position);
     }
 

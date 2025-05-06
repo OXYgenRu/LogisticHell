@@ -42,6 +42,6 @@ void GridCell::setup(std::shared_ptr<GridCell> node, std::shared_ptr<Structure> 
             structure->position.y - quad_position.y + sf_cell_size / 2);
 
     node->textured_quad = TexturedQuad::create(node);
-    node->textured_quad->set_texture("blocks/EmptyGridBlockBlue.png");
+//    node->textured_quad->set_texture("blocks/EmptyGridBlockBlue.png");
     node->textured_quad->set_quad(node->vertices);
 }

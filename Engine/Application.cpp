@@ -34,6 +34,8 @@ void Application::start() {
             float delta_time = clock.restart().asSeconds();
             ctx.last_frame_delta_time = delta_time;
 
+            this->scene_system->update_scene_selection(scene, ctx);
+
             this->tree->drop_tree();
 //        scene = this->scene_system->currentScene;
             this->tree->traverse(scene, ctx);
@@ -62,8 +64,6 @@ void Application::start() {
 
 void Application::set_new_scene(int id) {
     this->scene_system->set_new_scene(id, this->ctx);
-    auto to = std::static_pointer_cast<ContainerNode>(this->scene_system->currentScene);
-    this->tree->print_tree(to);
 }
 
 void Application::set_loaded_scene(int id) {
