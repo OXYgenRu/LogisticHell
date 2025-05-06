@@ -26,13 +26,16 @@ void Atlas::build() {
     std::sort(this->images.begin(), this->images.end(), compare_by_width);
     sf::Vector2i position = {0, 0};
     int height_step = 0;
+    if (!this->images.empty()) {
+        height_step = int(this->images[0].second.getSize().y);
+    }
     for (auto &element: this->images) {
         sf::Vector2u size = element.second.getSize();
-        if (position.x + size.x >= this->atlas.getSize().x) {
+        if (position.x + size.x > this->atlas.getSize().x) {
             position = {0, position.y + height_step};
             height_step = int(size.y);
         }
-        if (position.y + size.y >= this->atlas.getSize().y) {
+        if (position.y + size.y > this->atlas.getSize().y) {
             throw std::runtime_error("Atlas height overflow!");
         }
 
