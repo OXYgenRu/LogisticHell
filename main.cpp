@@ -18,11 +18,9 @@
 int main() {
     Application app(sf::VideoMode(1600, 900), "LogisticHell", 165);
     app.scene_system->registerScene(0, []() { return UIScene::create(10); });
-//    app.set_new_scene(0);
     app.scene_system->registerScene(1, []() { return PhysicsScene::create(10); });
     app.scene_system->registerScene(2, []() { return PhysicsTestScene::create(10); });
     app.scene_system->registerScene(3, []() { return MainScene::create(10); });
-
     app.set_new_scene(3);
     app.start();
 

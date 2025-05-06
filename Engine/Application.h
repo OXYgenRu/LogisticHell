@@ -8,6 +8,7 @@
 #include "Systems/Tree.h"
 #include "Systems/ControlSystem.h"
 #include "Systems/UICollidersSystem.h"
+#include "Systems/Atlas.h"
 
 #ifndef LOGISTICHELL_APPLICATION_H
 #define LOGISTICHELL_APPLICATION_H
@@ -45,6 +46,8 @@ public:
     int frame_limit;
 
     sf::Color background_color = sf::Color::Black;
+
+    Atlas *texture_atlas;
 private:
     EngineContext ctx;
 };

@@ -19,6 +19,7 @@ Application::Application(const sf::VideoMode &videoMode, const std::string &titl
     this->standard_view = sf::View(sf::Vector2f(float(videoMode.width) / 2, float(videoMode.height) / 2),
                                    sf::Vector2f(float(videoMode.width), float(videoMode.height)));
     this->frame_limit = frame_limit;
+    this->texture_atlas = new Atlas(sf::Vector2i(128, 128));
 }
 
 void Application::start() {
@@ -27,30 +28,35 @@ void Application::start() {
     sf::Event event{};
     std::shared_ptr<ContainerNode> scene = this->scene_system->currentScene;
     this->window->setFramerateLimit(this->frame_limit);
-    while (this->window->isOpen()) {
-        float delta_time = clock.restart().asSeconds();
-        ctx.last_frame_delta_time = delta_time;
+    this->texture_atlas->build();
+    try {
+        while (this->window->isOpen()) {
+            float delta_time = clock.restart().asSeconds();
+            ctx.last_frame_delta_time = delta_time;
 
-        this->tree->drop_tree();
+            this->tree->drop_tree();
 //        scene = this->scene_system->currentScene;
-        this->tree->traverse(scene, ctx);
-        this->tree->update_view_tracker(ctx);
+            this->tree->traverse(scene, ctx);
+            this->tree->update_view_tracker(ctx);
 
-        while (window->pollEvent(event)) {
-            if (event.type == sf::Event::Closed) {
-                window->close();
+            while (window->pollEvent(event)) {
+                if (event.type == sf::Event::Closed) {
+                    window->close();
+                }
+                this->control_system->collect_event(event);
+                this->ui_colliders_system->collect_event(event);
             }
-            this->control_system->collect_event(event);
-            this->ui_colliders_system->collect_event(event);
+            this->control_system->update(this->ctx);
+            this->ui_colliders_system->update(this->ctx);
+
+            this->tree->update(this->ctx);
+
+            window->clear(this->background_color);
+            this->tree->render(this->ctx);
+            window->display();
         }
-        this->control_system->update(this->ctx);
-        this->ui_colliders_system->update(this->ctx);
-
-        this->tree->update(this->ctx);
-
-        window->clear(this->background_color);
-        this->tree->render(this->ctx);
-        window->display();
+    } catch (const std::exception &e) {
+        std::cerr << "Error: " << e.what() << std::endl;
     }
 }
 
