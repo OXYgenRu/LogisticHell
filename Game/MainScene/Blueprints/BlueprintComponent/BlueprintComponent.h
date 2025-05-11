@@ -9,17 +9,19 @@
 #include "memory"
 
 struct BlueprintBlock {
-    int block_id;
+    std::string block_id;
     sf::Vector2i unit_offset;
+    sf::Vector2i unit_size;
 
     BlueprintBlock() {
-        this->block_id = 0;
+        this->block_id = "empty_block::empty_block";
         this->unit_offset = {0, 0};
     }
 
-    BlueprintBlock(int block_id, sf::Vector2i unit_offset) {
+    BlueprintBlock(std::string block_id, sf::Vector2i unit_offset, sf::Vector2i unit_size) {
         this->block_id = block_id;
         this->unit_offset = unit_offset;
+        this->unit_size = unit_size;
     }
 };
 
@@ -33,7 +35,7 @@ public:
 
     void set_block(sf::Vector2i position, BlueprintBlock new_block);
 
-    BlueprintBlock& get_block(sf::Vector2i position);
+    BlueprintBlock &get_block(sf::Vector2i position);
 
     std::vector<std::vector<BlueprintBlock>> grid;
 };

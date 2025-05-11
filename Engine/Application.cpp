@@ -19,7 +19,7 @@ Application::Application(const sf::VideoMode &videoMode, const std::string &titl
     this->standard_view = sf::View(sf::Vector2f(float(videoMode.width) / 2, float(videoMode.height) / 2),
                                    sf::Vector2f(float(videoMode.width), float(videoMode.height)));
     this->frame_limit = frame_limit;
-    this->texture_atlas = new Atlas(sf::Vector2i(64, 128));
+    this->texture_atlas = new Atlas(sf::Vector2i(96, 128));
 }
 
 void Application::start() {

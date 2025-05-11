@@ -23,7 +23,8 @@ public:
     static std::shared_ptr<Dock>
     create(std::shared_ptr<ContainerNode> parent, EngineContext &ctx, std::shared_ptr<World> world,
            sf::Vector2f position,
-           sf::Vector2i grid_size, float b2_cell_size,
+           sf::Vector2i grid_size, float b2_cell_size, std::shared_ptr<BlueprintLoader> blueprint_loader,
+           std::shared_ptr<BlockFactory> block_factory,
            int render_priority = 0,
            int render_priority_layers = 10);
 
@@ -33,8 +34,10 @@ public:
 
     static void
     setup(std::shared_ptr<Dock> node, EngineContext &ctx, std::shared_ptr<World> world, sf::Vector2f position,
-          sf::Vector2i grid_size, float b2_cell_size);
+          sf::Vector2i grid_size, float b2_cell_size, std::shared_ptr<BlueprintLoader> blueprint_loader,
+          std::shared_ptr<BlockFactory> block_factory);
 
+    std::shared_ptr<UICollider> background_collider;
 
     std::shared_ptr<Builder> builder;
     std::shared_ptr<BuildingGrid> building_grid;

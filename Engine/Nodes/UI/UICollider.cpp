@@ -34,3 +34,11 @@ void UICollider::on_mouse_release(sf::Event &event, EngineContext &ctx) {
 void UICollider::on_mouse_moved(sf::Event &event, EngineContext &ctx) {
 
 }
+
+void UICollider::on_mouse_enter(EngineContext &ctx) {
+
+}
+
+void UICollider::on_mouse_exit(EngineContext &ctx) {
+
+}

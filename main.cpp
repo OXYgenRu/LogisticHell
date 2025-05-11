@@ -28,6 +28,13 @@ int main() {
     app.texture_atlas->register_texture("icon", "blocks/Icon.png");
     app.texture_atlas->register_texture("construction_block", "blocks/TestConstructionBlock.png");
     app.texture_atlas->register_texture("hull", "blocks/Hull.png");
+    app.texture_atlas->register_texture("beam", "blocks/BeamBlock.png");
+    app.texture_atlas->register_texture("light_construction", "blocks/LightConstructionBlock.png");
+    app.texture_atlas->register_texture("middle_construction", "blocks/MiddleConstructionBlock.png");
+    app.texture_atlas->register_texture("heavy_construction", "blocks/HeavyConstructionBlock.png");
+
+    app.texture_atlas->register_texture("void_block", "blocks/VoidBLock.png");
+    app.texture_atlas->register_texture("busy_grid_block", "blocks/BusyGridBlockBlue.png");
     app.start();
 
 

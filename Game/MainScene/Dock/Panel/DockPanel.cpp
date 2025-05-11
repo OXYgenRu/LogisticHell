@@ -32,6 +32,9 @@ void DockPanel::setup(std::shared_ptr<DockPanel> node, std::shared_ptr<Dock> doc
     node->text->text.setPosition(1430, 200);
     node->text->text.setFillColor(sf::Color::Black);
     node->text->text.setCharacterSize(30);
+
+    node->background_collider = UICollider::create(node);
+    node->background_collider->vertices = polygon;
 }
 
 void DockPanel::update(EngineContext &ctx) {

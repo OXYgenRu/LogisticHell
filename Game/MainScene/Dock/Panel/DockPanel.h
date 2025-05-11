@@ -27,6 +27,7 @@ public:
     std::weak_ptr<Dock> dock;
     std::shared_ptr<Polygon> polygon;
     std::shared_ptr<Text> text;
+    std::shared_ptr<UICollider> background_collider;
 };
 
 

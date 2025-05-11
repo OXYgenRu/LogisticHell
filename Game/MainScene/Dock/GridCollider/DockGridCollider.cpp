@@ -48,6 +48,35 @@ void DockGridCollider::on_mouse_release(sf::Event &event, EngineContext &ctx) {
     sf::Vector2i cell_pos = {int((local_pos.x + sf_cell_size / 2) / sf_cell_size),
                              abs(int((local_pos.y - sf_cell_size / 2) / sf_cell_size))};
     auto builder = dock.lock()->builder;
-    builder->attach_block(cell_pos, ctx);
+    builder->attach_unit(cell_pos, ctx);
+}
 
+void DockGridCollider::on_mouse_moved(sf::Event &event, EngineContext &ctx) {
+    float sf_cell_size = dock.lock()->building_grid->sf_cell_size;
+    sf::Vector2i pixel_pos = sf::Mouse::getPosition(*ctx.app->window);
+    sf::Vector2f world_pos = ctx.app->window->mapPixelToCoords(pixel_pos);
+    sf::Vector2f local_pos = world_pos - this->dock.lock()->building_grid->position;
+    sf::Vector2i cell_pos = {int((local_pos.x + sf_cell_size / 2) / sf_cell_size),
+                             abs(int((local_pos.y - sf_cell_size / 2) / sf_cell_size))};
+    auto builder = dock.lock()->builder;
+    if (cell_pos != builder->unit_mask_position) {
+        builder->clear_mask(ctx);
+        builder->update_mask(cell_pos, ctx);
+    }
+}
+
+void DockGridCollider::on_mouse_exit(EngineContext &ctx) {
+    auto builder = dock.lock()->builder;
+    builder->clear_mask(ctx);
+}
+
+void DockGridCollider::on_mouse_enter(EngineContext &ctx) {
+    float sf_cell_size = dock.lock()->building_grid->sf_cell_size;
+    sf::Vector2i pixel_pos = sf::Mouse::getPosition(*ctx.app->window);
+    sf::Vector2f world_pos = ctx.app->window->mapPixelToCoords(pixel_pos);
+    sf::Vector2f local_pos = world_pos - this->dock.lock()->building_grid->position;
+    sf::Vector2i cell_pos = {int((local_pos.x + sf_cell_size / 2) / sf_cell_size),
+                             abs(int((local_pos.y - sf_cell_size / 2) / sf_cell_size))};
+    auto builder = dock.lock()->builder;
+    builder->update_mask(cell_pos, ctx);
 }

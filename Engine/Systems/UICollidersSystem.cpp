@@ -23,13 +23,20 @@ void UICollidersSystem::update(EngineContext &ctx) {
                 if (was_used) {
                     continue;
                 }
-                sf::Vector2i pixelPos(event.mouseButton.x, event.mouseButton.y);
+                sf::Vector2i pixelPos = sf::Mouse::getPosition(*ctx.app->window);
                 sf::Vector2f worldPos = ctx.app->window->mapPixelToCoords(pixelPos,
                                                                           ctx.app->tree->get_view_tracker()[i]);
                 if (!is_point_in_polygon(worldPos, node->vertices)) {
                     continue;
                 }
                 ctx.app->window->setView(ctx.app->tree->get_view_tracker()[i]);
+                if (node != this->last_used_collider) {
+                    if (this->last_used_collider != nullptr) {
+                        this->last_used_collider->on_mouse_exit(ctx);
+                    }
+                    node->on_mouse_enter(ctx);
+                }
+                this->last_used_collider = node;
                 if (event.type == sf::Event::MouseButtonReleased) {
                     node->on_mouse_release(event, ctx);
                     was_used = true;
@@ -39,7 +46,7 @@ void UICollidersSystem::update(EngineContext &ctx) {
                     was_used = true;
                 }
                 if (event.type == sf::Event::MouseMoved) {
-                    node->on_mouse_press(event, ctx);
+                    node->on_mouse_moved(event, ctx);
                     was_used = true;
                 }
             }
@@ -58,9 +65,9 @@ void UICollidersSystem::collect_event(sf::Event &event) {
     if (event.type == sf::Event::MouseButtonReleased) {
         this->control_events.push_back(event);
     }
-//    if (event.type == sf::Event::MouseMoved) {
-//        this->control_events.push_back(event);
-//    }
+    if (event.type == sf::Event::MouseMoved) {
+        this->control_events.push_back(event);
+    }
 //    if (event.type == sf::Event::MouseWheelScrolled) {
 //        this->control_events.push_back(event);
 //    }

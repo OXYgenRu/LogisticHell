@@ -8,6 +8,8 @@
 
 #include "../../../../Engine/Nodes/Base/ContainerNode.h"
 #include "BuildingBlock.h"
+#include "BlockFactory.h"
+
 
 class Dock;
 
@@ -17,7 +19,7 @@ public:
     static std::shared_ptr<BuildingGrid>
     create(std::shared_ptr<ContainerNode> parent, std::shared_ptr<Dock> dock, sf::Vector2f position,
            float sf_cell_size,
-           float b2_cell_size, sf::Vector2i grid_size,
+           float b2_cell_size, sf::Vector2i grid_size, std::shared_ptr<BlockFactory> block_factory,
            int render_priority = 0,
            int render_priority_layers = 10
     );
@@ -29,15 +31,24 @@ public:
     static void
     setup(std::shared_ptr<BuildingGrid> node, std::shared_ptr<Dock> dock, sf::Vector2f position,
           float sf_cell_size,
-          float b2_cell_size, sf::Vector2i grid_size
+          float b2_cell_size, sf::Vector2i grid_size, std::shared_ptr<BlockFactory> block_factory
     );
 
     void clear(EngineContext &ctx);
 
-    void set_block(sf::Vector2i position, int block_id, EngineContext &ctx);
+    void clear_mask(EngineContext &ctx);
+
+    void set_block(sf::Vector2i position, std::string block_id, EngineContext &ctx);
+
+    void set_mask_block(sf::Vector2i position, std::string block_id, EngineContext &ctx);
 
     std::weak_ptr<Dock> dock;
+    std::shared_ptr<ContainerNode> cells_layer;
+    std::shared_ptr<ContainerNode> mask_cells_layer;
     std::vector<std::vector<std::shared_ptr<BuildingBlock>>> cells;
+    std::vector<std::vector<std::shared_ptr<BuildingBlock>>> mask_cells;
+    std::shared_ptr<BlockFactory> block_factory;
+
     sf::Vector2f position;
     sf::Vector2i grid_size;
     float sf_cell_size;

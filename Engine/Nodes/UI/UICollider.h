@@ -27,6 +27,10 @@ public:
 
     virtual void on_mouse_moved(sf::Event &event, EngineContext &ctx);
 
+    virtual void on_mouse_enter(EngineContext &ctx);
+
+    virtual void on_mouse_exit(EngineContext &ctx);
+
     std::vector<sf::Vector2f> vertices;
 };
 
