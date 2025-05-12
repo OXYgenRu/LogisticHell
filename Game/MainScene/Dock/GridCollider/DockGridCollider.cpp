@@ -59,15 +59,14 @@ void DockGridCollider::on_mouse_moved(sf::Event &event, EngineContext &ctx) {
     sf::Vector2i cell_pos = {int((local_pos.x + sf_cell_size / 2) / sf_cell_size),
                              abs(int((local_pos.y - sf_cell_size / 2) / sf_cell_size))};
     auto builder = dock.lock()->builder;
-    if (cell_pos != builder->unit_mask_position) {
-        builder->clear_mask(ctx);
-        builder->update_mask(cell_pos, ctx);
+    if (cell_pos != builder->get_unit_position()) {
+        builder->set_new_preview_position(cell_pos, ctx);
     }
 }
 
 void DockGridCollider::on_mouse_exit(EngineContext &ctx) {
     auto builder = dock.lock()->builder;
-    builder->clear_mask(ctx);
+    builder->clear_preview(ctx);
 }
 
 void DockGridCollider::on_mouse_enter(EngineContext &ctx) {
@@ -78,5 +77,5 @@ void DockGridCollider::on_mouse_enter(EngineContext &ctx) {
     sf::Vector2i cell_pos = {int((local_pos.x + sf_cell_size / 2) / sf_cell_size),
                              abs(int((local_pos.y - sf_cell_size / 2) / sf_cell_size))};
     auto builder = dock.lock()->builder;
-    builder->update_mask(cell_pos, ctx);
+    builder->set_new_preview_position(cell_pos, ctx);
 }

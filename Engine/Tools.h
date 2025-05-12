@@ -27,4 +27,7 @@ bool is_point_in_polygon(const sf::Vector2f &point, const std::vector<sf::Vector
     return (count % 2 == 1);
 }
 
+
 #endif //LOGISTICHELL_TOOLS_H
+
+

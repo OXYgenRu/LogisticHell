@@ -12,16 +12,19 @@ struct BlueprintBlock {
     std::string block_id;
     sf::Vector2i unit_offset;
     sf::Vector2i unit_size;
+    int rotation;
 
     BlueprintBlock() {
         this->block_id = "empty_block::empty_block";
         this->unit_offset = {0, 0};
+        this->rotation = 0;
     }
 
-    BlueprintBlock(std::string block_id, sf::Vector2i unit_offset, sf::Vector2i unit_size) {
+    BlueprintBlock(std::string block_id, sf::Vector2i unit_offset, sf::Vector2i unit_size, int rotation) {
         this->block_id = block_id;
         this->unit_offset = unit_offset;
         this->unit_size = unit_size;
+        this->rotation = rotation;
     }
 };
 
@@ -35,8 +38,11 @@ public:
 
     void set_block(sf::Vector2i position, BlueprintBlock new_block);
 
+    sf::Vector2i get_grid_size();
+
     BlueprintBlock &get_block(sf::Vector2i position);
 
+private:
     std::vector<std::vector<BlueprintBlock>> grid;
 };
 

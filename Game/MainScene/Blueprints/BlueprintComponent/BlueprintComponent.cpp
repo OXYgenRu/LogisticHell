@@ -12,6 +12,14 @@ void BlueprintComponent::set_block(sf::Vector2i position, BlueprintBlock new_blo
     this->grid[position.y][position.x] = new_block;
 }
 
+
+sf::Vector2i BlueprintComponent::get_grid_size() {
+    if (grid.empty()) {
+        return {int(0), int(0)};
+    }
+    return {int(grid[0].size()), int(grid.size())};
+}
+
 BlueprintBlock &BlueprintComponent::get_block(sf::Vector2i position) {
     return this->grid[position.y][position.x];
 }

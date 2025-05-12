@@ -4,18 +4,21 @@
 
 #include "Blueprint.h"
 
-Blueprint::Blueprint(sf::Vector2i grid_size, bool is_unit) {
-    this->grid_size = grid_size;
-    this->as_unit = is_unit;
+sf::Vector2i rotate_grid(sf::Vector2i grid_size, int rotation) {
+    switch (rotation % 2) {
+        case 0:
+            return {grid_size.x, grid_size.y};
+        case 1:
+            return {grid_size.y, grid_size.x};
+    }
+    return grid_size;
 }
 
-Blueprint::Blueprint(sf::Vector2i grid_size, bool is_unit,
-                     std::vector<std::shared_ptr<BlueprintComponent>> &components) {
-    this->grid_size = grid_size;
-    this->as_unit = is_unit;
-    this->components = components;
-}
 
+Blueprint::Blueprint(sf::Vector2i grid_size, bool is_unit, int rotation) {
+    this->grid_size = rotate_grid(grid_size, rotation);
+    this->as_unit = is_unit;
+}
 
 std::shared_ptr<BlueprintComponent> Blueprint::add_component() {
     this->components.push_back(BlueprintComponent::create(this->grid_size));
@@ -31,7 +34,7 @@ std::shared_ptr<BlueprintComponent> Blueprint::get_component(sf::Vector2i positi
     return nullptr;
 }
 
-bool Blueprint::is_cell_exist(sf::Vector2i position) const{
+bool Blueprint::is_cell_exist(sf::Vector2i position) const {
     if (position.x < 0 or position.x >= this->grid_size.x) {
         return false;
     }

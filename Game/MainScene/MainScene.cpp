@@ -12,33 +12,33 @@ void MainScene::init_tree(EngineContext &ctx) {
     ctx.app->set_background_color(sf::Color(1, 2, 74));
     blueprint_loader = std::make_shared<BlueprintLoader>();
 
-    Blueprint empty_block_blueprint({1, 1}, true);
+    Blueprint empty_block_blueprint({1, 1}, true, 0);
     empty_block_blueprint.add_component()->set_block({0, 0},
-                                                     BlueprintBlock("empty_block::empty_block", {0, 0}, {1, 1}));
+                                                     BlueprintBlock("empty_block::empty_block", {0, 0}, {1, 1}, 0));
     blueprint_loader->register_blueprint("empty_block", empty_block_blueprint);
 
-    Blueprint construction_block_blueprint({1, 1}, true);
+    Blueprint construction_block_blueprint({1, 1}, true, 0);
     construction_block_blueprint.add_component()->set_block({0, 0},
                                                             BlueprintBlock("construction_block::construction_block",
-                                                                           {0, 0}, {1, 1}));
+                                                                           {0, 0}, {1, 1}, 0));
     blueprint_loader->register_blueprint("construction_block", construction_block_blueprint);
 
-    Blueprint big_construction({3, 3}, true);
+    Blueprint big_construction({3, 3}, true, 0);
     big_construction.add_component()->set_block({0, 0},
                                                 BlueprintBlock("construction_block::construction_block",
-                                                               {0, 0}, {3, 3}));
+                                                               {0, 0}, {3, 3}, 0));
     big_construction.add_component()->set_block({1, 0},
                                                 BlueprintBlock("construction_block::construction_block",
-                                                               {1, 0}, {3, 3}));
+                                                               {1, 0}, {3, 3}, 0));
     big_construction.add_component()->set_block({2, 0},
                                                 BlueprintBlock("construction_block::construction_block",
-                                                               {2, 0}, {3, 3}));
+                                                               {2, 0}, {3, 3}, 0));
     big_construction.add_component()->set_block({1, 1},
                                                 BlueprintBlock("construction_block::construction_block",
-                                                               {1, 1}, {3, 3}));
+                                                               {1, 1}, {3, 3}, 0));
     big_construction.add_component()->set_block({1, 2},
                                                 BlueprintBlock("construction_block::construction_block",
-                                                               {1, 2}, {3, 3}));
+                                                               {1, 2}, {3, 3}, 0));
     blueprint_loader->register_blueprint("big_construction", big_construction);
 
 

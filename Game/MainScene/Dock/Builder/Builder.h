@@ -26,20 +26,33 @@ public:
 
     void set_attach_direction(int new_attach_direction_index);
 
-    void update_mask(sf::Vector2i position, EngineContext &ctx);
+    void set_new_preview_position(sf::Vector2i position, EngineContext &ctx);
 
-    void clear_mask(EngineContext &ctx);
+    void rotate_preview(EngineContext &ctx);
+
+    int get_unit_rotation();
+
+    sf::Vector2i &get_unit_position();
+
+    void clear_preview(EngineContext &ctx);
 
     int attach_direction_index = 0;
+
     std::string unit_id;
     std::vector<sf::Vector2i> attach_directions;
     sf::Vector2i attach_direction;
-    sf::Vector2i unit_mask_position;
+
 
     std::shared_ptr<Blueprint> blueprint;
     std::shared_ptr<BuildingGrid> building_grid;
 
     std::weak_ptr<BlueprintLoader> blueprint_loader;
+private:
+    void update_preview(EngineContext &ctx);
+
+    int new_unit_rotation = 0;
+    sf::Vector2i new_unit_position;
+
 };
 
 

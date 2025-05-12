@@ -11,10 +11,7 @@
 
 class Blueprint : public std::enable_shared_from_this<Blueprint> {
 public:
-    explicit Blueprint(sf::Vector2i grid_size, bool is_unit);
-
-    explicit Blueprint(sf::Vector2i grid_size, bool is_unit,
-                       std::vector<std::shared_ptr<BlueprintComponent>> &components);
+    explicit Blueprint(sf::Vector2i grid_size, bool is_unit, int rotation);
 
     std::shared_ptr<BlueprintComponent> add_component();
 
