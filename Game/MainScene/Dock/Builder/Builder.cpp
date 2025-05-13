@@ -28,7 +28,7 @@ void Builder::set_default_blueprint(EngineContext &ctx) {
     this->blueprint = std::make_shared<Blueprint>(this->building_grid->grid_size, false, 0);
     this->blueprint->add_component()->get_block({0, 0}).block_id = "construction_block::construction_block";
     this->building_grid->clear(ctx);
-    this->building_grid->set_block({0, 0}, "construction_block::construction_block", ctx);
+    this->building_grid->set_block({0, 0}, "construction_block::construction_block", 0, ctx);
 }
 
 void Builder::attach_unit(sf::Vector2i position, EngineContext &ctx) {
@@ -45,7 +45,8 @@ void Builder::attach_unit(sf::Vector2i position, EngineContext &ctx) {
             BlueprintBlock block = unit_connecting_component->get_block({x, y});
             if (block.block_id != "empty_block::empty_block") {
                 unit_attachment_base->set_block({position.x + x, position.y + y}, block);
-                this->building_grid->set_block({position.x + x, position.y + y}, block.block_id, ctx);
+                this->building_grid->set_block({position.x + x, position.y + y}, block.block_id,
+                                               this->new_unit_rotation, ctx);
             }
         }
     }
@@ -59,7 +60,8 @@ void Builder::attach_unit(sf::Vector2i position, EngineContext &ctx) {
                 BlueprintBlock block = component->get_block({x, y});
                 if (block.block_id != "empty_block::empty_block") {
                     new_component->set_block({position.x + x, position.y + y}, block);
-                    this->building_grid->set_block({position.x + x, position.y + y}, block.block_id, ctx);
+                    this->building_grid->set_block({position.x + x, position.y + y}, block.block_id,
+                                                   this->new_unit_rotation, ctx);
                 }
             }
         }
@@ -118,11 +120,11 @@ void Builder::update_preview(EngineContext &ctx) {
                     nullptr) {
                     BlueprintBlock block = component->get_block({x, y});
                     this->building_grid->set_mask_block({this->new_unit_position.x + x, this->new_unit_position.y + y},
-                                                        block.block_id, ctx);
+                                                        block.block_id, this->new_unit_rotation, ctx);
                     continue;
                 }
                 this->building_grid->set_mask_block({this->new_unit_position.x + x, this->new_unit_position.y + y},
-                                                    "busy_grid_block::busy_grid_block",
+                                                    "busy_grid_block::busy_grid_block", this->new_unit_rotation,
                                                     ctx);
             }
         }

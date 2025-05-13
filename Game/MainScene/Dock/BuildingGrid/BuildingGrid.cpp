@@ -44,7 +44,7 @@ void BuildingGrid::clear(EngineContext &ctx) {
         for (int j = 0; j < this->grid_size.x; j++) {
             this->cells[i][j] = this->block_factory->create_block("empty_block::empty_block", this->cells_layer, ctx,
                                                                   {j, i},
-                                                                  this->sf_cell_size, this->position);
+                                                                  this->sf_cell_size, this->position, 0);
         }
     }
 }
@@ -62,26 +62,28 @@ void BuildingGrid::clear_mask(EngineContext &ctx) {
                                                                        this->mask_cells_layer,
                                                                        ctx,
                                                                        {j, i},
-                                                                       this->sf_cell_size, this->position);
+                                                                       this->sf_cell_size, this->position, 0);
         }
     }
 }
 
-void BuildingGrid::set_block(sf::Vector2i position, std::string block_id, EngineContext &ctx) {
+void BuildingGrid::set_block(sf::Vector2i position, std::string block_id, int rotation, EngineContext &ctx) {
     this->cells_layer->delete_node(this->cells[position.y][position.x]);
 
     this->cells[position.y][position.x] = this->block_factory->create_block(block_id,
                                                                             this->cells_layer, ctx,
                                                                             {position.x, position.y},
-                                                                            this->sf_cell_size, this->position);
+                                                                            this->sf_cell_size, this->position,
+                                                                            rotation);
 }
 
 
-void BuildingGrid::set_mask_block(sf::Vector2i position, std::string block_id, EngineContext &ctx) {
+void BuildingGrid::set_mask_block(sf::Vector2i position, std::string block_id, int rotation, EngineContext &ctx) {
     this->mask_cells_layer->delete_node(this->mask_cells[position.y][position.x]);
 
     this->mask_cells[position.y][position.x] = this->block_factory->create_block(block_id,
                                                                                  this->mask_cells_layer, ctx,
                                                                                  {position.x, position.y},
-                                                                                 this->sf_cell_size, this->position);
+                                                                                 this->sf_cell_size, this->position,
+                                                                                 rotation);
 }

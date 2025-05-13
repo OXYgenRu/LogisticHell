@@ -27,12 +27,12 @@ void TexturedQuad::update(EngineContext &ctx) {
 
 }
 
-void TexturedQuad::set_texture(const std::string &new_texture_name, EngineContext &ctx) {
+void TexturedQuad::set_texture(const std::string &new_texture_name, int rotation, EngineContext &ctx) {
     std::vector<sf::Vector2f> vertices = ctx.app->texture_atlas->get_region(new_texture_name).get_rect();
-    this->quad[0].texCoords = vertices[0];
-    this->quad[1].texCoords = vertices[1];
-    this->quad[2].texCoords = vertices[2];
-    this->quad[3].texCoords = vertices[3];
+    for (int i = 0; i < 4; i++) {
+        this->quad[(i + rotation) % 4].texCoords = vertices[i];
+    }
+
 }
 
 void TexturedQuad::set_quad(std::vector<sf::Vector2f> &vertices) {

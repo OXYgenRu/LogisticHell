@@ -37,7 +37,7 @@ void MainScene::init_tree(EngineContext &ctx) {
                                                 BlueprintBlock("construction_block::construction_block",
                                                                {1, 1}, {3, 3}, 0));
     big_construction.add_component()->set_block({1, 2},
-                                                BlueprintBlock("construction_block::construction_block",
+                                                BlueprintBlock("icon::icon",
                                                                {1, 2}, {3, 3}, 0));
     blueprint_loader->register_blueprint("big_construction", big_construction);
 
@@ -50,6 +50,7 @@ void MainScene::init_tree(EngineContext &ctx) {
     block_factory->register_block("test_unit", "construction_block", "construction_block");
     block_factory->register_block("void_block", "void_block", "void_block");
     block_factory->register_block("busy_grid_block", "busy_grid_block", "busy_grid_block");
+    block_factory->register_block("icon", "icon", "icon");
 
     world = World::create(scene, b2Vec2({0, 0}), 240);
     dock = Dock::create(world, ctx, world, {200, 600}, sf::Vector2i({10, 10}), 0.2, blueprint_loader, block_factory);

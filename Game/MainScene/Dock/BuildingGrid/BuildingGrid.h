@@ -38,9 +38,9 @@ public:
 
     void clear_mask(EngineContext &ctx);
 
-    void set_block(sf::Vector2i position, std::string block_id, EngineContext &ctx);
+    void set_block(sf::Vector2i position, std::string block_id, int rotation, EngineContext &ctx);
 
-    void set_mask_block(sf::Vector2i position, std::string block_id, EngineContext &ctx);
+    void set_mask_block(sf::Vector2i position, std::string block_id, int rotation, EngineContext &ctx);
 
     std::weak_ptr<Dock> dock;
     std::shared_ptr<ContainerNode> cells_layer;

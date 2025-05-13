@@ -18,7 +18,7 @@ public:
 
     static void setup(std::shared_ptr<TexturedQuad> node);
 
-    void set_texture(const std::string &new_texture_name,EngineContext &ctx);
+    void set_texture(const std::string &new_texture_name, int rotation, EngineContext &ctx);
 
     void set_quad(std::vector<sf::Vector2f> &vertices);
 
