@@ -25,8 +25,8 @@ void BlueprintLoader::register_blueprint(const std::string &blueprint_id, sf::Ve
         auto blueprint = std::make_shared<Blueprint>(grid_size, is_unit, rotation);
         for (auto &to: components) {
             std::shared_ptr<BlueprintComponent> component = blueprint->add_component();
-            for (int i = 0; i < component->get_grid_size().y; i++) {
-                for (int j = 0; j < component->get_grid_size().x; j++) {
+            for (int i = 0; i < grid_size.y; i++) {
+                for (int j = 0; j < grid_size.x; j++) {
                     sf::Vector2i new_position = get_block_position({j, i}, blueprint->grid_size, rotation);
                     component->get_block(new_position) = to->get_block({j, i});
                     component->get_block(new_position).rotation = rotation;
@@ -50,8 +50,8 @@ void BlueprintLoader::register_blueprint(const std::string &blueprint_id, Bluepr
         auto blueprint = std::make_shared<Blueprint>(grid_size, is_unit, rotation);
         for (auto &to: components) {
             std::shared_ptr<BlueprintComponent> component = blueprint->add_component();
-            for (int i = 0; i < component->get_grid_size().y; i++) {
-                for (int j = 0; j < component->get_grid_size().x; j++) {
+            for (int i = 0; i < grid_size.y; i++) {
+                for (int j = 0; j < grid_size.x; j++) {
                     sf::Vector2i new_position = get_block_position({j, i}, blueprint->grid_size, rotation);
                     component->get_block(new_position) = to->get_block({j, i});
                     component->get_block(new_position).rotation = rotation;
