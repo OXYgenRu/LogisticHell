@@ -38,6 +38,7 @@ void Dock::setup(std::shared_ptr<Dock> node, EngineContext &ctx, std::shared_ptr
                                                b2_cell_size, grid_size, block_factory);
     node->builder = Builder::create(node->building_grid, blueprint_loader);
     node->builder->set_default_blueprint(ctx);
+    node->builder->set_attach_direction(3);
     node->dock_collider = DockGridCollider::create(node->camera, node);
 }
 

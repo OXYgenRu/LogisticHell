@@ -18,11 +18,15 @@ DockController::create(std::shared_ptr<ContainerNode> parent, std::shared_ptr<Do
 
 
 void DockController::on_key_release(sf::Event &event, EngineContext &ctx) {
-    if (event.key.code == sf::Keyboard::R) {
-        auto dock_ptr = this->dock.lock();
-        dock_ptr->builder->set_attach_direction((dock_ptr->builder->attach_direction_index + 1) % 4);
-    }
     if (event.key.code == sf::Keyboard::E) {
+        auto dock_ptr = this->dock.lock();
+        dock_ptr->builder->select_next_preview_component(ctx);
+    }
+    if (event.key.code == sf::Keyboard::Q) {
+        auto dock_ptr = this->dock.lock();
+        dock_ptr->builder->select_next_blueprint_component(ctx);
+    }
+    if (event.key.code == sf::Keyboard::R) {
         auto dock_ptr = this->dock.lock();
         dock_ptr->builder->rotate_preview(ctx);
     }

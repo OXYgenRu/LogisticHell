@@ -27,16 +27,16 @@ void MainScene::init_tree(EngineContext &ctx) {
     big_construction.add_component()->set_block({0, 0},
                                                 BlueprintBlock("construction_block::construction_block",
                                                                {0, 0}, {3, 4}, 0));
-    big_construction.add_component()->set_block({1, 0},
-                                                BlueprintBlock("construction_block::construction_block",
-                                                               {1, 0}, {3, 4}, 0));
-    big_construction.add_component()->set_block({2, 0},
+    big_construction.components[0]->set_block({1, 0},
+                                              BlueprintBlock("construction_block::construction_block",
+                                                             {1, 0}, {3, 4}, 0));
+    big_construction.components[0]->set_block({2, 0},
                                                 BlueprintBlock("construction_block::construction_block",
                                                                {2, 0}, {3, 4}, 0));
-    big_construction.add_component()->set_block({1, 1},
+    big_construction.components[0]->set_block({1, 1},
                                                 BlueprintBlock("construction_block::construction_block",
                                                                {1, 1}, {3, 4}, 0));
-    big_construction.add_component()->set_block({1, 2},
+    big_construction.components[0]->set_block({1, 2},
                                                 BlueprintBlock("construction_block::construction_block",
                                                                {1, 2}, {3, 4}, 0));
     big_construction.add_component()->set_block({1, 3},
@@ -54,6 +54,7 @@ void MainScene::init_tree(EngineContext &ctx) {
     block_factory->register_block("void_block", "void_block", "void_block");
     block_factory->register_block("busy_grid_block", "busy_grid_block", "busy_grid_block");
     block_factory->register_block("icon", "icon", "icon");
+    block_factory->register_block("selected_grid_block", "selected_grid_block", "selected_grid_block");
 
     world = World::create(scene, b2Vec2({0, 0}), 240);
     dock = Dock::create(world, ctx, world, {200, 600}, sf::Vector2i({10, 10}), 0.2, blueprint_loader, block_factory);

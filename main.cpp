@@ -35,6 +35,7 @@ int main() {
 
     app.texture_atlas->register_texture("void_block", "blocks/VoidBLock.png");
     app.texture_atlas->register_texture("busy_grid_block", "blocks/BusyGridBlockBlue.png");
+    app.texture_atlas->register_texture("selected_grid_block", "blocks/SelectedGridBlock.png");
     app.start();
 
     

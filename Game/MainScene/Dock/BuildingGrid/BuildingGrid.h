@@ -36,16 +36,22 @@ public:
 
     void clear(EngineContext &ctx);
 
+    void clear_preview(EngineContext &ctx);
+
     void clear_mask(EngineContext &ctx);
 
     void set_block(sf::Vector2i position, std::string block_id, int rotation, EngineContext &ctx);
+
+    void set_preview_block(sf::Vector2i position, std::string block_id, int rotation, EngineContext &ctx);
 
     void set_mask_block(sf::Vector2i position, std::string block_id, int rotation, EngineContext &ctx);
 
     std::weak_ptr<Dock> dock;
     std::shared_ptr<ContainerNode> cells_layer;
+    std::shared_ptr<ContainerNode> preview_cells_layer;
     std::shared_ptr<ContainerNode> mask_cells_layer;
     std::vector<std::vector<std::shared_ptr<BuildingBlock>>> cells;
+    std::vector<std::vector<std::shared_ptr<BuildingBlock>>> preview_cells;
     std::vector<std::vector<std::shared_ptr<BuildingBlock>>> mask_cells;
     std::shared_ptr<BlockFactory> block_factory;
 

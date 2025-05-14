@@ -9,6 +9,7 @@
 #include "memory"
 #include "../BuildingGrid/BuildingGrid.h"
 #include "../../Blueprints/BlueprintLoader.h"
+#include "set"
 
 class Builder {
 public:
@@ -36,6 +37,12 @@ public:
 
     void clear_preview(EngineContext &ctx);
 
+    void select_next_preview_component(EngineContext &ctx);
+
+    void select_next_blueprint_component(EngineContext &ctx);
+
+    void find_blueprint_attachment_components();
+
     int attach_direction_index = 0;
 
     std::string unit_id;
@@ -48,10 +55,14 @@ public:
 
     std::weak_ptr<BlueprintLoader> blueprint_loader;
 private:
+    std::vector<std::shared_ptr<BlueprintComponent>> blueprint_attachment_components;
+
     void update_preview(EngineContext &ctx);
 
     int preview_rotation = 0;
     sf::Vector2i preview_position;
+    int selected_preview_component_index = 0;
+    int selected_blueprint_component_index = 0;
 
 };
 
