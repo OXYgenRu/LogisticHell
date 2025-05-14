@@ -21,7 +21,7 @@ Builder::Builder(std::shared_ptr<BuildingGrid> building_grid, std::shared_ptr<Bl
                                {-1, 0}};
     this->attach_direction_index = 0;
     this->unit_id = "big_construction";
-    this->new_unit_position = {0, 0};
+    this->preview_position = {0, 0};
 }
 
 void Builder::set_default_blueprint(EngineContext &ctx) {
@@ -32,21 +32,23 @@ void Builder::set_default_blueprint(EngineContext &ctx) {
 }
 
 void Builder::attach_unit(sf::Vector2i position, EngineContext &ctx) {
-    if (!this->validate_unit_attachment(position)) {
+    std::shared_ptr<Blueprint> unit = this->blueprint_loader.lock()->create_blueprint(this->unit_id,
+                                                                                      this->preview_rotation);
+    sf::Vector2i unit_position = {position.x - unit->grid_size.x / 2, position.y - unit->grid_size.y / 2};
+    if (!this->validate_unit_attachment(unit_position)) {
         return;
     }
-    std::shared_ptr<Blueprint> unit = this->blueprint_loader.lock()->create_blueprint(this->unit_id,
-                                                                                      this->new_unit_rotation);
+
     std::shared_ptr<BlueprintComponent> unit_attachment_base = this->blueprint->get_component(
-            position + this->attach_direction);
+            unit_position + this->attach_direction);
     std::shared_ptr<BlueprintComponent> unit_connecting_component = unit->get_component({0, 0});
     for (int y = 0; y < unit->grid_size.y; y++) {
         for (int x = 0; x < unit->grid_size.x; x++) {
             BlueprintBlock block = unit_connecting_component->get_block({x, y});
             if (block.block_id != "empty_block::empty_block") {
-                unit_attachment_base->set_block({position.x + x, position.y + y}, block);
-                this->building_grid->set_block({position.x + x, position.y + y}, block.block_id,
-                                               this->new_unit_rotation, ctx);
+                unit_attachment_base->set_block({unit_position.x + x, unit_position.y + y}, block);
+                this->building_grid->set_block({unit_position.x + x, unit_position.y + y}, block.block_id,
+                                               this->preview_rotation, ctx);
             }
         }
     }
@@ -59,9 +61,9 @@ void Builder::attach_unit(sf::Vector2i position, EngineContext &ctx) {
             for (int x = 0; x < unit->grid_size.x; x++) {
                 BlueprintBlock block = component->get_block({x, y});
                 if (block.block_id != "empty_block::empty_block") {
-                    new_component->set_block({position.x + x, position.y + y}, block);
-                    this->building_grid->set_block({position.x + x, position.y + y}, block.block_id,
-                                                   this->new_unit_rotation, ctx);
+                    new_component->set_block({unit_position.x + x, unit_position.y + y}, block);
+                    this->building_grid->set_block({unit_position.x + x, unit_position.y + y}, block.block_id,
+                                                   this->preview_rotation, ctx);
                 }
             }
         }
@@ -70,7 +72,7 @@ void Builder::attach_unit(sf::Vector2i position, EngineContext &ctx) {
 
 bool Builder::validate_unit_attachment(sf::Vector2i position) {
     std::shared_ptr<Blueprint> unit = this->blueprint_loader.lock()->create_blueprint(this->unit_id,
-                                                                                      this->new_unit_rotation);
+                                                                                      this->preview_rotation);
     sf::Vector2i unit_attachment_base = position + this->attach_direction;
     if (unit_attachment_base.x < 0 or unit_attachment_base.x >= this->building_grid->grid_size.x) {
         return false;
@@ -106,25 +108,27 @@ void Builder::set_attach_direction(int new_attach_direction_index) {
 
 void Builder::update_preview(EngineContext &ctx) {
     std::shared_ptr<Blueprint> unit = this->blueprint_loader.lock()->create_blueprint(this->unit_id,
-                                                                                      this->new_unit_rotation);
+                                                                                      this->preview_rotation);
+    sf::Vector2i unit_position = {this->preview_position.x - unit->grid_size.x / 2,
+                                  this->preview_position.y - unit->grid_size.y / 2};
     for (auto &component: unit->components) {
         for (int y = 0; y < unit->grid_size.y; y++) {
             for (int x = 0; x < unit->grid_size.x; x++) {
-                if (!this->blueprint->is_cell_exist({this->new_unit_position.x + x, this->new_unit_position.y + y})) {
+                if (!this->blueprint->is_cell_exist({unit_position.x + x, unit_position.y + y})) {
                     continue;
                 }
                 if (component->get_block({x, y}).block_id == "empty_block::empty_block") {
                     continue;
                 }
-                if (this->blueprint->get_component({this->new_unit_position.x + x, this->new_unit_position.y + y}) ==
+                if (this->blueprint->get_component({unit_position.x + x, unit_position.y + y}) ==
                     nullptr) {
                     BlueprintBlock block = component->get_block({x, y});
-                    this->building_grid->set_mask_block({this->new_unit_position.x + x, this->new_unit_position.y + y},
-                                                        block.block_id, this->new_unit_rotation, ctx);
+                    this->building_grid->set_mask_block({unit_position.x + x, unit_position.y + y},
+                                                        block.block_id, this->preview_rotation, ctx);
                     continue;
                 }
-                this->building_grid->set_mask_block({this->new_unit_position.x + x, this->new_unit_position.y + y},
-                                                    "busy_grid_block::busy_grid_block", this->new_unit_rotation,
+                this->building_grid->set_mask_block({unit_position.x + x, unit_position.y + y},
+                                                    "busy_grid_block::busy_grid_block", this->preview_rotation,
                                                     ctx);
             }
         }
@@ -136,22 +140,22 @@ void Builder::clear_preview(EngineContext &ctx) {
     this->building_grid->clear_mask(ctx);
 }
 
-int Builder::get_unit_rotation() {
-    return this->new_unit_rotation;
+int Builder::get_preview_rotation() {
+    return this->preview_rotation;
 }
 
-sf::Vector2i &Builder::get_unit_position() {
-    return this->new_unit_position;
+sf::Vector2i &Builder::get_preview_position() {
+    return this->preview_position;
 }
 
 void Builder::set_new_preview_position(sf::Vector2i position, EngineContext &ctx) {
-    this->new_unit_position = position;
+    this->preview_position = position;
     this->clear_preview(ctx);
     this->update_preview(ctx);
 }
 
 void Builder::rotate_preview(EngineContext &ctx) {
-    this->new_unit_rotation = (this->new_unit_rotation + 1) % 4;
+    this->preview_rotation = (this->preview_rotation + 1) % 4;
     this->clear_preview(ctx);
     this->update_preview(ctx);
 }

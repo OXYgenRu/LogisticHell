@@ -37,6 +37,6 @@ int main() {
     app.texture_atlas->register_texture("busy_grid_block", "blocks/BusyGridBlockBlue.png");
     app.start();
 
-
+    
     return 0;
 }

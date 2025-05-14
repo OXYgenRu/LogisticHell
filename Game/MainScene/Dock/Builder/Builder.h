@@ -30,9 +30,9 @@ public:
 
     void rotate_preview(EngineContext &ctx);
 
-    int get_unit_rotation();
+    int get_preview_rotation();
 
-    sf::Vector2i &get_unit_position();
+    sf::Vector2i &get_preview_position();
 
     void clear_preview(EngineContext &ctx);
 
@@ -50,8 +50,8 @@ public:
 private:
     void update_preview(EngineContext &ctx);
 
-    int new_unit_rotation = 0;
-    sf::Vector2i new_unit_position;
+    int preview_rotation = 0;
+    sf::Vector2i preview_position;
 
 };
 
