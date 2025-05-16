@@ -5,8 +5,8 @@
 #include "DockController.h"
 #include "../../../../Engine/Nodes/Base/ContainerNode.h"
 #include "../Dock.h"
-#include "../Panel/DockPanel.h"
 #include "iostream"
+
 
 std::shared_ptr<DockController>
 DockController::create(std::shared_ptr<ContainerNode> parent, std::shared_ptr<Dock> dock, int render_priority) {
@@ -18,16 +18,5 @@ DockController::create(std::shared_ptr<ContainerNode> parent, std::shared_ptr<Do
 
 
 void DockController::on_key_release(sf::Event &event, EngineContext &ctx) {
-    if (event.key.code == sf::Keyboard::E) {
-        auto dock_ptr = this->dock.lock();
-        dock_ptr->builder->select_next_preview_component(ctx);
-    }
-    if (event.key.code == sf::Keyboard::Q) {
-        auto dock_ptr = this->dock.lock();
-        dock_ptr->builder->select_next_blueprint_component(ctx);
-    }
-    if (event.key.code == sf::Keyboard::R) {
-        auto dock_ptr = this->dock.lock();
-        dock_ptr->builder->rotate_preview(ctx);
-    }
+    this->dock.lock()->editor_controller->on_key_release(event, ctx);
 }

@@ -11,10 +11,12 @@
 #include "../../../Engine/Nodes/Render/Shapes/Polygon.h"
 #include "../../../Engine/Nodes/Render/Shapes/Text.h"
 #include "../../../Engine/Nodes/Base/CameraNode.h"
-#include "GridCollider/DockGridCollider.h"
-#include "Controller/DockController.h"
+#include "EditorController/DockGridCollider.h"
+#include "EditorController/DockController.h"
 #include "BuildingGrid/BuildingGrid.h"
 #include "Builder/Builder.h"
+#include "Panel/DockPanel.h"
+#include "EditorController/EditorController.h"
 
 class Structure;
 
@@ -39,7 +41,7 @@ public:
 
     std::shared_ptr<UICollider> background_collider;
 
-    std::shared_ptr<Builder> builder;
+    std::shared_ptr<EditorController> editor_controller;
     std::shared_ptr<BuildingGrid> building_grid;
 
     std::shared_ptr<DockController> controller;

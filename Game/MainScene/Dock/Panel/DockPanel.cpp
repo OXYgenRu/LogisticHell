@@ -16,7 +16,6 @@ std::shared_ptr<DockPanel> DockPanel::create(std::shared_ptr<ContainerNode> pare
 
 void DockPanel::setup(std::shared_ptr<DockPanel> node, std::shared_ptr<Dock> dock) {
     node->dock = dock;
-
     std::vector<sf::Vector2f> polygon = {{1400, 0},
                                          {1600, 0},
                                          {1600, 900},
@@ -33,11 +32,18 @@ void DockPanel::setup(std::shared_ptr<DockPanel> node, std::shared_ptr<Dock> doc
     node->text->text.setFillColor(sf::Color::Black);
     node->text->text.setCharacterSize(30);
 
+    node->selected_unit = Text::create(node);
+    node->selected_unit->set_font("C:/Windows/Fonts/arial.ttf");
+    node->selected_unit->text.setString("");
+    node->selected_unit->text.setPosition(1430, 500);
+    node->selected_unit->text.setFillColor(sf::Color::Black);
+    node->selected_unit->text.setCharacterSize(30);
+
     node->background_collider = UICollider::create(node);
     node->background_collider->vertices = polygon;
 }
 
 void DockPanel::update(EngineContext &ctx) {
     auto dock_ptr = this->dock.lock();
-    this->text->text.setString(std::to_string(dock_ptr->builder->attach_direction_index));
+    this->selected_unit->text.setString(dock_ptr->editor_controller->builder->unit_id);
 }

@@ -17,10 +17,13 @@ public:
 
     void register_blueprint(const std::string &blueprint_id, Blueprint &template_blueprint);
 
+    std::vector<std::string> &get_all_blueprints();
+
     std::shared_ptr<Blueprint> create_blueprint(const std::string &blueprint_id, int rotation);
 
 private:
     std::unordered_map<std::string, blueprint_loader> loaders;
+    std::vector<std::string> blueprints;
 };
 
 

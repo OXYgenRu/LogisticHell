@@ -23,9 +23,9 @@ public:
 
     void attach_unit(sf::Vector2i position, EngineContext &ctx);
 
-    bool validate_unit_attachment(sf::Vector2i position);
+    void destroy_unit(sf::Vector2i position, EngineContext &ctx);
 
-    void set_attach_direction(int new_attach_direction_index);
+    bool validate_unit_attachment(sf::Vector2i position);
 
     void set_new_preview_position(sf::Vector2i position, EngineContext &ctx);
 
@@ -43,22 +43,17 @@ public:
 
     void find_blueprint_attachment_components();
 
-    int attach_direction_index = 0;
+    void draw_building_preview(EngineContext &ctx);
+
+    void draw_destroying_preview(EngineContext &ctx);
 
     std::string unit_id;
-    std::vector<sf::Vector2i> attach_directions;
-    sf::Vector2i attach_direction;
-
-
     std::shared_ptr<Blueprint> blueprint;
     std::shared_ptr<BuildingGrid> building_grid;
-
     std::weak_ptr<BlueprintLoader> blueprint_loader;
+    int unit_index;
 private:
     std::vector<std::shared_ptr<BlueprintComponent>> blueprint_attachment_components;
-
-    void update_preview(EngineContext &ctx);
-
     int preview_rotation = 0;
     sf::Vector2i preview_position;
     int selected_preview_component_index = 0;

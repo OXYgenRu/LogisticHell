@@ -114,5 +114,5 @@ void BuildingGrid::set_mask_block(sf::Vector2i position, std::string block_id, i
                                                                                  this->mask_cells_layer, ctx,
                                                                                  {position.x, position.y},
                                                                                  this->sf_cell_size, this->position,
-                                                                                 rotation);
+                                                                                 0);
 }

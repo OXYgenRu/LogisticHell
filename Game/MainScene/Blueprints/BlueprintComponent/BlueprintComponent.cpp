@@ -23,3 +23,7 @@ sf::Vector2i BlueprintComponent::get_grid_size() {
 BlueprintBlock &BlueprintComponent::get_block(sf::Vector2i position) {
     return this->grid[position.y][position.x];
 }
+
+void BlueprintComponent::delete_block(sf::Vector2i position) {
+    this->grid[position.y][position.x].block_id = "empty_block::empty_block";
+}

@@ -21,6 +21,7 @@ sf::Vector2i get_block_position(sf::Vector2i position, sf::Vector2i &grid_size, 
 
 void BlueprintLoader::register_blueprint(const std::string &blueprint_id, sf::Vector2i grid_size, bool is_unit,
                                          std::vector<std::shared_ptr<BlueprintComponent>> &components) {
+    this->blueprints.push_back(blueprint_id);
     this->loaders[blueprint_id] = [grid_size, is_unit, components](int rotation) {
         auto blueprint = std::make_shared<Blueprint>(grid_size, is_unit, rotation);
         for (auto &to: components) {
@@ -46,6 +47,7 @@ void BlueprintLoader::register_blueprint(const std::string &blueprint_id, Bluepr
     sf::Vector2i grid_size = template_blueprint.grid_size;
     bool is_unit = template_blueprint.as_unit;
     std::vector<std::shared_ptr<BlueprintComponent>> components = template_blueprint.components;
+    this->blueprints.push_back(blueprint_id);
     this->loaders[blueprint_id] = [grid_size, is_unit, components](int rotation) {
         auto blueprint = std::make_shared<Blueprint>(grid_size, is_unit, rotation);
         for (auto &to: components) {
@@ -72,4 +74,8 @@ std::shared_ptr<Blueprint> BlueprintLoader::create_blueprint(const std::string &
         throw std::runtime_error("Unknown blueprint ID");
     }
     return it->second(rotation);
+}
+
+std::vector<std::string> &BlueprintLoader::get_all_blueprints() {
+    return this->blueprints;
 }

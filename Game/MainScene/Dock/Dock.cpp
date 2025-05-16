@@ -4,7 +4,6 @@
 
 #include "Dock.h"
 #include "../Structure/Structure.h"
-#include "Panel/DockPanel.h"
 #include "../../../Engine/Application.h"
 
 std::shared_ptr<Dock>
@@ -26,19 +25,21 @@ void Dock::setup(std::shared_ptr<Dock> node, EngineContext &ctx, std::shared_ptr
                  sf::Vector2i grid_size, float b2_cell_size, std::shared_ptr<BlueprintLoader> blueprint_loader,
                  std::shared_ptr<BlockFactory> block_factory) {
     node->world = world;
-    node->controller = DockController::create(node, node);
+
     node->background_collider = UICollider::create(node, 0);
     node->background_collider->vertices = {{0,                                   0},
                                            {float(ctx.app->window->getSize().x), 0},
                                            {float(ctx.app->window->getSize().x), float(ctx.app->window->getSize().y)},
                                            {0,                                   float(ctx.app->window->getSize().x)}};
-    node->panel = DockPanel::create(node, node, 2);
+
+
     node->camera = CameraNode::create(node, ctx, 1);
+    node->controller = DockController::create(node, node);
     node->building_grid = BuildingGrid::create(node->camera, node, position, world->pixel_per_meter * b2_cell_size,
                                                b2_cell_size, grid_size, block_factory);
-    node->builder = Builder::create(node->building_grid, blueprint_loader);
-    node->builder->set_default_blueprint(ctx);
-    node->builder->set_attach_direction(3);
+    node->editor_controller = EditorController::create(ctx, node, node->building_grid, blueprint_loader);
     node->dock_collider = DockGridCollider::create(node->camera, node);
+
+    node->panel = DockPanel::create(node, node, 2);
 }
 

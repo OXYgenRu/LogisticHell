@@ -28,6 +28,7 @@ public:
     std::shared_ptr<Polygon> polygon;
     std::shared_ptr<Text> text;
     std::shared_ptr<UICollider> background_collider;
+    std::shared_ptr<Text> selected_unit;
 };
 
 

@@ -38,6 +38,8 @@ public:
 
     void set_block(sf::Vector2i position, BlueprintBlock new_block);
 
+    void delete_block(sf::Vector2i position);
+
     sf::Vector2i get_grid_size();
 
     BlueprintBlock &get_block(sf::Vector2i position);

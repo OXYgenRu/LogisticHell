@@ -23,30 +23,25 @@ void MainScene::init_tree(EngineContext &ctx) {
                                                                            {0, 0}, {1, 1}, 0));
     blueprint_loader->register_blueprint("construction_block", construction_block_blueprint);
 
-    Blueprint big_construction({3, 4}, true, 0);
+    Blueprint big_construction({2, 2}, true, 0);
     big_construction.add_component()->set_block({0, 0},
-                                                BlueprintBlock("construction_block::construction_block",
-                                                               {0, 0}, {3, 4}, 0));
+                                                BlueprintBlock("heavy_construction::heavy_construction",
+                                                               {0, 0}, {2, 2}, 0));
     big_construction.components[0]->set_block({1, 0},
-                                              BlueprintBlock("construction_block::construction_block",
-                                                             {1, 0}, {3, 4}, 0));
-    big_construction.components[0]->set_block({2, 0},
-                                                BlueprintBlock("construction_block::construction_block",
-                                                               {2, 0}, {3, 4}, 0));
-    big_construction.components[0]->set_block({1, 1},
-                                                BlueprintBlock("construction_block::construction_block",
-                                                               {1, 1}, {3, 4}, 0));
-    big_construction.components[0]->set_block({1, 2},
-                                                BlueprintBlock("construction_block::construction_block",
-                                                               {1, 2}, {3, 4}, 0));
-    big_construction.add_component()->set_block({1, 3},
-                                                BlueprintBlock("icon::icon",
-                                                               {1, 3}, {3, 4}, 0));
+                                              BlueprintBlock("heavy_construction::heavy_construction",
+                                                             {1, 0}, {2, 2}, 0));
+    big_construction.add_component()->set_block({0, 1},
+                                                BlueprintBlock("light_construction::light_construction",
+                                                               {2, 0}, {2, 2}, 0));
+    big_construction.components[1]->set_block({1, 1},
+                                              BlueprintBlock("light_construction::light_construction",
+                                                             {1, 1}, {2, 2}, 0));
     blueprint_loader->register_blueprint("big_construction", big_construction);
 
 
     block_factory = std::make_shared<BlockFactory>();
-
+    block_factory->register_block("light_construction", "light_construction", "light_construction");
+    block_factory->register_block("heavy_construction", "heavy_construction", "heavy_construction");
     block_factory->register_block("empty_block", "empty_block", "empty_block");
     block_factory->register_block("discarded_block", "discarded_block", "discarded_block");
     block_factory->register_block("construction_block", "construction_block", "construction_block");
