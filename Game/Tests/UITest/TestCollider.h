@@ -7,18 +7,18 @@
 
 #include "iostream"
 
-#include "../../../Engine/Nodes/UI/UICollider.h"
+#include "../../../Engine/Nodes/UI/Collider.h"
 
 
-class TestCollider : public UICollider {
+class TestCollider : public UI::Collider {
 public:
 
     static std::shared_ptr<TestCollider> create(std::shared_ptr<ContainerNode> parent, int render_priority = 0);
 
-    explicit TestCollider(std::shared_ptr<ContainerNode> parent, int render_priority = 0) : UICollider(parent,
+    explicit TestCollider(std::shared_ptr<ContainerNode> parent, int render_priority = 0) : UI::Collider(parent,
                                                                                                        render_priority) {}
 
-    void on_mouse_press(sf::Event &event, EngineContext &ctx) override;
+//    void handle_mouse_press(sf::Event &event, EngineContext &ctx) override;
 };
 
 

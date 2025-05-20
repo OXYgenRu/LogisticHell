@@ -22,5 +22,5 @@ void UIScene::init_tree(EngineContext &ctx) {
     polygon = Polygon::create(camera);
     polygon->set_polygon(a);
     ui_collider = TestCollider::create(camera);
-    ui_collider->vertices = a;
+//    ui_collider->vertices = a;
 }

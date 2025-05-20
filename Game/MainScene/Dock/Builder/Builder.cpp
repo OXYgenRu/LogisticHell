@@ -63,7 +63,6 @@ void Builder::attach_unit(sf::Vector2i position, EngineContext &ctx) {
             }
         }
     }
-    this->find_blueprint_attachment_components();
 }
 
 void Builder::destroy_unit(sf::Vector2i position, EngineContext &ctx) {

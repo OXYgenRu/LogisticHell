@@ -7,7 +7,7 @@
 
 #include "../EngineContext.h"
 #include "SFML/Graphics.hpp"
-#include "../Nodes/UI/UICollider.h"
+#include "../Nodes/UI/Collider.h"
 
 class UICollidersSystem {
 public:
@@ -19,7 +19,7 @@ public:
 
 private:
     std::vector<sf::Event> control_events;
-    std::shared_ptr<UICollider> last_used_collider;
+    std::shared_ptr<UI::Collider> last_used_collider;
 };
 
 

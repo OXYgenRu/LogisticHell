@@ -27,9 +27,14 @@ void EditorController::on_mouse_release(sf::Event &event, EngineContext &ctx) {
     switch (this->editor_mode) {
         case EditorMode::Attachment:
             this->builder->attach_unit(cell_position, ctx);
+            this->builder->find_blueprint_attachment_components();
+            this->builder->clear_preview(ctx);
+            this->builder->draw_building_preview(ctx);
             break;
         case EditorMode::Destroying:
             this->builder->destroy_unit(cell_position, ctx);
+            this->builder->clear_preview(ctx);
+            this->builder->draw_destroying_preview(ctx);
             break;
     }
 
@@ -65,19 +70,15 @@ void EditorController::on_mouse_enter(EngineContext &ctx) {
     sf::Vector2i cell_position = this->get_grid_cell_position(ctx);
     switch (this->editor_mode) {
         case EditorMode::Attachment:
-            if (cell_position != builder->get_preview_position()) {
-                this->builder->set_new_preview_position(cell_position, ctx);
-                this->builder->find_blueprint_attachment_components();
-                this->builder->clear_preview(ctx);
-                this->builder->draw_building_preview(ctx);
-            }
+            this->builder->set_new_preview_position(cell_position, ctx);
+            this->builder->find_blueprint_attachment_components();
+            this->builder->clear_preview(ctx);
+            this->builder->draw_building_preview(ctx);
             break;
         case EditorMode::Destroying:
-            if (cell_position != builder->get_preview_position()) {
-                this->builder->set_new_preview_position(cell_position, ctx);
-                this->builder->clear_preview(ctx);
-                this->builder->draw_destroying_preview(ctx);
-            }
+            this->builder->set_new_preview_position(cell_position, ctx);
+            this->builder->clear_preview(ctx);
+            this->builder->draw_destroying_preview(ctx);
             break;
     }
 }
@@ -104,12 +105,33 @@ void EditorController::on_key_release(sf::Event &event, EngineContext &ctx) {
             }
             if (event.key.code == sf::Keyboard::F) {
                 this->editor_mode = EditorMode::Destroying;
+                this->builder->clear_preview(ctx);
+                this->builder->draw_destroying_preview(ctx);
             }
             break;
         case EditorMode::Destroying:
             if (event.key.code == sf::Keyboard::F) {
                 this->editor_mode = EditorMode::Attachment;
+                this->builder->find_blueprint_attachment_components();
+                this->builder->clear_preview(ctx);
+                this->builder->draw_building_preview(ctx);
             }
+            break;
+    }
+}
+
+void EditorController::set_mode(const EditorMode &new_mode, EngineContext &ctx) {
+    switch (new_mode) {
+        case EditorMode::Attachment:
+            this->editor_mode = EditorMode::Attachment;
+            this->builder->find_blueprint_attachment_components();
+            this->builder->clear_preview(ctx);
+            this->builder->draw_building_preview(ctx);
+            break;
+        case EditorMode::Destroying:
+            this->editor_mode = EditorMode::Destroying;
+            this->builder->clear_preview(ctx);
+            this->builder->draw_destroying_preview(ctx);
             break;
     }
 }

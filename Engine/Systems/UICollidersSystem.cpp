@@ -6,7 +6,7 @@
 
 #include "../EngineContext.h"
 #include "../Application.h"
-#include "../Nodes/UI/UICollider.h"
+#include "../Nodes/UI/Collider.h"
 #include "../Tools.h"
 #include "../Application.h"
 #include "../EngineContext.h"
@@ -18,7 +18,7 @@ void UICollidersSystem::update(EngineContext &ctx) {
             continue;
         }
         if (ctx.app->tree->get_flatten_tree()[i]->get_node_type() == 9) {
-            auto node = std::static_pointer_cast<UICollider>(ctx.app->tree->get_flatten_tree()[i]);
+            auto node = std::static_pointer_cast<UI::Collider>(ctx.app->tree->get_flatten_tree()[i]);
             for (sf::Event &event: this->control_events) {
                 if (was_used) {
                     continue;
@@ -26,27 +26,27 @@ void UICollidersSystem::update(EngineContext &ctx) {
                 sf::Vector2i pixelPos = sf::Mouse::getPosition(*ctx.app->window);
                 sf::Vector2f worldPos = ctx.app->window->mapPixelToCoords(pixelPos,
                                                                           ctx.app->tree->get_view_tracker()[i]);
-                if (!is_point_in_polygon(worldPos, node->vertices)) {
+                if (!is_point_in_polygon(worldPos, node->get_vertices())) {
                     continue;
                 }
                 ctx.app->window->setView(ctx.app->tree->get_view_tracker()[i]);
                 if (node != this->last_used_collider) {
                     if (this->last_used_collider != nullptr) {
-                        this->last_used_collider->on_mouse_exit(ctx);
+                        this->last_used_collider->handle_mouse_exit(ctx);
                     }
-                    node->on_mouse_enter(ctx);
+                    node->handle_mouse_enter(ctx);
                 }
                 this->last_used_collider = node;
                 if (event.type == sf::Event::MouseButtonReleased) {
-                    node->on_mouse_release(event, ctx);
+                    node->handle_mouse_release(event, ctx);
                     was_used = true;
                 }
                 if (event.type == sf::Event::MouseButtonPressed) {
-                    node->on_mouse_press(event, ctx);
+                    node->handle_mouse_press(event, ctx);
                     was_used = true;
                 }
                 if (event.type == sf::Event::MouseMoved) {
-                    node->on_mouse_moved(event, ctx);
+                    node->handle_mouse_move(event, ctx);
                     was_used = true;
                 }
             }

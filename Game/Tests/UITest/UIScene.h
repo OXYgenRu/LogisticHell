@@ -9,7 +9,7 @@
 #include "../../../Engine/Nodes/Base/CameraNode.h"
 #include "../../../Engine/Nodes/Base/ContainerNode.h"
 #include "../../../Engine/Nodes/Render/Shapes/Polygon.h"
-#include "../../../Engine/Nodes/UI/UICollider.h"
+#include "../../../Engine/Nodes/UI/Collider.h"
 
 class UIScene : public Scene {
 public:
@@ -27,7 +27,7 @@ public:
 
     std::shared_ptr<CameraNode> camera;
     std::shared_ptr<Polygon> polygon;
-    std::shared_ptr<UICollider> ui_collider;
+    std::shared_ptr<UI::Collider> ui_collider;
 
 };
 

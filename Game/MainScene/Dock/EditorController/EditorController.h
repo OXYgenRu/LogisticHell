@@ -9,7 +9,6 @@
 #include "../BuildingGrid/BuildingGrid.h"
 #include "../../Blueprints/BlueprintLoader.h"
 #include "../Builder/Builder.h"
-#include "DockGridCollider.h"
 #include "DockController.h"
 
 class Dock;
@@ -39,6 +38,8 @@ public:
     void on_mouse_enter(EngineContext &ctx);
 
     void on_key_release(sf::Event &event, EngineContext &ctx);
+
+    void set_mode(const EditorMode &new_mode, EngineContext &ctx);
 
     std::shared_ptr<Builder> builder;
     std::weak_ptr<Dock> dock;

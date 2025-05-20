@@ -11,11 +11,10 @@
 #include "../../../Engine/Nodes/Render/Shapes/Polygon.h"
 #include "../../../Engine/Nodes/Render/Shapes/Text.h"
 #include "../../../Engine/Nodes/Base/CameraNode.h"
-#include "EditorController/DockGridCollider.h"
 #include "EditorController/DockController.h"
 #include "BuildingGrid/BuildingGrid.h"
 #include "Builder/Builder.h"
-#include "Panel/DockPanel.h"
+#include "EditorInterface/EditorInterface.h"
 #include "EditorController/EditorController.h"
 
 class Structure;
@@ -39,16 +38,13 @@ public:
           sf::Vector2i grid_size, float b2_cell_size, std::shared_ptr<BlueprintLoader> blueprint_loader,
           std::shared_ptr<BlockFactory> block_factory);
 
-    std::shared_ptr<UICollider> background_collider;
-
+    std::shared_ptr<UI::Collider> background_collider;
     std::shared_ptr<EditorController> editor_controller;
     std::shared_ptr<BuildingGrid> building_grid;
-
     std::shared_ptr<DockController> controller;
-    std::shared_ptr<ContainerNode> panel;
-    std::shared_ptr<DockGridCollider> dock_collider;
+    std::shared_ptr<EditorInterface> interface;
+    std::shared_ptr<UI::Collider> blueprint_collider;
     std::shared_ptr<CameraNode> camera;
-
     std::weak_ptr<World> world;
 };
 

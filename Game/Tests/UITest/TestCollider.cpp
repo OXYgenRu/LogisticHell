@@ -10,7 +10,7 @@ std::shared_ptr<TestCollider> TestCollider::create(std::shared_ptr<ContainerNode
     parent->add_node(node);
     return node;
 }
-
-void TestCollider::on_mouse_press(sf::Event &event, EngineContext &ctx) {
-    std::cout << "Click!" << '\n';
-}
+//
+//void TestCollider::handle_mouse_press(sf::Event &event, EngineContext &ctx) {
+//    std::cout << "Click!" << '\n';
+//}

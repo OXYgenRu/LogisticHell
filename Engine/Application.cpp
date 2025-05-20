@@ -19,11 +19,11 @@ Application::Application(const sf::VideoMode &videoMode, const std::string &titl
     this->standard_view = sf::View(sf::Vector2f(float(videoMode.width) / 2, float(videoMode.height) / 2),
                                    sf::Vector2f(float(videoMode.width), float(videoMode.height)));
     this->frame_limit = frame_limit;
-    this->texture_atlas = new Atlas(sf::Vector2i(96, 128));
+    this->texture_atlas = new Atlas(sf::Vector2i(128, 128));
 }
 
 void Application::start() {
-    this->window = new sf::RenderWindow(this->video_mode, this->title);
+    this->window = new sf::RenderWindow(this->video_mode, this->title, sf::Style::Titlebar | sf::Style::Close);
     sf::Clock clock;
     sf::Event event{};
     std::shared_ptr<ContainerNode> scene = this->scene_system->currentScene;
@@ -76,4 +76,8 @@ std::shared_ptr<Scene> Application::get_current_scene() const {
 
 void Application::set_background_color(sf::Color new_color) {
     this->background_color = new_color;
+}
+
+sf::Vector2f Application::get_window_size() const {
+    return {float(this->window->getSize().x), float(this->window->getSize().y)};
 }

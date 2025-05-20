@@ -29,6 +29,8 @@ public:
 
     void set_background_color(sf::Color new_color);
 
+     sf::Vector2f get_window_size() const;
+
     std::shared_ptr<Scene> get_current_scene() const;
 
     SceneSystem *scene_system;

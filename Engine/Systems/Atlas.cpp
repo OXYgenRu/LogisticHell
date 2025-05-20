@@ -74,3 +74,7 @@ std::vector<sf::Vector2f> AtlasRegion::get_rect() const {
     vertices[3] = {float(x2), float(y2)};
     return vertices;
 }
+
+sf::IntRect AtlasRegion::get_int_rect() const {
+    return {sf::Vector2i(x1, y1), sf::Vector2i(x2 - x1, y2 - y1)};
+}
