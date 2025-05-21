@@ -7,19 +7,19 @@
 #include "../../Application.h"
 
 std::shared_ptr<UI::Rectangle>
-UI::Rectangle::create(std::shared_ptr<ContainerNode> parent, sf::Vector2f space_position, sf::Vector2f space_size,
+UI::Rectangle::create(std::shared_ptr<ContainerNode> parent,  sf::Vector2f space_size,
                       AnchorType anchor_type,
                       AnchorBinding anchor_binding,
                       int render_priority) {
     auto node = std::make_shared<UI::Rectangle>(parent, render_priority);
     parent->add_node(node);
-    UI::Rectangle::setup(node, space_position, space_size, anchor_type, anchor_binding);
+    UI::Rectangle::setup(node,  space_size, anchor_type, anchor_binding);
     return node;
 }
 
-void UI::Rectangle::setup(std::shared_ptr<Rectangle> &node, sf::Vector2f &space_position, sf::Vector2f &space_size,
+void UI::Rectangle::setup(std::shared_ptr<Rectangle> &node,  sf::Vector2f &space_size,
                           AnchorType anchor_type, AnchorBinding anchor_binding) {
-    node->anchor.set_space(space_position, space_size);
+    node->anchor.set_space( space_size);
     node->anchor.set_anchor_type(anchor_type);
     node->anchor.set_anchor_binding(anchor_binding);
 }
@@ -42,6 +42,6 @@ void UI::Rectangle::set_color(sf::Color color) {
 }
 
 
-void UI::Rectangle::render(EngineContext &ctx) {
-    ctx.app->window->draw(this->polygon);
+void UI::Rectangle::render(EngineContext &ctx, sf::RenderStates &states) {
+    ctx.app->window->draw(this->polygon, states);
 }

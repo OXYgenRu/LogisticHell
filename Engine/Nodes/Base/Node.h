@@ -16,7 +16,7 @@ public:
 
     explicit Node(std::shared_ptr<ContainerNode> parent, int render_priority = 0);
 
-    virtual void render(EngineContext &ctx) = 0;
+    virtual void render(EngineContext &ctx, sf::RenderStates &states) = 0;
 
     virtual void update(EngineContext &ctx) = 0;
 
@@ -31,14 +31,25 @@ public:
 
     bool get_update_flag();
 
-    std::weak_ptr<ContainerNode> parent;
-    int render_priority = 0;
+    virtual sf::Transformable &get_transformable();
 
     static std::string get_node_type_str(std::shared_ptr<Node> node);
 
+    void set_position(const sf::Vector2f &position);
+
+    const sf::Vector2f &get_position();
+
+    void set_rotation(float angle);
+
+    float get_rotation();
+
+    std::weak_ptr<ContainerNode> parent;
+    int render_priority = 0;
 private:
     bool render_enabled = true;
     bool update_enabled = true;
+protected:
+    sf::Transformable transform;
 };
 
 

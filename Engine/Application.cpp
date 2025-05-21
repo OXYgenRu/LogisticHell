@@ -29,6 +29,8 @@ void Application::start() {
     std::shared_ptr<ContainerNode> scene = this->scene_system->currentScene;
     this->window->setFramerateLimit(this->frame_limit);
     this->texture_atlas->build();
+    sf::Transform scene_transform;
+    scene_transform.translate(this->get_window_size().x / 2, this->get_window_size().y / 2);
     try {
         while (this->window->isOpen()) {
             float delta_time = clock.restart().asSeconds();
@@ -38,8 +40,7 @@ void Application::start() {
 
             this->tree->drop_tree();
 //        scene = this->scene_system->currentScene;
-            this->tree->traverse(scene, ctx);
-            this->tree->update_view_tracker(ctx);
+            this->tree->traverse(scene, ctx, scene_transform);
 
             while (window->pollEvent(event)) {
                 if (event.type == sf::Event::Closed) {

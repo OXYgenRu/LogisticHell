@@ -28,6 +28,7 @@ public:
     std::shared_ptr<CameraNode> camera;
     std::shared_ptr<Polygon> polygon;
     std::shared_ptr<UI::Collider> ui_collider;
+    std::shared_ptr<ContainerNode> c1;
 
 };
 

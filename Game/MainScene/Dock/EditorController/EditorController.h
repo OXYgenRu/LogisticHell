@@ -29,13 +29,13 @@ public:
                               std::shared_ptr<BuildingGrid> building_grid,
                               std::shared_ptr<BlueprintLoader> blueprint_loader);
 
-    void on_mouse_release(sf::Event &event, EngineContext &ctx);
+    void on_mouse_release(sf::Event &event, EngineContext &ctx, const sf::Vector2f &local_position);
 
-    void on_mouse_moved(sf::Event &event, EngineContext &ctx);
+    void on_mouse_moved(sf::Event &event, EngineContext &ctx, const sf::Vector2f &local_position);
 
-    void on_mouse_exit(EngineContext &ctx);
+    void on_mouse_exit(EngineContext &ctx, const sf::Vector2f &local_position);
 
-    void on_mouse_enter(EngineContext &ctx);
+    void on_mouse_enter(EngineContext &ctx, const sf::Vector2f &local_position);
 
     void on_key_release(sf::Event &event, EngineContext &ctx);
 
@@ -45,8 +45,9 @@ public:
     std::weak_ptr<Dock> dock;
 private:
     EditorMode editor_mode;
+    bool is_preview_active;
 
-    sf::Vector2i get_grid_cell_position(EngineContext &ctx);
+    sf::Vector2i get_grid_cell_position(EngineContext &ctx, const sf::Vector2f &local_position);
 };
 
 

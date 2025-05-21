@@ -7,6 +7,7 @@
 
 
 #include "../../../../Engine/Nodes/Base/ContainerNode.h"
+#include "../../../../Engine/Nodes/UI/Collider.h"
 #include "BuildingBlock.h"
 #include "BlockFactory.h"
 
@@ -17,9 +18,8 @@ class Dock;
 class BuildingGrid : public ContainerNode {
 public:
     static std::shared_ptr<BuildingGrid>
-    create(std::shared_ptr<ContainerNode> parent, std::shared_ptr<Dock> dock, sf::Vector2f position,
-           float sf_cell_size,
-           float b2_cell_size, sf::Vector2i grid_size, std::shared_ptr<BlockFactory> block_factory,
+    create(std::shared_ptr<ContainerNode> parent, std::shared_ptr<Dock> &dock,float sf_cell_size,
+         const sf::Vector2i &grid_size, std::shared_ptr<BlockFactory> &block_factory,
            int render_priority = 0,
            int render_priority_layers = 10
     );
@@ -29,9 +29,8 @@ public:
             : ContainerNode(parent, render_priority) {}
 
     static void
-    setup(std::shared_ptr<BuildingGrid> node, std::shared_ptr<Dock> dock, sf::Vector2f position,
-          float sf_cell_size,
-          float b2_cell_size, sf::Vector2i grid_size, std::shared_ptr<BlockFactory> block_factory
+    setup(std::shared_ptr<BuildingGrid> &node, std::shared_ptr<Dock> &dock,float sf_cell_size,
+           const sf::Vector2i &grid_size, std::shared_ptr<BlockFactory> &block_factory
     );
 
     void clear(EngineContext &ctx);
@@ -40,11 +39,11 @@ public:
 
     void clear_mask(EngineContext &ctx);
 
-    void set_block(sf::Vector2i position, std::string block_id, int rotation, EngineContext &ctx);
+    void set_block(const sf::Vector2i &position, const std::string &block_id, int rotation, EngineContext &ctx);
 
-    void set_preview_block(sf::Vector2i position, std::string block_id, int rotation, EngineContext &ctx);
+    void set_preview_block(const sf::Vector2i &position, const std::string &block_id, int rotation, EngineContext &ctx);
 
-    void set_mask_block(sf::Vector2i position, std::string block_id, int rotation, EngineContext &ctx);
+    void set_mask_block(const sf::Vector2i &position, const std::string &block_id, int rotation, EngineContext &ctx);
 
     std::weak_ptr<Dock> dock;
     std::shared_ptr<ContainerNode> cells_layer;
@@ -54,11 +53,10 @@ public:
     std::vector<std::vector<std::shared_ptr<BuildingBlock>>> preview_cells;
     std::vector<std::vector<std::shared_ptr<BuildingBlock>>> mask_cells;
     std::shared_ptr<BlockFactory> block_factory;
+    std::shared_ptr<UI::Collider> grid_collider;
 
-    sf::Vector2f position;
     sf::Vector2i grid_size;
     float sf_cell_size;
-    float b2_cell_size;
 };
 
 

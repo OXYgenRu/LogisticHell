@@ -29,7 +29,6 @@ public:
     Anchor() {
         this->anchor_binding = AnchorBinding::LeftUp;
         this->anchor_type = AnchorType::Absolute;
-        this->space_position = {0, 0};
         this->space_size = {1, 1};
         this->calculate_anchor_parameters();
     }
@@ -39,13 +38,11 @@ public:
            sf::Vector2f space_size) {
         this->anchor_binding = anchor_binding;
         this->anchor_type = anchor_type;
-        this->space_position = space_position;
         this->space_size = space_size;
         this->calculate_anchor_parameters();
     }
 
-    void set_space(sf::Vector2f &new_space_position, sf::Vector2f &new_space_size) {
-        this->space_position = new_space_position;
+    void set_space( sf::Vector2f &new_space_size) {
         this->space_size = new_space_size;
     }
 
@@ -75,31 +72,31 @@ private:
     void calculate_anchor_parameters() {
         switch (this->anchor_binding) {
             case AnchorBinding::Center:
-                this->anchor_position = this->space_position + this->space_size / float(2);
+                this->anchor_position = {space_size.x / 2, space_size.y / 2};
                 break;
             case AnchorBinding::LeftUp:
-                this->anchor_position = this->space_position;
+                this->anchor_position = {0, 0};
                 break;
             case AnchorBinding::CenterUp:
-                this->anchor_position = {space_position.x + space_size.x / 2, space_position.y};
+                this->anchor_position = {space_size.x, 0};
                 break;
             case AnchorBinding::RightUp:
-                this->anchor_position = {space_position.x + space_size.x, space_position.y};
+                this->anchor_position = {space_size.x, space_size.y};
                 break;
             case AnchorBinding::RightCenter:
-                this->anchor_position = {space_position.x + space_size.x, space_position.y + space_size.y / 2};
+                this->anchor_position = {space_size.x, space_size.y / 2};
                 break;
             case AnchorBinding::RightDown:
-                this->anchor_position = {space_position.x + space_size.x, space_position.y + space_size.y};
+                this->anchor_position = {space_size.x, space_size.y};
                 break;
             case AnchorBinding::CenterDown:
-                this->anchor_position = {space_position.x + space_size.x / 2, space_position.y + space_size.y};
+                this->anchor_position = {space_size.x / 2, space_size.y};
                 break;
             case AnchorBinding::LeftDown:
-                this->anchor_position = {space_position.x, space_position.y + space_size.y};
+                this->anchor_position = {0, space_size.y};
                 break;
             case AnchorBinding::LeftCenter:
-                this->anchor_position = {space_position.x, space_position.y + space_size.y / 2};
+                this->anchor_position = {0, space_size.y / 2};
                 break;
         }
     }
@@ -107,7 +104,6 @@ private:
     AnchorBinding anchor_binding;
     AnchorType anchor_type;
     sf::Vector2f anchor_position;
-    sf::Vector2f space_position;
     sf::Vector2f space_size;
 
 };

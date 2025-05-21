@@ -15,7 +15,7 @@ std::shared_ptr<ContentNode> ContentNode::create(std::shared_ptr<ContainerNode> 
 }
 
 
-void ContentNode::render(EngineContext &ctx) {}
+void ContentNode::render(EngineContext &ctx, sf::RenderStates &states) {}
 
 void ContentNode::update(EngineContext &ctx) {}
 

@@ -15,7 +15,7 @@ public:
     explicit Text(std::shared_ptr<ContainerNode> parent, int render_priority = 0) : ContentNode(parent,
                                                                                                 render_priority) {}
 
-    void render(EngineContext &ctx) override;
+    void render(EngineContext &ctx, sf::RenderStates &states) override;
 
     void update(EngineContext &ctx) override;
 

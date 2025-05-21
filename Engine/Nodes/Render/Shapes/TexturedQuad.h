@@ -22,7 +22,7 @@ public:
 
     void set_quad(std::vector<sf::Vector2f> &vertices);
 
-    void render(EngineContext &ctx) override;
+    void render(EngineContext &ctx, sf::RenderStates &states) override;
 
     void update(EngineContext &ctx) override;
 

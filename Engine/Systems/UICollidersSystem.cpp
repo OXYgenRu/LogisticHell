@@ -23,30 +23,28 @@ void UICollidersSystem::update(EngineContext &ctx) {
                 if (was_used) {
                     continue;
                 }
-                sf::Vector2i pixelPos = sf::Mouse::getPosition(*ctx.app->window);
-                sf::Vector2f worldPos = ctx.app->window->mapPixelToCoords(pixelPos,
-                                                                          ctx.app->tree->get_view_tracker()[i]);
-                if (!is_point_in_polygon(worldPos, node->get_vertices())) {
+                sf::Vector2f pixelPos = ctx.app->window->mapPixelToCoords(sf::Mouse::getPosition(*ctx.app->window));
+                sf::Vector2f localPos = ctx.app->tree->get_transform_tracker()[i].getInverse().transformPoint(pixelPos);
+                if (!is_point_in_polygon(localPos, node->get_vertices())) {
                     continue;
                 }
-                ctx.app->window->setView(ctx.app->tree->get_view_tracker()[i]);
                 if (node != this->last_used_collider) {
                     if (this->last_used_collider != nullptr) {
-                        this->last_used_collider->handle_mouse_exit(ctx);
+                        this->last_used_collider->handle_mouse_exit(ctx, localPos);
                     }
-                    node->handle_mouse_enter(ctx);
+                    node->handle_mouse_enter(ctx, localPos);
                 }
                 this->last_used_collider = node;
                 if (event.type == sf::Event::MouseButtonReleased) {
-                    node->handle_mouse_release(event, ctx);
+                    node->handle_mouse_release(event, ctx, localPos);
                     was_used = true;
                 }
                 if (event.type == sf::Event::MouseButtonPressed) {
-                    node->handle_mouse_press(event, ctx);
+                    node->handle_mouse_press(event, ctx, localPos);
                     was_used = true;
                 }
                 if (event.type == sf::Event::MouseMoved) {
-                    node->handle_mouse_move(event, ctx);
+                    node->handle_mouse_move(event, ctx, localPos);
                     was_used = true;
                 }
             }

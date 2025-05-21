@@ -28,6 +28,27 @@ bool Node::get_update_flag() {
     return this->update_enabled;
 }
 
+sf::Transformable &Node::get_transformable() {
+    return this->transform;
+}
+
+void Node::set_position(const sf::Vector2f &position) {
+    transform.setPosition(position);
+}
+
+const sf::Vector2f &Node::get_position() {
+    return transform.getPosition();
+}
+
+void Node::set_rotation(float angle) {
+    transform.setRotation(angle);
+}
+
+float Node::get_rotation() {
+    return transform.getRotation();
+}
+
+
 std::string Node::get_node_type_str(std::shared_ptr<Node> node) {
     if (node->get_node_type() == 1) {
         return "ContentNode";

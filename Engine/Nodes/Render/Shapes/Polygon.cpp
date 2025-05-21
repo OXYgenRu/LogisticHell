@@ -23,18 +23,18 @@ void Polygon::set_polygon(std::vector<sf::Vector2<float>> &new_polygon) {
 
 void Polygon::set_polygon() {
     this->polygon.setPointCount(4);
-    std::vector<sf::Vector2<float>> new_polygon = {{0, 100},
+    std::vector<sf::Vector2<float>> new_polygon = {{0,    100},
                                                    {1600, 100},
                                                    {1600, 200},
-                                                   {0, 200}};
+                                                   {0,    200}};
     this->polygon.setFillColor(sf::Color::Green);
     for (int i = 0; i < this->polygon.getPointCount(); i++) {
         this->polygon.setPoint(i, new_polygon[i]);
     }
 }
 
-void Polygon::render(EngineContext &ctx) {
-    ctx.app->window->draw(this->polygon);
+void Polygon::render(EngineContext &ctx, sf::RenderStates &states) {
+    ctx.app->window->draw(this->polygon, states);
 }
 
 void Polygon::update(EngineContext &ctx) {

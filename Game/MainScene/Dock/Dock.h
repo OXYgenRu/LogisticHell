@@ -43,7 +43,6 @@ public:
     std::shared_ptr<BuildingGrid> building_grid;
     std::shared_ptr<DockController> controller;
     std::shared_ptr<EditorInterface> interface;
-    std::shared_ptr<UI::Collider> blueprint_collider;
     std::shared_ptr<CameraNode> camera;
     std::weak_ptr<World> world;
 };

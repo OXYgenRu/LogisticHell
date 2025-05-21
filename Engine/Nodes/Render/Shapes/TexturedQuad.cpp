@@ -19,8 +19,9 @@ void TexturedQuad::setup(std::shared_ptr<TexturedQuad> node) {
     node->quad.setPrimitiveType(sf::Quads);
 }
 
-void TexturedQuad::render(EngineContext &ctx) {
-    ctx.app->window->draw(quad, ctx.app->texture_atlas->get_texture());
+void TexturedQuad::render(EngineContext &ctx, sf::RenderStates &states) {
+    states.texture = ctx.app->texture_atlas->get_texture();
+    ctx.app->window->draw(quad, states);
 }
 
 void TexturedQuad::update(EngineContext &ctx) {

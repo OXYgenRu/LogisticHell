@@ -9,19 +9,19 @@
 #include "../Nodes/Base/CameraNode.h"
 #include "../Application.h"
 
-void Tree::add_node(std::shared_ptr<Node> node, EngineContext &ctx) {
+void Tree::add_node(std::shared_ptr<Node> node, EngineContext &ctx, sf::Transform transform) {
     if (this->free_tree_index == this->flatten_tree.size()) {
         this->flatten_tree.push_back(node);
         this->active_render_indices.push_back(true);
         this->active_update_indices.push_back(true);
-        this->view_tracker.push_back(ctx.app->standard_view);
+        this->transform_tracker.push_back(transform);
         this->free_tree_index++;
         return;
     }
     this->flatten_tree[free_tree_index] = node;
     this->active_render_indices[free_tree_index] = true;
     this->active_update_indices[free_tree_index] = true;
-    this->view_tracker[free_tree_index] = ctx.app->standard_view;
+    this->transform_tracker[free_tree_index] = transform;
     this->free_tree_index++;
 }
 
@@ -29,14 +29,20 @@ void Tree::drop_tree() {
     this->free_tree_index = 0;
 }
 
-void Tree::traverse(std::shared_ptr<ContainerNode> &node, EngineContext &ctx) {
-    this->add_node(std::static_pointer_cast<Node>(node), ctx);
+void Tree::traverse(std::shared_ptr<ContainerNode> &node, EngineContext &ctx, sf::Transform transform) {
+    this->add_node(std::static_pointer_cast<Node>(node), ctx, transform);
     for (int i = 0; i < node->get_content_layer().size(); i++) {
-        this->add_node(std::static_pointer_cast<Node>(node->get_content_layer()[i]), ctx);
+        this->add_node(std::static_pointer_cast<Node>(node->get_content_layer()[i]), ctx,
+                       transform * node->get_content_layer()[i]->get_transformable().getTransform());
     }
     for (int i = 0; i < node->get_render_layers_count(); i++) {
         for (auto &child: node->get_render_layer(i)) {
-            this->traverse(child, ctx);
+            if (child->get_node_type() == 6) {
+                this->traverse(child, ctx, transform * child->get_transformable().getInverseTransform());
+            } else {
+                this->traverse(child, ctx, transform * child->get_transformable().getTransform());
+            }
+
         }
     }
 
@@ -62,13 +68,13 @@ void Tree::render(EngineContext &ctx) {
                 render_delay += node->get_container_volume();
             }
         }
-        ctx.app->window->setView(this->get_view_tracker()[i]);
         if (render_delay) {
             render_delay--;
             this->active_render_indices[i] = false;
         } else {
             this->active_render_indices[i] = true;
-            this->flatten_tree[i]->render(ctx);
+            states.transform = this->transform_tracker[i];
+            this->flatten_tree[i]->render(ctx, states);
         }
     }
 }
@@ -89,7 +95,6 @@ void Tree::update(EngineContext &ctx) {
                 update_delay += node->get_container_volume();
             }
         }
-        ctx.app->window->setView(this->get_view_tracker()[i]);
         if (update_delay) {
             update_delay--;
             this->active_update_indices[i] = false;
@@ -129,32 +134,7 @@ void Tree::print_tree(std::shared_ptr<ContainerNode> &node, const std::string &i
 
 }
 
-std::vector<sf::View> &Tree::get_view_tracker() {
-    return this->view_tracker;
-}
 
-void Tree::update_view_tracker(EngineContext &ctx) {
-    ctx.app->window->setView(ctx.app->standard_view);
-    for (int i = 0; i < this->free_tree_index; i++) {
-        if ((this->flatten_tree[i]->get_node_type() == 2 or this->flatten_tree[i]->get_node_type() == 3 or
-             this->flatten_tree[i]->get_node_type() == 6) and !this->brunch_tracker.empty()) {
-            auto node = std::static_pointer_cast<ContainerNode>(this->flatten_tree[i]);
-            this->brunch_tracker.back().second += node->get_container_volume();
-        }
-        if (this->flatten_tree[i]->get_node_type() == 6) {
-            auto node = std::static_pointer_cast<CameraNode>(this->flatten_tree[i]);
-            this->flatten_tree[i]->render(ctx);
-            this->brunch_tracker.emplace_back(i, node->get_container_volume() + 1);
-        }
-        this->view_tracker[i] = ctx.app->window->getView();
-        if (!this->brunch_tracker.empty()) {
-            this->brunch_tracker.back().second--;
-            if (this->brunch_tracker.back().second == 0) {
-                auto node = std::static_pointer_cast<CameraNode>(this->flatten_tree[brunch_tracker.back().first]);
-                node->rollback_view_point(ctx);
-                this->brunch_tracker.pop_back();
-            }
-        }
-    }
-
+std::vector<sf::Transform> &Tree::get_transform_tracker() {
+    return this->transform_tracker;
 }

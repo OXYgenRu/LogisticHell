@@ -12,7 +12,7 @@ std::shared_ptr<Sprite> Sprite::create(std::shared_ptr<ContainerNode> parent, in
     return node;
 }
 
-void Sprite::render(EngineContext &ctx) {
+void Sprite::render(EngineContext &ctx, sf::RenderStates &states) {
     ctx.app->window->draw(this->sprite);
 }
 

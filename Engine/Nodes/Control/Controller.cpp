@@ -11,7 +11,7 @@ std::shared_ptr<Controller> Controller::create(std::shared_ptr<ContainerNode> pa
     return node;
 }
 
-void Controller::render(EngineContext &ctx) {
+void Controller::render(EngineContext &ctx, sf::RenderStates &states) {
 
 }
 

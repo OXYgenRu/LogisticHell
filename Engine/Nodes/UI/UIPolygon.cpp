@@ -6,19 +6,19 @@
 #include "../../Application.h"
 
 std::shared_ptr<UIPolygon>
-UIPolygon::create(std::shared_ptr<ContainerNode> parent, sf::Vector2f space_position, sf::Vector2f space_size,
+UIPolygon::create(std::shared_ptr<ContainerNode> parent, sf::Vector2f space_size,
                   AnchorType anchor_type, AnchorBinding anchor_binding,
                   int render_priority) {
     auto node = std::make_shared<UIPolygon>(parent, render_priority);
-    UIPolygon::setup(node, space_position, space_size, anchor_type, anchor_binding);
+    UIPolygon::setup(node, space_size, anchor_type, anchor_binding);
     parent->add_node(node);
     return node;
 }
 
-void UIPolygon::setup(std::shared_ptr<UIPolygon> &node, sf::Vector2f &space_position, sf::Vector2f &space_size,
+void UIPolygon::setup(std::shared_ptr<UIPolygon> &node, sf::Vector2f &space_size,
                       AnchorType anchor_type, AnchorBinding anchor_binding) {
     node->vertices.resize(4);
-    node->anchor.set_space(space_position, space_size);
+    node->anchor.set_space(space_size);
     node->anchor.set_anchor_type(anchor_type);
     node->anchor.set_anchor_binding(anchor_binding);
 }
@@ -36,6 +36,6 @@ void UIPolygon::set_color(sf::Color color) {
     this->polygon.setFillColor(color);
 }
 
-void UIPolygon::render(EngineContext &ctx) {
+void UIPolygon::render(EngineContext &ctx, sf::RenderStates &states) {
     ctx.app->window->draw(this->polygon);
 }

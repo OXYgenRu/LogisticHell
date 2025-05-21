@@ -30,9 +30,8 @@ public:
     void update(EngineContext &ctx) override;
 
     std::weak_ptr<Dock> dock;
-    std::shared_ptr<UI::Rectangle> background;
+    std::shared_ptr<UI::Button> background;
     std::shared_ptr<Text> text;
-    std::shared_ptr<UI::Collider> background_collider;
     std::shared_ptr<UI::Button> attachment_mode;
     std::shared_ptr<UI::Button> destroying_mode;
     std::shared_ptr<Text> selected_unit;

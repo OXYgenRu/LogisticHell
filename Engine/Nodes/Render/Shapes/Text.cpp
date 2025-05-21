@@ -12,8 +12,8 @@ std::shared_ptr<Text> Text::create(std::shared_ptr<ContainerNode> parent, int re
     return node;
 }
 
-void Text::render(EngineContext &ctx) {
-    ctx.app->window->draw(this->text);
+void Text::render(EngineContext &ctx, sf::RenderStates &states) {
+    ctx.app->window->draw(this->text, states);
 }
 
 void Text::update(EngineContext &ctx) {

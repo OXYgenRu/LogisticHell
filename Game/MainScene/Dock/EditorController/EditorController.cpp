@@ -20,10 +20,11 @@ EditorController::EditorController(EngineContext &ctx, std::shared_ptr<Dock> doc
     this->builder = Builder::create(building_grid, blueprint_loader);
     this->builder->set_default_blueprint(ctx);
     this->editor_mode = EditorMode::Attachment;
+    this->is_preview_active = false;
 }
 
-void EditorController::on_mouse_release(sf::Event &event, EngineContext &ctx) {
-    sf::Vector2i cell_position = this->get_grid_cell_position(ctx);
+void EditorController::on_mouse_release(sf::Event &event, EngineContext &ctx, const sf::Vector2f &local_position) {
+    sf::Vector2i cell_position = this->get_grid_cell_position(ctx, local_position);
     switch (this->editor_mode) {
         case EditorMode::Attachment:
             this->builder->attach_unit(cell_position, ctx);
@@ -40,8 +41,8 @@ void EditorController::on_mouse_release(sf::Event &event, EngineContext &ctx) {
 
 }
 
-void EditorController::on_mouse_moved(sf::Event &event, EngineContext &ctx) {
-    sf::Vector2i cell_position = this->get_grid_cell_position(ctx);
+void EditorController::on_mouse_moved(sf::Event &event, EngineContext &ctx, const sf::Vector2f &local_position) {
+    sf::Vector2i cell_position = this->get_grid_cell_position(ctx, local_position);
 
     switch (this->editor_mode) {
         case EditorMode::Attachment:
@@ -62,12 +63,14 @@ void EditorController::on_mouse_moved(sf::Event &event, EngineContext &ctx) {
     }
 }
 
-void EditorController::on_mouse_exit(EngineContext &ctx) {
+void EditorController::on_mouse_exit(EngineContext &ctx, const sf::Vector2f &local_position) {
     this->builder->clear_preview(ctx);
+    this->is_preview_active = false;
 }
 
-void EditorController::on_mouse_enter(EngineContext &ctx) {
-    sf::Vector2i cell_position = this->get_grid_cell_position(ctx);
+void EditorController::on_mouse_enter(EngineContext &ctx, const sf::Vector2f &local_position) {
+    sf::Vector2i cell_position = this->get_grid_cell_position(ctx, local_position);
+    this->is_preview_active = true;
     switch (this->editor_mode) {
         case EditorMode::Attachment:
             this->builder->set_new_preview_position(cell_position, ctx);
@@ -84,6 +87,9 @@ void EditorController::on_mouse_enter(EngineContext &ctx) {
 }
 
 void EditorController::on_key_release(sf::Event &event, EngineContext &ctx) {
+    if (!is_preview_active) {
+        return;
+    }
     switch (this->editor_mode) {
         case EditorMode::Attachment:
             if (event.key.code == sf::Keyboard::E) {
@@ -103,44 +109,32 @@ void EditorController::on_key_release(sf::Event &event, EngineContext &ctx) {
                 this->builder->clear_preview(ctx);
                 this->builder->draw_building_preview(ctx);
             }
-            if (event.key.code == sf::Keyboard::F) {
-                this->editor_mode = EditorMode::Destroying;
-                this->builder->clear_preview(ctx);
-                this->builder->draw_destroying_preview(ctx);
-            }
             break;
         case EditorMode::Destroying:
-            if (event.key.code == sf::Keyboard::F) {
-                this->editor_mode = EditorMode::Attachment;
-                this->builder->find_blueprint_attachment_components();
-                this->builder->clear_preview(ctx);
-                this->builder->draw_building_preview(ctx);
-            }
             break;
     }
 }
 
 void EditorController::set_mode(const EditorMode &new_mode, EngineContext &ctx) {
+    this->editor_mode = new_mode;
+    if (!is_preview_active) {
+        return;
+    }
     switch (new_mode) {
         case EditorMode::Attachment:
-            this->editor_mode = EditorMode::Attachment;
             this->builder->find_blueprint_attachment_components();
             this->builder->clear_preview(ctx);
             this->builder->draw_building_preview(ctx);
             break;
         case EditorMode::Destroying:
-            this->editor_mode = EditorMode::Destroying;
             this->builder->clear_preview(ctx);
             this->builder->draw_destroying_preview(ctx);
             break;
     }
 }
 
-sf::Vector2i EditorController::get_grid_cell_position(EngineContext &ctx) {
+sf::Vector2i EditorController::get_grid_cell_position(EngineContext &ctx, const sf::Vector2f &local_position) {
     float sf_cell_size = builder->building_grid->sf_cell_size;
-    sf::Vector2i pixel_position = sf::Mouse::getPosition(*ctx.app->window);
-    sf::Vector2f world_position = ctx.app->window->mapPixelToCoords(pixel_position);
-    sf::Vector2f local_position = world_position - builder->building_grid->position;
-    return {int((local_position.x + sf_cell_size / 2) / sf_cell_size),
-            abs(int((local_position.y - sf_cell_size / 2) / sf_cell_size))};
+    return {int((local_position.x) / sf_cell_size),
+            abs(builder->building_grid->grid_size.y - int((local_position.y) / sf_cell_size) - 1)};
 }

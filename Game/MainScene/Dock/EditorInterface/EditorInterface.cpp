@@ -19,15 +19,12 @@ EditorInterface::create(std::shared_ptr<ContainerNode> parent, EngineContext &ct
 
 void EditorInterface::setup(std::shared_ptr<EditorInterface> node, EngineContext &ctx, std::shared_ptr<Dock> dock) {
     node->dock = dock;
-    std::vector<sf::Vector2f> polygon = {{-0.12, 0},
-                                         {0,     0},
-                                         {0,     1},
-                                         {-0.12, 1}};
 
-    node->background = UI::Rectangle::create(node, {0, 0},
-                                             ctx.app->get_window_size(),
-                                             AnchorType::Absolute, AnchorBinding::CenterDown);
-    node->background->set_rectangle({-ctx.app->get_window_size().x / 2, -100}, {ctx.app->get_window_size().x / 2, 0});
+    node->background = UI::Button::create(node, ctx,
+                                          ctx.app->get_window_size(),
+                                          AnchorType::Absolute, AnchorBinding::CenterDown);
+    node->background->set_rectangle({-ctx.app->get_window_size().x / 2, -180}, {ctx.app->get_window_size().x / 2, 0});
+    node->background->set_color(sf::Color(63, 72, 204));
 
     node->text = Text::create(node);
     node->text->set_font("C:/Windows/Fonts/arial.ttf");
@@ -43,21 +40,20 @@ void EditorInterface::setup(std::shared_ptr<EditorInterface> node, EngineContext
     node->selected_unit->text.setFillColor(sf::Color::Black);
     node->selected_unit->text.setCharacterSize(30);
 
-    node->background_collider = UI::Collider::create(node, {0, 0}, ctx.app->get_window_size(),
-                                                     AnchorType::Absolute, AnchorBinding::CenterDown);
-    node->background_collider->set_vertices(polygon);
     {
-        node->attachment_mode = UI::Button::create(node, ctx, {0, 0}, {float(ctx.app->window->getSize().x),
+        node->attachment_mode = UI::Button::create(node, ctx,  {float(ctx.app->window->getSize().x),
                                                                        float(ctx.app->window->getSize().y)},
-                                                   AnchorType::Absolute, AnchorBinding::RightUp);
-        node->attachment_mode->set_rectangle({-180, 30}, {-20, 190});
+                                                   AnchorType::Absolute, AnchorBinding::CenterDown);
+        node->attachment_mode->set_rectangle({-ctx.app->get_window_size().x / 2 + 30, -170},
+                                             {-ctx.app->get_window_size().x / 2 + 30 + 150, -170 + 150});
         node->attachment_mode->set_texture("attach_icon", ctx);
     }
     {
-        node->destroying_mode = UI::Button::create(node, ctx, {0, 0}, {float(ctx.app->window->getSize().x),
+        node->destroying_mode = UI::Button::create(node, ctx,  {float(ctx.app->window->getSize().x),
                                                                        float(ctx.app->window->getSize().y)},
-                                                   AnchorType::Absolute, AnchorBinding::RightUp);
-        node->destroying_mode->set_rectangle({-180, 330}, {-20, 490});
+                                                   AnchorType::Absolute, AnchorBinding::CenterDown);
+        node->destroying_mode->set_rectangle({-ctx.app->get_window_size().x / 2 + 330, -170},
+                                             {-ctx.app->get_window_size().x / 2 + 330 + 150, -170 + 150});
         node->destroying_mode->set_texture("remove_icon", ctx);
     }
     {

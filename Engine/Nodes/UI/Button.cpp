@@ -6,36 +6,39 @@
 #include "../../Application.h"
 
 std::shared_ptr<UI::Button>
-UI::Button::create(std::shared_ptr<ContainerNode> parent, EngineContext &ctx, sf::Vector2f space_position,
+UI::Button::create(std::shared_ptr<ContainerNode> parent, EngineContext &ctx,
                    sf::Vector2f space_size,
                    AnchorType anchor_type, AnchorBinding anchor_binding,
                    int render_priority,
                    int render_priority_layers) {
     auto node = std::make_shared<UI::Button>(parent, render_priority);
     node->set_render_layers_count(render_priority_layers + 1);
-    UI::Button::setup(node, ctx, space_position, space_size, anchor_type, anchor_binding);
+    UI::Button::setup(node, ctx, space_size, anchor_type, anchor_binding);
     parent->add_node(node);
     return node;
 }
 
-void UI::Button::setup(std::shared_ptr<Button> &node, EngineContext &ctx, sf::Vector2f &space_position,
+void UI::Button::setup(std::shared_ptr<Button> &node, EngineContext &ctx,
                        sf::Vector2f &space_size,
                        AnchorType &anchor_type, AnchorBinding &anchor_binding) {
-    node->rectangle = UI::Rectangle::create(node, space_position, space_size, anchor_type, anchor_binding);
-    node->collider = UI::Collider::create(node, space_position, space_size, anchor_type, anchor_binding);
-    node->collider->bind_on_mouse_release([node](sf::Event &event, EngineContext &ctx) {
-        node->handle_on_mouse_release(event, ctx);
-    });
-    node->collider->bind_on_mouse_press([node](sf::Event &event, EngineContext &ctx) {
-        node->handle_on_mouse_press(event, ctx);
-    });
-    node->collider->bind_on_mouse_moved([node](sf::Event &event, EngineContext &ctx) {
-        node->handle_on_mouse_move(event, ctx);
-    });
-    node->collider->bind_on_mouse_enter([node](EngineContext &ctx) {
+    node->rectangle = UI::Rectangle::create(node,  space_size, anchor_type, anchor_binding);
+    node->collider = UI::Collider::create(node,  space_size, anchor_type, anchor_binding);
+    node->collider->bind_on_mouse_release(
+            [node](sf::Event &event, EngineContext &ctx, const sf::Vector2f &local_position) {
+                node->handle_on_mouse_release(event, ctx);
+            });
+    node->collider->bind_on_mouse_press(
+            [node](sf::Event &event, EngineContext &ctx, const sf::Vector2f &local_position) {
+                node->handle_on_mouse_press(event, ctx);
+            });
+    node->collider->bind_on_mouse_moved(
+            [node](sf::Event &event, EngineContext &ctx, const sf::Vector2f &local_position) {
+                node->handle_on_mouse_move(event, ctx);
+            });
+    node->collider->bind_on_mouse_enter([node](EngineContext &ctx, const sf::Vector2f &local_position) {
         node->handle_on_mouse_enter(ctx);
     });
-    node->collider->bind_on_mouse_exit([node](EngineContext &ctx) {
+    node->collider->bind_on_mouse_exit([node](EngineContext &ctx, const sf::Vector2f &local_position) {
         node->handle_on_mouse_exit(ctx);
     });
 }

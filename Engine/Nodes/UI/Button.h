@@ -15,7 +15,7 @@ namespace UI {
     class Button : public ContainerNode {
     public:
         static std::shared_ptr<Button>
-        create(std::shared_ptr<ContainerNode> parent, EngineContext &ctx, sf::Vector2f space_position,
+        create(std::shared_ptr<ContainerNode> parent, EngineContext &ctx,
                sf::Vector2f space_size,
                AnchorType anchor_type = AnchorType::Relative, AnchorBinding anchor_binding = AnchorBinding::LeftUp,
                int render_priority = 0,
@@ -27,7 +27,6 @@ namespace UI {
                 : ContainerNode(parent, render_priority) {}
 
         static void setup(std::shared_ptr<Button> &node, EngineContext &ctx, sf::Vector2f &space_position,
-                          sf::Vector2f &space_size,
                           AnchorType &anchor_type, AnchorBinding &anchor_binding);
 
         void set_rectangle(sf::Vector2f new_top_left, sf::Vector2f new_bottom_right);

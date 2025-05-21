@@ -39,7 +39,7 @@ public:
 
     void set_render_layers_count(int render_layers_count);
 
-    void render(EngineContext &ctx) override;
+    void render(EngineContext &ctx, sf::RenderStates &states) override;
 
     void update(EngineContext &ctx) override;
 

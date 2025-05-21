@@ -15,15 +15,14 @@ private:
     std::vector<std::shared_ptr<Node>> flatten_tree;
     std::vector<bool> active_render_indices, active_update_indices;
     std::vector<std::pair<int, int>> brunch_tracker;
-    std::vector<sf::View> view_tracker;
+    std::vector<sf::Transform> transform_tracker;
+    sf::RenderStates states;
 public:
-    void add_node(std::shared_ptr<Node> node, EngineContext &ctx);
+    void add_node(std::shared_ptr<Node> node, EngineContext &ctx, sf::Transform transform);
 
     void drop_tree();
 
-    void traverse(std::shared_ptr<ContainerNode> &node, EngineContext &ctx);
-
-    void update_view_tracker(EngineContext &ctx);
+    void traverse(std::shared_ptr<ContainerNode> &node, EngineContext &ctx, sf::Transform transform);
 
     std::vector<std::shared_ptr<Node>> &get_tree();
 
@@ -41,7 +40,7 @@ public:
 
     void print_tree(std::shared_ptr<ContainerNode> &node, const std::string &indent = "");
 
-    std::vector<sf::View> &get_view_tracker();
+    std::vector<sf::Transform> &get_transform_tracker();
 };
 
 

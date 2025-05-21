@@ -19,7 +19,7 @@ public:
 
     void set_polygon();
 
-    void render(EngineContext &ctx) override;
+    void render(EngineContext &ctx, sf::RenderStates &states) override;
 
     void update(EngineContext &ctx) override;
 

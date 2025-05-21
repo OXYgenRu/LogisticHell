@@ -24,19 +24,12 @@ public:
 
     void set_camera_target(sf::Vector2f camera_target);
 
-    sf::View view_point;
-    sf::Vector2f original_size;
-
     int get_node_type() const override;
 
-    float zoom;
-
-    void rollback_view_point(EngineContext &ctx);
-
-    void render(EngineContext &ctx) override;
+    const sf::Transform &get_transform();
 
     std::shared_ptr<CameraController> camera_controller;
-
+    float zoom;
 };
 
 

@@ -22,7 +22,10 @@ Builder::Builder(std::shared_ptr<BuildingGrid> building_grid, std::shared_ptr<Bl
 
 void Builder::set_default_blueprint(EngineContext &ctx) {
     this->blueprint = std::make_shared<Blueprint>(this->building_grid->grid_size, false, 0);
-    this->blueprint->add_component()->get_block({0, 0}).block_id = "construction_block::construction_block";
+    BlueprintBlock &default_block = this->blueprint->add_component()->get_block({0, 0});
+    default_block.block_id = "construction_block::construction_block";
+    default_block.unit_size = {1, 1};
+    default_block.unit_offset = {0, 0};
     this->building_grid->clear(ctx);
     this->building_grid->set_block({0, 0}, "construction_block::construction_block", 0, ctx);
 }

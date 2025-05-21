@@ -47,7 +47,7 @@ void ContainerNode::set_render_layers_count(int render_layers_count) {
     this->container_nodes.resize(render_layers_count);
 }
 
-void ContainerNode::render(EngineContext &ctx) {}
+void ContainerNode::render(EngineContext &ctx, sf::RenderStates &states) {}
 
 void ContainerNode::update(EngineContext &ctx) {}
 

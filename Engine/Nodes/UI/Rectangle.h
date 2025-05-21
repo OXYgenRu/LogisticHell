@@ -13,14 +13,14 @@ namespace UI {
     class Rectangle : public ContentNode {
     public:
         static std::shared_ptr<Rectangle>
-        create(std::shared_ptr<ContainerNode> parent, sf::Vector2f space_position, sf::Vector2f space_size,
+        create(std::shared_ptr<ContainerNode> parent,  sf::Vector2f space_size,
                AnchorType anchor_type = AnchorType::Relative, AnchorBinding anchor_binding = AnchorBinding::LeftUp,
                int render_priority = 0);
 
         explicit Rectangle(std::shared_ptr<ContainerNode> parent, int render_priority = 0) : ContentNode(parent,
                                                                                                          render_priority) {}
 
-        static void setup(std::shared_ptr<Rectangle> &node, sf::Vector2f &space_position, sf::Vector2f &space_size,
+        static void setup(std::shared_ptr<Rectangle> &node,  sf::Vector2f &space_size,
                           AnchorType anchor_type,
                           AnchorBinding anchor_binding);
 
@@ -30,7 +30,7 @@ namespace UI {
 
         void set_color(sf::Color color);
 
-        void render(EngineContext &ctx) override;
+        void render(EngineContext &ctx, sf::RenderStates &states) override;
 
     private:
         sf::RectangleShape polygon;
