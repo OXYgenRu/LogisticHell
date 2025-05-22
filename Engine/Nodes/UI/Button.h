@@ -16,24 +16,22 @@ namespace UI {
     public:
         static std::shared_ptr<Button>
         create(std::shared_ptr<ContainerNode> parent, EngineContext &ctx,
-               sf::Vector2f space_size,
-               AnchorType anchor_type = AnchorType::Relative, AnchorBinding anchor_binding = AnchorBinding::LeftUp,
                int render_priority = 0,
                int render_priority_layers = 10
         );
 
-
         explicit Button(std::shared_ptr<ContainerNode> parent, int render_priority = 0)
                 : ContainerNode(parent, render_priority) {}
 
-        static void setup(std::shared_ptr<Button> &node, EngineContext &ctx, sf::Vector2f &space_position,
-                          AnchorType &anchor_type, AnchorBinding &anchor_binding);
+        static void setup(std::shared_ptr<Button> &node, EngineContext &ctx);
 
         void set_rectangle(sf::Vector2f new_top_left, sf::Vector2f new_bottom_right);
 
         void set_texture(const std::string &new_texture_name, EngineContext &ctx);
 
-        void set_color(sf::Color color);
+        void set_color(const sf::Color &color);
+
+        void set_hold_reaction(bool is_react_to_hold);
 
         void bind_on_mouse_press(const std::function<void(sf::Event &event, EngineContext &ctx)> &new_function);
 
@@ -56,9 +54,11 @@ namespace UI {
 
         void handle_on_mouse_exit(EngineContext &ctx);
 
-
+        bool is_pressed;
+        bool react_to_hold;
         std::shared_ptr<UI::Rectangle> rectangle;
         std::shared_ptr<UI::Collider> collider;
+        sf::Color color;
 
         std::function<void(sf::Event &event, EngineContext &ctx)> on_mouse_press = [](sf::Event &event,
                                                                                       EngineContext &ctx) {};

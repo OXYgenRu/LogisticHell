@@ -27,11 +27,7 @@ public:
 
     void update(EngineContext &ctx) override;
 
-    std::shared_ptr<Structure> structure;
-    std::shared_ptr<Structure> static_structure;
     std::shared_ptr<World> world;
-    std::shared_ptr<TestController> test_controller;
-    std::shared_ptr<Component> component;
     std::shared_ptr<Dock> dock;
     std::shared_ptr<BlueprintLoader> blueprint_loader;
     std::shared_ptr<BlockFactory> block_factory;

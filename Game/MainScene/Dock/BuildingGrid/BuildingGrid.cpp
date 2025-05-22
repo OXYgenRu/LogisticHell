@@ -23,9 +23,7 @@ void BuildingGrid::setup(std::shared_ptr<BuildingGrid> &node, std::shared_ptr<Do
                          float sf_cell_size, const sf::Vector2i &grid_size,
                          std::shared_ptr<BlockFactory> &block_factory) {
 
-    node->grid_collider = UI::Collider::create(node,
-                                               {grid_size.x * sf_cell_size, grid_size.y * sf_cell_size},
-                                               AnchorType::Absolute, AnchorBinding::LeftUp);
+    node->grid_collider = UI::Collider::create(node);
     node->grid_collider->set_vertices(
             {sf::Vector2f(0, 0), sf::Vector2f(grid_size.x * sf_cell_size, 0),
              sf::Vector2f(grid_size.x * sf_cell_size, grid_size.y * sf_cell_size),

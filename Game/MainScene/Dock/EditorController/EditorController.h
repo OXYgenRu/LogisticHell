@@ -10,6 +10,7 @@
 #include "../../Blueprints/BlueprintLoader.h"
 #include "../Builder/Builder.h"
 #include "DockController.h"
+#include "../EditorInterface/EditorInterface.h"
 
 class Dock;
 
@@ -41,7 +42,10 @@ public:
 
     void set_mode(const EditorMode &new_mode, EngineContext &ctx);
 
+    void set_unit(const std::string &new_unit_id);
+
     std::shared_ptr<Builder> builder;
+    std::shared_ptr<EditorInterface> interface;
     std::weak_ptr<Dock> dock;
 private:
     EditorMode editor_mode;

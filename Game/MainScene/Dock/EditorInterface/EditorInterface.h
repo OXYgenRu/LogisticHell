@@ -11,6 +11,8 @@
 #include "../../../../Engine/Nodes/UI/Button.h"
 #include "../../../../Engine/Nodes/Render/Shapes/Text.h"
 #include "../../../../Engine/Nodes/UI/Rectangle.h"
+#include "../../../../Engine/Nodes/UI/VerticalList.h"
+#include "BlocksInventory.h"
 
 class Dock;
 
@@ -18,23 +20,26 @@ class EditorInterface : public ContainerNode {
 public:
     static std::shared_ptr<EditorInterface>
     create(std::shared_ptr<ContainerNode> parent, EngineContext &ctx, std::shared_ptr<Dock> dock,
+           std::shared_ptr<BlueprintLoader> &blueprint_loader,
            int render_priority = 0,
            int render_priority_layers = 10);
 
 
-    explicit EditorInterface(std::shared_ptr<ContainerNode> parent, int render_priority = 0) : ContainerNode(parent,
-                                                                                                             render_priority) {}
+    explicit EditorInterface(std::shared_ptr<ContainerNode> parent,
+                             int render_priority = 0) : ContainerNode(parent,
+                                                                      render_priority) {}
 
-    static void setup(std::shared_ptr<EditorInterface> node, EngineContext &ctx, std::shared_ptr<Dock> dock);
+    static void setup(std::shared_ptr<EditorInterface> node, EngineContext &ctx, std::shared_ptr<Dock> dock,
+                      std::shared_ptr<BlueprintLoader> &blueprint_loader);
 
     void update(EngineContext &ctx) override;
 
     std::weak_ptr<Dock> dock;
-    std::shared_ptr<UI::Button> background;
-    std::shared_ptr<Text> text;
+    std::shared_ptr<ContainerNode> buttons_layer;
+    std::shared_ptr<UI::Button> buttons_layer_background;
     std::shared_ptr<UI::Button> attachment_mode;
     std::shared_ptr<UI::Button> destroying_mode;
-    std::shared_ptr<Text> selected_unit;
+    std::shared_ptr<BlocksInventory> inventory;
 };
 
 

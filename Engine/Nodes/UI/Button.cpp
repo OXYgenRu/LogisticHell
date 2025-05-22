@@ -7,22 +7,21 @@
 
 std::shared_ptr<UI::Button>
 UI::Button::create(std::shared_ptr<ContainerNode> parent, EngineContext &ctx,
-                   sf::Vector2f space_size,
-                   AnchorType anchor_type, AnchorBinding anchor_binding,
                    int render_priority,
                    int render_priority_layers) {
     auto node = std::make_shared<UI::Button>(parent, render_priority);
     node->set_render_layers_count(render_priority_layers + 1);
-    UI::Button::setup(node, ctx, space_size, anchor_type, anchor_binding);
+    UI::Button::setup(node, ctx);
     parent->add_node(node);
     return node;
 }
 
-void UI::Button::setup(std::shared_ptr<Button> &node, EngineContext &ctx,
-                       sf::Vector2f &space_size,
-                       AnchorType &anchor_type, AnchorBinding &anchor_binding) {
-    node->rectangle = UI::Rectangle::create(node,  space_size, anchor_type, anchor_binding);
-    node->collider = UI::Collider::create(node,  space_size, anchor_type, anchor_binding);
+void UI::Button::setup(std::shared_ptr<Button> &node, EngineContext &ctx) {
+    node->is_pressed = false;
+    node->color = sf::Color(255, 255, 255);
+    node->react_to_hold = false;
+    node->rectangle = UI::Rectangle::create(node);
+    node->collider = UI::Collider::create(node);
     node->collider->bind_on_mouse_release(
             [node](sf::Event &event, EngineContext &ctx, const sf::Vector2f &local_position) {
                 node->handle_on_mouse_release(event, ctx);
@@ -56,7 +55,8 @@ void UI::Button::set_texture(const std::string &new_texture_name, EngineContext 
     this->rectangle->set_texture(new_texture_name, ctx);
 }
 
-void UI::Button::set_color(sf::Color color) {
+void UI::Button::set_color(const sf::Color &color) {
+    this->color = color;
     this->rectangle->set_color(color);
 }
 
@@ -81,10 +81,23 @@ void UI::Button::bind_on_mouse_exit(const std::function<void(EngineContext &ctx)
 }
 
 void UI::Button::handle_on_mouse_press(sf::Event &event, EngineContext &ctx) {
+    this->is_pressed = true;
     this->on_mouse_press(event, ctx);
+    if (this->react_to_hold) {
+        this->rectangle->set_color(sf::Color(static_cast<sf::Uint8>(float(color.r) * 0.8f),
+                                             static_cast<sf::Uint8>(float(color.g) * 0.8f),
+                                             static_cast<sf::Uint8>(float(color.b) * 0.8f)));
+    }
 }
 
 void UI::Button::handle_on_mouse_release(sf::Event &event, EngineContext &ctx) {
+    if (!this->is_pressed) {
+        return;
+    }
+    if (this->react_to_hold) {
+        this->rectangle->set_color(this->color);
+    }
+    this->is_pressed = false;
     this->on_mouse_release(event, ctx);
 }
 
@@ -97,5 +110,13 @@ void UI::Button::handle_on_mouse_enter(EngineContext &ctx) {
 }
 
 void UI::Button::handle_on_mouse_exit(EngineContext &ctx) {
+    if (this->react_to_hold and this->is_pressed) {
+        this->rectangle->set_color(this->color);
+    }
+    this->is_pressed = false;
     this->on_mouse_exit(ctx);
+}
+
+void UI::Button::set_hold_reaction(bool is_react_to_hold) {
+    this->react_to_hold = is_react_to_hold;
 }

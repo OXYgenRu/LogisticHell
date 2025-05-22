@@ -13,16 +13,12 @@ namespace UI {
     class Collider : public ContentNode {
     public:
         static std::shared_ptr<Collider>
-        create(std::shared_ptr<ContainerNode> parent, sf::Vector2f space_size,
-               AnchorType anchor_type = AnchorType::Relative, AnchorBinding anchor_binding = AnchorBinding::LeftUp,
-               int render_priority = 0);
+        create(std::shared_ptr<ContainerNode> parent, int render_priority = 0);
 
         explicit Collider(std::shared_ptr<ContainerNode> parent, int render_priority = 0) : ContentNode(parent,
                                                                                                         render_priority) {}
 
-        static void setup(std::shared_ptr<Collider> node,
-                          sf::Vector2f space_size,
-                          AnchorType anchor_type, AnchorBinding anchor_binding);
+        static void setup(std::shared_ptr<Collider> &node);
 
         void render(EngineContext &ctx, sf::RenderStates &states) override;
 
@@ -40,7 +36,7 @@ namespace UI {
 
         void handle_mouse_exit(EngineContext &ctx, const sf::Vector2f &local_position);
 
-        void set_vertices(std::vector<sf::Vector2f> new_vertices);
+        void set_vertices(const std::vector<sf::Vector2f> &new_vertices);
 
         std::vector<sf::Vector2f> &get_vertices();
 
@@ -61,7 +57,6 @@ namespace UI {
 
     private:
         std::vector<sf::Vector2f> vertices;
-        Anchor anchor;
         std::function<void(sf::Event &event, EngineContext &ctx,
                            const sf::Vector2f &local_position)> on_mouse_press = [](
                 sf::Event &event,

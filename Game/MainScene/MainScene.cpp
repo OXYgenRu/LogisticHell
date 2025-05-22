@@ -39,6 +39,18 @@ void MainScene::init_tree(EngineContext &ctx) {
     blueprint_loader->register_blueprint("big_construction", big_construction);
 
 
+    Blueprint light_construction({1, 1}, true, 0);
+    light_construction.add_component()->set_block({0, 0},
+                                                            BlueprintBlock("light_construction::light_construction",
+                                                                           {0, 0}, {1, 1}, 0));
+    blueprint_loader->register_blueprint("light_construction", light_construction);
+
+    Blueprint beam({1, 1}, true, 0);
+    beam.add_component()->set_block({0, 0},
+                                                            BlueprintBlock("beam::beam",
+                                                                           {0, 0}, {1, 1}, 0));
+    blueprint_loader->register_blueprint("beam", beam);
+
     block_factory = std::make_shared<BlockFactory>();
     block_factory->register_block("light_construction", "light_construction", "light_construction");
     block_factory->register_block("heavy_construction", "heavy_construction", "heavy_construction");
@@ -49,6 +61,7 @@ void MainScene::init_tree(EngineContext &ctx) {
     block_factory->register_block("void_block", "void_block", "void_block");
     block_factory->register_block("busy_grid_block", "busy_grid_block", "busy_grid_block");
     block_factory->register_block("icon", "icon", "icon");
+    block_factory->register_block("beam", "beam", "beam");
     block_factory->register_block("selected_grid_block", "selected_grid_block", "selected_grid_block");
 
     world = World::create(scene, b2Vec2({0, 0}), 240);

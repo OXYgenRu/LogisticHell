@@ -138,3 +138,7 @@ sf::Vector2i EditorController::get_grid_cell_position(EngineContext &ctx, const 
     return {int((local_position.x) / sf_cell_size),
             abs(builder->building_grid->grid_size.y - int((local_position.y) / sf_cell_size) - 1)};
 }
+
+void EditorController::set_unit(const std::string &new_unit_id) {
+    this->builder->unit_id = new_unit_id;
+}
