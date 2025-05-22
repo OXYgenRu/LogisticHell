@@ -19,10 +19,10 @@ void UICollidersSystem::update(EngineContext &ctx) {
         }
         if (ctx.app->tree->get_flatten_tree()[i]->get_node_type() == 9) {
             auto node = std::static_pointer_cast<UI::Collider>(ctx.app->tree->get_flatten_tree()[i]);
+            if (was_used) {
+                continue;
+            }
             for (sf::Event &event: this->control_events) {
-                if (was_used) {
-                    continue;
-                }
                 sf::Vector2f pixelPos = ctx.app->window->mapPixelToCoords(sf::Mouse::getPosition(*ctx.app->window));
                 sf::Vector2f localPos = ctx.app->tree->get_transform_tracker()[i].getInverse().transformPoint(pixelPos);
                 if (!is_point_in_polygon(localPos, node->get_vertices())) {

@@ -2,6 +2,7 @@
 // Created by EgorRychkov on 22.05.2025.
 //
 
+#include <iostream>
 #include "BlocksInventory.h"
 #include "../Dock.h"
 
@@ -27,7 +28,7 @@ void BlocksInventory::setup(std::shared_ptr<BlocksInventory> &node, EngineContex
 
     for (int i = 0; i < node->vertical_list->get_list_size(); i++) {
         std::shared_ptr<UI::ListItem> item = node->vertical_list->get_item(i);
-        item->text->text.setString(units[i]);
+        item->text->text.setString(units[i]);;
         item->button->bind_on_mouse_release([dock, units, i](sf::Event &event, EngineContext &ctx) {
             dock->editor_controller->set_unit(units[i]);
         });
