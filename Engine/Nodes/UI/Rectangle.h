@@ -5,18 +5,18 @@
 #ifndef LOGISTICHELL_RECTANGLE_H
 #define LOGISTICHELL_RECTANGLE_H
 
-#include "../Base/ContentNode.h"
+#include "../Base/Node.h"
 #include "Anchor.h"
 #include "../Render/Shapes/TexturedQuad.h"
 
 namespace UI {
-    class Rectangle : public ContentNode {
+    class Rectangle : public Node {
     public:
         static std::shared_ptr<Rectangle>
-        create(std::shared_ptr<ContainerNode> parent, int render_priority = 0);
+        create(const std::shared_ptr<Node> &parent, int render_priority = 0);
 
-        explicit Rectangle(std::shared_ptr<ContainerNode> parent, int render_priority = 0) : ContentNode(parent,
-                                                                                                         render_priority) {}
+        explicit Rectangle(const std::shared_ptr<Node> &parent, int render_priority = 0) : Node(parent,
+                                                                                                render_priority) {}
 
         static void setup(std::shared_ptr<Rectangle> &node);
 

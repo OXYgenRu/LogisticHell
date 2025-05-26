@@ -3,12 +3,11 @@
 //
 
 #include "CameraController.h"
-#include "../Base/ContainerNode.h"
 #include "../../Application.h"
 #include "../Base/CameraNode.h"
 
 std::shared_ptr<CameraController>
-CameraController::create(std::shared_ptr<ContainerNode> parent, std::shared_ptr<CameraNode> camera,
+CameraController::create(const std::shared_ptr<Node> &parent, const std::shared_ptr<CameraNode> &camera,
                          int render_priority) {
     auto node = std::make_shared<CameraController>(parent, render_priority);
     parent->add_node(node);
@@ -48,8 +47,8 @@ void CameraController::on_mouse_moved(sf::Event &event, EngineContext &ctx) {
         sf::Vector2f current_mouse_pos = ctx.app->window->mapPixelToCoords(sf::Mouse::getPosition(*ctx.app->window));
         sf::Vector2f delta = current_mouse_pos - this->start_mouse_pos;
         this->start_mouse_pos = current_mouse_pos;
-        this->camera->get_transformable().setPosition(
-                (-delta * this->camera->zoom) + this->camera->get_transformable().getPosition());
+        this->camera.lock()->get_transformable().setPosition(
+                (-delta * this->camera.lock()->zoom) + this->camera.lock()->get_transformable().getPosition());
     }
 }
 
@@ -57,9 +56,9 @@ void CameraController::on_mouse_wheel_scrolled(sf::Event &event, EngineContext &
     if (event.mouseWheelScroll.wheel == sf::Mouse::VerticalWheel) {
         float delta = event.mouseWheelScroll.delta;
         if (delta > 0) {
-            this->camera->set_zoom(float(this->camera->zoom * 0.7));
+            this->camera.lock()->set_zoom(float(this->camera.lock()->zoom * 0.7));
         } else {
-            this->camera->set_zoom(float(this->camera->zoom / 0.7));
+            this->camera.lock()->set_zoom(float(this->camera.lock()->zoom / 0.7));
         }
     }
 }

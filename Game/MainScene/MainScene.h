@@ -10,14 +10,12 @@
 #include "Structure/Structure.h"
 #include "../../Engine/Nodes/Base/CameraNode.h"
 #include "../../Engine/Nodes/Physics/World.h"
-#include "../Tests/PhysicsNodes/TestController.h"
 #include "Dock/Dock.h"
 
 class MainScene : public Scene {
 public:
     static std::shared_ptr<MainScene> create(int render_priority_layers) {
         auto node = std::make_shared<MainScene>();
-        node->set_render_layers_count(render_priority_layers + 1);
         return node;
     }
 

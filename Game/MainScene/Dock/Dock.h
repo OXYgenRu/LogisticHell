@@ -6,7 +6,7 @@
 #define LOGISTICHELL_DOCK_H
 
 
-#include "../../../Engine/Nodes/Base/ContainerNode.h"
+#include "../../../Engine/Nodes/Base/Node.h"
 #include "../../../Engine/Nodes/Physics/World.h"
 #include "../../../Engine/Nodes/Render/Shapes/Polygon.h"
 #include "../../../Engine/Nodes/Render/Shapes/Text.h"
@@ -19,24 +19,23 @@
 
 class Structure;
 
-class Dock : public ContainerNode {
+class Dock : public Node {
 public:
     static std::shared_ptr<Dock>
-    create(std::shared_ptr<ContainerNode> parent, EngineContext &ctx, std::shared_ptr<World> world,
+    create(const std::shared_ptr<Node> &parent, EngineContext &ctx, const  std::shared_ptr<World>& world,
            sf::Vector2f position,
-           sf::Vector2i grid_size, float b2_cell_size, std::shared_ptr<BlueprintLoader> blueprint_loader,
-           std::shared_ptr<BlockFactory> block_factory,
-           int render_priority = 0,
-           int render_priority_layers = 10);
+           sf::Vector2i grid_size, float b2_cell_size, const std::shared_ptr<BlueprintLoader> &blueprint_loader,
+           const std::shared_ptr<BlockFactory> &block_factory,
+           int render_priority = 0);
 
 
-    explicit Dock(std::shared_ptr<ContainerNode> parent, int render_priority = 0)
-            : ContainerNode(parent, render_priority) {}
+    explicit Dock(const std::shared_ptr<Node> &parent, int render_priority = 0)
+            : Node(parent, render_priority) {}
 
     static void
-    setup(std::shared_ptr<Dock> node, EngineContext &ctx, std::shared_ptr<World> world, sf::Vector2f position,
-          sf::Vector2i grid_size, float b2_cell_size, std::shared_ptr<BlueprintLoader> blueprint_loader,
-          std::shared_ptr<BlockFactory> block_factory);
+    setup(const std::shared_ptr<Dock> &node, EngineContext &ctx,const  std::shared_ptr<World> &world, sf::Vector2f position,
+          sf::Vector2i grid_size, float b2_cell_size, const  std::shared_ptr<BlueprintLoader> &blueprint_loader,
+          const std::shared_ptr<BlockFactory> &block_factory);
 
     std::shared_ptr<UI::Collider> background_collider;
     std::shared_ptr<EditorController> editor_controller;

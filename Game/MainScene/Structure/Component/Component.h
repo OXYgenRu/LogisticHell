@@ -11,16 +11,16 @@
 
 class Structure;
 
-class Component : public ContainerNode {
+class Component : public Node {
 public:
     static std::shared_ptr<Component>
-    create(std::shared_ptr<ContainerNode> parent, std::shared_ptr<Structure> structure,
+    create(const std::shared_ptr<Node> &parent, std::shared_ptr<Structure> structure,
            int render_priority = 0,
            int render_priority_layers = 10);
 
 
-    explicit Component(std::shared_ptr<ContainerNode> parent, int render_priority = 0)
-            : ContainerNode(parent, render_priority) {}
+    explicit Component(const std::shared_ptr<Node> &parent, int render_priority = 0)
+            : Node(parent, render_priority) {}
 
     static void setup(std::shared_ptr<Component> node, std::shared_ptr<Structure> structure);
 

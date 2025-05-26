@@ -4,13 +4,11 @@
 
 #include "World.h"
 #include "box2d/box2d.h"
-#include "../Base/ContainerNode.h"
+#include "../Base/Node.h"
 
 std::shared_ptr<World>
-World::create(std::shared_ptr<ContainerNode> parent, b2Vec2 gravity, float pixel_per_meter, int render_priority,
-              int render_priority_layers) {
+World::create(const std::shared_ptr<Node> &parent, b2Vec2 gravity, float pixel_per_meter, int render_priority) {
     auto node = std::make_shared<World>(parent, render_priority);
-    node->set_render_layers_count(render_priority_layers + 1);
     b2WorldDef world_def = b2DefaultWorldDef();
     world_def.gravity = gravity;
     node->world_id = b2CreateWorld(&world_def);

@@ -10,21 +10,23 @@
 #include "../Tools.h"
 #include "../Application.h"
 #include "../EngineContext.h"
+#include "../Systems/Tree.h"
 
 void UICollidersSystem::update(EngineContext &ctx) {
     bool was_used = false;
     for (int i = ctx.app->tree->get_free_tree_index() - 1; i >= 0; i--) {
-        if (!ctx.app->tree->get_active_update_indices()[i]) {
+        if (!ctx.app->tree->get_flatten_tree()[i].is_update_active) {
             continue;
         }
-        if (ctx.app->tree->get_flatten_tree()[i]->get_node_type() == 9) {
-            auto node = std::static_pointer_cast<UI::Collider>(ctx.app->tree->get_flatten_tree()[i]);
+        if (ctx.app->tree->get_flatten_tree()[i].node->get_node_type() == 9) {
+            auto node = std::static_pointer_cast<UI::Collider>(ctx.app->tree->get_flatten_tree()[i].node);
             if (was_used) {
                 continue;
             }
             for (sf::Event &event: this->control_events) {
                 sf::Vector2f pixelPos = ctx.app->window->mapPixelToCoords(sf::Mouse::getPosition(*ctx.app->window));
-                sf::Vector2f localPos = ctx.app->tree->get_transform_tracker()[i].getInverse().transformPoint(pixelPos);
+                sf::Vector2f localPos = ctx.app->tree->get_flatten_tree()[i].transform.getInverse().transformPoint(
+                        pixelPos);
                 if (!is_point_in_polygon(localPos, node->get_vertices())) {
                     continue;
                 }

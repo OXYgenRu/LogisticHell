@@ -3,10 +3,10 @@
 //
 
 #include "BaseBlock.h"
-#include "../../../../Engine/Nodes/Base/ContainerNode.h"
+#include "../../../../Engine/Nodes/Base/Node.h"
 #include "../Component/Component.h"
 
-std::shared_ptr<BaseBlock> BaseBlock::create(std::shared_ptr<ContainerNode> parent,
+std::shared_ptr<BaseBlock> BaseBlock::create(const std::shared_ptr<Node> &parent,
                                              std::shared_ptr<RigidBody> rigid_body, b2Vec2 grid_position,
                                              float cell_size,
                                              int render_priority,
@@ -20,7 +20,6 @@ std::shared_ptr<BaseBlock> BaseBlock::create(std::shared_ptr<ContainerNode> pare
 void BaseBlock::setup(std::shared_ptr<BaseBlock> node, b2Vec2 grid_position, std::shared_ptr<RigidBody> rigid_body,
                       int render_priority_layers, float cell_size) {
 
-    node->set_render_layers_count(render_priority_layers + 1);
     node->grid_position = grid_position;
 
     node->textured_quad = TexturedQuad::create(node);

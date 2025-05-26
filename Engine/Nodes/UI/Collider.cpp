@@ -3,11 +3,11 @@
 //
 
 #include "Collider.h"
-#include "../Base/ContainerNode.h"
+#include "../Base/Node.h"
 #include "../../Application.h"
 
 std::shared_ptr<UI::Collider>
-UI::Collider::create(std::shared_ptr<ContainerNode> parent, int render_priority) {
+UI::Collider::create(const std::shared_ptr<Node> &parent, int render_priority) {
     auto node = std::make_shared<UI::Collider>(parent, render_priority);
     UI::Collider::setup(node);
     parent->add_node(node);

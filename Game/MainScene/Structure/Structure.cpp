@@ -5,12 +5,10 @@
 #include "Structure.h"
 
 std::shared_ptr<Structure>
-Structure::create(std::shared_ptr<ContainerNode> parent, std::shared_ptr<World> world, sf::Vector2f position,
+Structure::create(const std::shared_ptr<Node> &parent, std::shared_ptr<World> world, sf::Vector2f position,
                   sf::Vector2i grid_size, float cell_size,
-                  int render_priority,
-                  int render_priority_layers) {
+                  int render_priority) {
     auto node = std::make_shared<Structure>(parent, render_priority);
-    node->set_render_layers_count(render_priority_layers + 1);
     Structure::setup(node, world, position, grid_size, cell_size);
     if (parent != nullptr) {
         parent->add_node(node);

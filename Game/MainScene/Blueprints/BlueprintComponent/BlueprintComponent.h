@@ -10,18 +10,23 @@
 
 struct BlueprintBlock {
     std::string block_id;
+    std::string background_block_id;
     sf::Vector2i unit_offset;
     sf::Vector2i unit_size;
     int rotation;
+//    bool
 
     BlueprintBlock() {
         this->block_id = "empty_block::empty_block";
+        this->background_block_id = "void_block::void_block";
         this->unit_offset = {0, 0};
         this->rotation = 0;
     }
 
-    BlueprintBlock(std::string block_id, sf::Vector2i unit_offset, sf::Vector2i unit_size, int rotation) {
+    BlueprintBlock(std::string block_id, std::string background_block_id, sf::Vector2i unit_offset,
+                   sf::Vector2i unit_size, int rotation) {
         this->block_id = block_id;
+        this->background_block_id = background_block_id;
         this->unit_offset = unit_offset;
         this->unit_size = unit_size;
         this->rotation = rotation;

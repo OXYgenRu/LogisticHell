@@ -6,18 +6,18 @@
 #define LOGISTICHELL_UIPOLYGON_H
 
 
-#include "../Base/ContentNode.h"
+#include "../Base/Node.h"
 #include "Anchor.h"
 
-class UIPolygon : public ContentNode {
+class UIPolygon : public Node {
 public:
     static std::shared_ptr<UIPolygon>
-    create(std::shared_ptr<ContainerNode> parent, sf::Vector2f space_size,
+    create(const std::shared_ptr<Node> &parent, sf::Vector2f space_size,
            AnchorType anchor_type = AnchorType::Relative, AnchorBinding anchor_binding = AnchorBinding::LeftUp,
            int render_priority = 0);
 
-    explicit UIPolygon(std::shared_ptr<ContainerNode> parent, int render_priority = 0) : ContentNode(parent,
-                                                                                                     render_priority) {}
+    explicit UIPolygon(const std::shared_ptr<Node> &parent, int render_priority = 0) : Node(parent,
+                                                                                            render_priority) {}
 
     static void setup(std::shared_ptr<UIPolygon> &node, sf::Vector2f &space_size,
                       AnchorType anchor_type,

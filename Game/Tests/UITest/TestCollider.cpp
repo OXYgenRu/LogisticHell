@@ -3,9 +3,9 @@
 //
 
 #include "TestCollider.h"
-#include "../../../Engine/Nodes/Base/ContainerNode.h"
+#include "../../../Engine/Nodes/Base/Node.h"
 
-std::shared_ptr<TestCollider> TestCollider::create(std::shared_ptr<ContainerNode> parent, int render_priority) {
+std::shared_ptr<TestCollider> TestCollider::create(const std::shared_ptr<Node> &parent, int render_priority) {
     auto node = std::make_shared<TestCollider>(parent, render_priority);
     parent->add_node(node);
     return node;

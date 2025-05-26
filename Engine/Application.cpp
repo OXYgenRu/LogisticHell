@@ -19,14 +19,15 @@ Application::Application(const sf::VideoMode &videoMode, const std::string &titl
     this->standard_view = sf::View(sf::Vector2f(float(videoMode.width) / 2, float(videoMode.height) / 2),
                                    sf::Vector2f(float(videoMode.width), float(videoMode.height)));
     this->frame_limit = frame_limit;
-    this->texture_atlas = new Atlas(sf::Vector2i(128, 128));
+    this->texture_atlas = new Atlas(sf::Vector2i(256, 256));
 }
 
 void Application::start() {
     this->window = new sf::RenderWindow(this->video_mode, this->title, sf::Style::Titlebar | sf::Style::Close);
+    this->window->setVerticalSyncEnabled(true);
     sf::Clock clock;
     sf::Event event{};
-    std::shared_ptr<ContainerNode> scene = this->scene_system->currentScene;
+    std::shared_ptr<Node> scene = this->scene_system->currentScene;
     this->window->setFramerateLimit(this->frame_limit);
     this->texture_atlas->build();
     sf::Transform scene_transform;
@@ -40,7 +41,9 @@ void Application::start() {
 
             this->tree->drop_tree();
 //        scene = this->scene_system->currentScene;
-            this->tree->traverse(scene, ctx, scene_transform);
+            this->tree->traverse(scene, ctx, scene_transform, 0);
+
+            this->tree->prepare_tree();
 
             while (window->pollEvent(event)) {
                 if (event.type == sf::Event::Closed) {

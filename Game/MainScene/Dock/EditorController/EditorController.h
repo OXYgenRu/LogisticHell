@@ -23,8 +23,8 @@ class EditorController {
 public:
     static std::shared_ptr<EditorController>
     create(EngineContext &ctx, std::shared_ptr<Dock> dock,
-           std::shared_ptr<BuildingGrid> building_grid,
-           std::shared_ptr<BlueprintLoader> blueprint_loader);
+           const std::shared_ptr<BuildingGrid> &building_grid,
+           const std::shared_ptr<BlueprintLoader>& blueprint_loader);
 
     explicit EditorController(EngineContext &ctx, std::shared_ptr<Dock> dock,
                               std::shared_ptr<BuildingGrid> building_grid,
@@ -42,7 +42,7 @@ public:
 
     void set_mode(const EditorMode &new_mode, EngineContext &ctx);
 
-    void set_unit(const std::string &new_unit_id);
+    void set_unit(const std::string &new_unit_id, EngineContext &ctx);
 
     std::shared_ptr<Builder> builder;
     std::shared_ptr<EditorInterface> interface;

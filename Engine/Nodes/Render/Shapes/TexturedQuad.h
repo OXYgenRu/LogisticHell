@@ -6,15 +6,14 @@
 #define LOGISTICHELL_TEXTUREDQUAD_H
 
 
-#include "../../Base/ContentNode.h"
+#include "../../Base/Node.h"
 
-class TexturedQuad : public ContentNode {
+class TexturedQuad : public Node {
 public:
     static std::shared_ptr<TexturedQuad>
-    create(std::shared_ptr<ContainerNode> parent, int render_priority = 0);
+    create(const std::shared_ptr<Node> &parent, int render_priority = 0);
 
-    explicit TexturedQuad(std::shared_ptr<ContainerNode> parent, int render_priority = 0) : ContentNode(parent,
-                                                                                                        render_priority) {}
+    explicit TexturedQuad(const std::shared_ptr<Node> &parent, int render_priority = 0) : Node(parent, render_priority) {}
 
     static void setup(std::shared_ptr<TexturedQuad> node);
 

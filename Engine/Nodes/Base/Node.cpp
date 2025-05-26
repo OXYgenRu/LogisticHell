@@ -3,14 +3,19 @@
 //
 #include "Node.h"
 
-Node::Node(std::shared_ptr<ContainerNode> parent, int render_priority) {
-    this->parent = parent;
-    this->render_priority = render_priority;
+
+std::shared_ptr<Node> Node::create(const std::shared_ptr<Node> &parent, int render_priority) {
+    auto node = std::make_shared<Node>(parent, render_priority);
+    parent->add_node(node);
+    return node;
 }
 
-//void Node::add_node(const std::shared_ptr<Node> &new_node) {
-//    this->children.emplace_back(new_node);
-//}
+Node::Node(const std::shared_ptr<Node> &parent, int render_priority) {
+    this->parent = parent;
+    this->render_priority = render_priority;
+    this->container_volume = 0;
+    this->priority_as_relative = true;
+}
 
 void Node::set_render_flag(bool flag) {
     this->render_enabled = flag;
@@ -20,11 +25,27 @@ void Node::set_update_flag(bool flag) {
     this->update_enabled = flag;
 }
 
-bool Node::get_render_flag() {
+void Node::set_priority_relativity(bool is_priority_relative) {
+    this->priority_as_relative = is_priority_relative;
+}
+
+int Node::get_render_priority() const {
+    return this->render_priority;
+}
+
+void Node::set_render_priority(int new_render_priority) {
+    this->render_priority = new_render_priority;
+}
+
+bool Node::get_priority_dependency() const {
+    return this->priority_as_relative;
+}
+
+bool Node::get_render_flag() const {
     return this->render_enabled;
 }
 
-bool Node::get_update_flag() {
+bool Node::get_update_flag() const {
     return this->update_enabled;
 }
 
@@ -81,4 +102,44 @@ std::string Node::get_node_type_str(std::shared_ptr<Node> node) {
         return "Sprite";
     }
     return "Not found";
+}
+
+
+void Node::add_node(const std::shared_ptr<Node> &new_node) {
+    this->container.emplace_back(new_node);
+    std::weak_ptr<Node> weak_this = shared_from_this();
+    new_node->parent = weak_this;
+    this->container_volume++;
+}
+
+void Node::delete_node(const std::shared_ptr<Node> &node) {
+    if (node == nullptr) {
+        return;
+    }
+    auto it = std::find(this->container.begin(),
+                        this->container.end(), node);
+    if (it != this->container.end()) {
+        this->container.erase(it);
+        this->container_volume--;
+    }
+}
+
+int Node::get_container_volume() const {
+    return this->container_volume;
+}
+
+int Node::get_node_type() const {
+    return 1;
+}
+
+std::vector<std::shared_ptr<Node>> &Node::get_container() {
+    return this->container;
+}
+
+void Node::render(EngineContext &ctx, sf::RenderStates &states) {
+
+}
+
+void Node::update(EngineContext &ctx) {
+
 }

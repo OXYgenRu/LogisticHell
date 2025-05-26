@@ -7,10 +7,8 @@
 #include "../Control/CameraController.h"
 
 std::shared_ptr<CameraNode>
-CameraNode::create(std::shared_ptr<ContainerNode> parent, EngineContext &ctx, int render_priority,
-                   int render_priority_layers) {
+CameraNode::create(const std::shared_ptr<Node> &parent, EngineContext &ctx, int render_priority) {
     auto node = std::make_shared<CameraNode>(parent, render_priority);
-    node->set_render_layers_count(render_priority_layers + 1);
     parent->add_node(node);
     node->zoom = 1;
     node->set_zoom(2);

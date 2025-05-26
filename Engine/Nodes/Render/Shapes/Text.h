@@ -6,14 +6,13 @@
 #define LOGISTICHELL_TEXT_H
 
 #include "SFML/Graphics.hpp"
-#include "../../Base/ContentNode.h"
+#include "../../Base/Node.h"
 
-class Text : public ContentNode {
+class Text : public Node {
 public:
-    static std::shared_ptr<Text> create(std::shared_ptr<ContainerNode> parent, int render_priority = 0);
+    static std::shared_ptr<Text> create(const std::shared_ptr<Node> &parent, int render_priority = 0);
 
-    explicit Text(std::shared_ptr<ContainerNode> parent, int render_priority = 0) : ContentNode(parent,
-                                                                                                render_priority) {}
+    explicit Text(const std::shared_ptr<Node> &parent, int render_priority = 0) : Node(parent, render_priority) {}
 
     void render(EngineContext &ctx, sf::RenderStates &states) override;
 

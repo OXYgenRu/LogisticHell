@@ -7,8 +7,8 @@
 
 std::shared_ptr<EditorController>
 EditorController::create(EngineContext &ctx, std::shared_ptr<Dock> dock,
-                         std::shared_ptr<BuildingGrid> building_grid,
-                         std::shared_ptr<BlueprintLoader> blueprint_loader) {
+                         const std::shared_ptr<BuildingGrid> &building_grid,
+                         const std::shared_ptr<BlueprintLoader> &blueprint_loader) {
     auto node = std::make_shared<EditorController>(ctx, dock, building_grid, blueprint_loader);
     return node;
 }
@@ -139,6 +139,7 @@ sf::Vector2i EditorController::get_grid_cell_position(EngineContext &ctx, const 
             abs(builder->building_grid->grid_size.y - int((local_position.y) / sf_cell_size) - 1)};
 }
 
-void EditorController::set_unit(const std::string &new_unit_id) {
+void EditorController::set_unit(const std::string &new_unit_id, EngineContext &ctx) {
     this->builder->unit_id = new_unit_id;
+    this->editor_mode = EditorMode::Attachment;
 }

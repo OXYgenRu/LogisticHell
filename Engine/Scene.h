@@ -2,16 +2,16 @@
 // Created by EgorRychkov on 13.04.2025.
 //
 
-#include "Nodes/Base/ContainerNode.h"
+#include "Nodes/Base/Node.h"
 
 #ifndef LOGISTICHELL_SCENE_H
 #define LOGISTICHELL_SCENE_H
 
 #include "EngineContext.h"
 
-class Scene : public ContainerNode {
+class Scene : public Node {
 public:
-    Scene() : ContainerNode(nullptr) {
+    Scene() : Node(nullptr) {
 
     }
 

@@ -56,7 +56,8 @@ void BlueprintLoader::register_blueprint(const std::string &blueprint_id, Bluepr
                 for (int j = 0; j < grid_size.x; j++) {
                     sf::Vector2i new_position = get_block_position({j, i}, blueprint->grid_size, rotation);
                     component->get_block(new_position) = to->get_block({j, i});
-                    component->get_block(new_position).rotation = rotation;
+                    component->get_block(new_position).rotation =
+                            (component->get_block(new_position).rotation + rotation) % 4;
                     if (is_unit) {
                         component->get_block(new_position).unit_size = blueprint->grid_size;
                         component->get_block(new_position).unit_offset = new_position;

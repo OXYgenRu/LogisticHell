@@ -6,22 +6,21 @@
 #define LOGISTICHELL_COMPONENTGRID_H
 
 
-#include "../../../../../Engine/Nodes/Base/ContainerNode.h"
+#include "../../../../../Engine/Nodes/Base/Node.h"
 
 class GridCell;
 
 class Component;
 
-class ComponentGrid : public ContainerNode {
+class ComponentGrid : public Node {
 public:
     static std::shared_ptr<ComponentGrid>
-    create(std::shared_ptr<ContainerNode> parent, std::shared_ptr<Component> component,
-           int render_priority = 0,
-           int render_priority_layers = 10);
+    create(const std::shared_ptr<Node> &parent, std::shared_ptr<Component> component,
+           int render_priority = 0);
 
 
-    explicit ComponentGrid(std::shared_ptr<ContainerNode> parent, int render_priority = 0)
-            : ContainerNode(parent, render_priority) {}
+    explicit ComponentGrid(const std::shared_ptr<Node> &parent, int render_priority = 0)
+            : Node(parent, render_priority) {}
 
     static void setup(std::shared_ptr<ComponentGrid> node, std::shared_ptr<Component> component);
 

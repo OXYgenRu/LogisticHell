@@ -12,10 +12,10 @@ class CameraNode;
 class CameraController : public Controller {
 public:
     static std::shared_ptr<CameraController>
-    create(std::shared_ptr<ContainerNode> parent, std::shared_ptr<CameraNode> camera, int render_priority = 0);
+    create(const std::shared_ptr<Node> &parent, const std::shared_ptr<CameraNode> &camera, int render_priority = 0);
 
-    explicit CameraController(std::shared_ptr<ContainerNode> parent, int render_priority = 0) : Controller(parent,
-                                                                                                           render_priority) {}
+    explicit CameraController(const std::shared_ptr<Node> &parent, int render_priority = 0) : Controller(parent,
+                                                                                                         render_priority) {}
 
     void render(EngineContext &ctx, sf::RenderStates &states) override;
 
@@ -35,7 +35,7 @@ public:
 
     sf::Vector2f start_mouse_pos;
 
-    std::shared_ptr<CameraNode> camera;
+    std::weak_ptr<CameraNode> camera;
 };
 
 

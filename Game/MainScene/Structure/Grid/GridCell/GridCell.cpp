@@ -3,16 +3,14 @@
 //
 
 #include "GridCell.h"
-#include "../../../../../Engine/Nodes/Base/ContainerNode.h"
+#include "../../../../../Engine/Nodes/Base/Node.h"
 #include "../../Structure.h"
 
-std::shared_ptr<GridCell> GridCell::create(std::shared_ptr<ContainerNode> parent, std::shared_ptr<Structure> structure,
+std::shared_ptr<GridCell> GridCell::create(const std::shared_ptr<Node> &parent, std::shared_ptr<Structure> structure,
                                            std::shared_ptr<Grid> grid,
                                            sf::Vector2i grid_position, float cell_size,
-                                           int render_priority,
-                                           int render_priority_layers) {
+                                           int render_priority) {
     auto node = std::make_shared<GridCell>(parent, render_priority);
-    node->set_render_layers_count(render_priority_layers + 1);
     GridCell::setup(node, structure, grid, grid_position, cell_size);
     parent->add_node(node);
     return node;

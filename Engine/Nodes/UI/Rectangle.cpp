@@ -3,11 +3,11 @@
 //
 
 #include "Rectangle.h"
-#include "../Base/ContainerNode.h"
+#include "../Base/Node.h"
 #include "../../Application.h"
 
 std::shared_ptr<UI::Rectangle>
-UI::Rectangle::create(std::shared_ptr<ContainerNode> parent, int render_priority) {
+UI::Rectangle::create(const std::shared_ptr<Node> &parent, int render_priority) {
     auto node = std::make_shared<UI::Rectangle>(parent, render_priority);
     parent->add_node(node);
     UI::Rectangle::setup(node);

@@ -3,11 +3,11 @@
 //
 
 #include "TexturedQuad.h"
-#include "../../Base/ContainerNode.h"
+#include "../../Base/Node.h"
 #include "../../../Application.h"
 
 std::shared_ptr<TexturedQuad>
-TexturedQuad::create(std::shared_ptr<ContainerNode> parent, int render_priority) {
+TexturedQuad::create(const std::shared_ptr<Node> &parent, int render_priority) {
     auto node = std::make_shared<TexturedQuad>(parent, render_priority);
     TexturedQuad::setup(node);
     parent->add_node(node);

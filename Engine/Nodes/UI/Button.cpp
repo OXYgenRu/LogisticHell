@@ -6,11 +6,9 @@
 #include "../../Application.h"
 
 std::shared_ptr<UI::Button>
-UI::Button::create(std::shared_ptr<ContainerNode> parent, EngineContext &ctx,
-                   int render_priority,
-                   int render_priority_layers) {
+UI::Button::create(const std::shared_ptr<Node> &parent, EngineContext &ctx,
+                   int render_priority) {
     auto node = std::make_shared<UI::Button>(parent, render_priority);
-    node->set_render_layers_count(render_priority_layers + 1);
     UI::Button::setup(node, ctx);
     parent->add_node(node);
     return node;

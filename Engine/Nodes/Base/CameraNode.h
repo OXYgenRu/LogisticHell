@@ -7,17 +7,16 @@
 
 
 #include <SFML/Graphics/View.hpp>
-#include "ContainerNode.h"
 #include "../Control/CameraController.h"
+#include "../Base/Node.h"
 
-class CameraNode : public ContainerNode {
+class CameraNode : public Node {
 public:
     static std::shared_ptr<CameraNode>
-    create(std::shared_ptr<ContainerNode> parent, EngineContext &ctx, int render_priority = 0,
-           int render_priority_layers = 10);
+    create(const std::shared_ptr<Node> &parent, EngineContext &ctx, int render_priority = 0);
 
-    explicit CameraNode(std::shared_ptr<ContainerNode> parent, int render_priority = 0)
-            : ContainerNode(parent, render_priority) {}
+    explicit CameraNode(const std::shared_ptr<Node>& parent, int render_priority = 0)
+            : Node(parent, render_priority) {}
 
 
     void set_zoom(float zoom);

@@ -7,34 +7,33 @@
 #include "../../../../Engine/Application.h"
 
 std::shared_ptr<EditorInterface>
-EditorInterface::create(std::shared_ptr<ContainerNode> parent, EngineContext &ctx, std::shared_ptr<Dock> dock,
-                        std::shared_ptr<BlueprintLoader> &blueprint_loader,
-                        int render_priority,
-                        int render_priority_layers) {
+EditorInterface::create(const std::shared_ptr<Node> &parent, EngineContext &ctx, const std::shared_ptr<Dock> &dock,
+                        const std::shared_ptr<BlueprintLoader> &blueprint_loader,
+                        int render_priority) {
     auto node = std::make_shared<EditorInterface>(parent, render_priority);
-    node->set_render_layers_count(render_priority_layers + 1);
     EditorInterface::setup(node, ctx, dock, blueprint_loader);
     parent->add_node(node);
     return node;
 }
 
-void EditorInterface::setup(std::shared_ptr<EditorInterface> node, EngineContext &ctx, std::shared_ptr<Dock> dock,
-                            std::shared_ptr<BlueprintLoader> &blueprint_loader) {
+void EditorInterface::setup(const std::shared_ptr<EditorInterface> &node, EngineContext &ctx,
+                            const std::shared_ptr<Dock> &dock,
+                            const std::shared_ptr<BlueprintLoader> &blueprint_loader) {
     node->dock = dock;
-    node->buttons_layer = ContainerNode::create(node);
+    node->buttons_layer = Node::create(node);
     node->buttons_layer->set_position({0, ctx.app->get_window_size().y - 130});
     {
-        node->buttons_layer_background = UI::Button::create(node->buttons_layer, ctx);
+        node->buttons_layer_background = UI::Button::create(node->buttons_layer, ctx, 1);
         node->buttons_layer_background->set_rectangle({0, 0}, {ctx.app->get_window_size().x, 130});
         node->buttons_layer_background->set_color(sf::Color(63, 72, 204));
 
-        node->attachment_mode = UI::Button::create(node->buttons_layer, ctx);
+        node->attachment_mode = UI::Button::create(node->buttons_layer, ctx, 2);
         node->attachment_mode->set_rectangle({30, 30},
                                              {120, 120});
         node->attachment_mode->set_texture("attach_icon", ctx);
         node->attachment_mode->set_hold_reaction(true);
 
-        node->destroying_mode = UI::Button::create(node->buttons_layer, ctx);
+        node->destroying_mode = UI::Button::create(node->buttons_layer, ctx, 2);
         node->destroying_mode->set_rectangle({150, 30},
                                              {240, 120});
         node->destroying_mode->set_texture("remove_icon", ctx);
@@ -67,7 +66,7 @@ void EditorInterface::setup(std::shared_ptr<EditorInterface> node, EngineContext
             dock->editor_controller->set_mode(EditorMode::Destroying, ctx);
         });
     }
-    node->inventory = BlocksInventory::create(node, ctx, dock, {300, 800}, blueprint_loader, 1);
+    node->inventory = BlocksInventory::create(node, ctx, dock, {300, 800}, blueprint_loader, 3);
     node->inventory->set_position({ctx.app->get_window_size().x - 300, 0});
 }
 

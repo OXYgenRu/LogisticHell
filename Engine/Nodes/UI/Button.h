@@ -6,22 +6,20 @@
 #define LOGISTICHELL_BUTTON_H
 
 #include "memory"
-#include "../Base/ContainerNode.h"
+#include "../Base/Node.h"
 #include "Collider.h"
 #include "Rectangle.h"
 #include "functional"
 
 namespace UI {
-    class Button : public ContainerNode {
+    class Button : public Node {
     public:
         static std::shared_ptr<Button>
-        create(std::shared_ptr<ContainerNode> parent, EngineContext &ctx,
-               int render_priority = 0,
-               int render_priority_layers = 10
-        );
+        create(const std::shared_ptr<Node> &parent, EngineContext &ctx,
+               int render_priority = 0);
 
-        explicit Button(std::shared_ptr<ContainerNode> parent, int render_priority = 0)
-                : ContainerNode(parent, render_priority) {}
+        explicit Button(const std::shared_ptr<Node> &parent, int render_priority = 0)
+                : Node(parent, render_priority) {}
 
         static void setup(std::shared_ptr<Button> &node, EngineContext &ctx);
 

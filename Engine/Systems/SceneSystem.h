@@ -21,7 +21,7 @@ public:
 
     void set_loaded_scene(int id, EngineContext &ctx);
 
-    void update_scene_selection(std::shared_ptr<ContainerNode> &scene, EngineContext &ctx);
+    void update_scene_selection(std::shared_ptr<Node> &scene, EngineContext &ctx);
 
     std::shared_ptr<Scene> currentScene;
 

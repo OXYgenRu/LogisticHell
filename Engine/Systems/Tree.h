@@ -7,40 +7,61 @@
 #define LOGISTICHELL_TREE_H
 
 #include "../Nodes/Base/Node.h"
-#include "../Nodes/Base/ContainerNode.h"
+
+struct Leaf {
+    std::shared_ptr<Node> node;
+    bool is_render_active;
+    bool is_update_active;
+    sf::Transform transform;
+    int global_render_priority;
+
+    Leaf() {
+        node = nullptr;
+        is_render_active = false;
+        is_update_active = false;
+        global_render_priority = 0;
+    }
+
+    Leaf(const std::shared_ptr<Node> &node, bool is_render_active, bool is_update_active,
+         const sf::Transform &transform, int global_render_priority) {
+        this->node = node;
+        this->is_render_active = is_render_active;
+        this->is_update_active = is_update_active;
+        this->transform = transform;
+        this->global_render_priority = global_render_priority;
+    }
+
+};
 
 class Tree {
 private:
-    int free_tree_index = 0;
-    std::vector<std::shared_ptr<Node>> flatten_tree;
-    std::vector<bool> active_render_indices, active_update_indices;
+    std::vector<Leaf> flatten_tree;
     std::vector<std::pair<int, int>> brunch_tracker;
-    std::vector<sf::Transform> transform_tracker;
     sf::RenderStates states;
+    int free_tree_index = 0;
 public:
-    void add_node(std::shared_ptr<Node> node, EngineContext &ctx, sf::Transform transform);
+    void add_node(const std::shared_ptr<Node> &node, EngineContext &ctx, const sf::Transform &transform,
+                  int render_priority);
 
-    void drop_tree();
+    void traverse(std::shared_ptr<Node> &node, EngineContext &ctx, sf::Transform transform, int render_priority);
 
-    void traverse(std::shared_ptr<ContainerNode> &node, EngineContext &ctx, sf::Transform transform);
-
-    std::vector<std::shared_ptr<Node>> &get_tree();
+    void prepare_tree();
 
     void render(EngineContext &ctx);
 
     void update(EngineContext &ctx);
 
-    std::vector<bool> &get_active_render_indices();
-
-    std::vector<bool> &get_active_update_indices();
-
     [[nodiscard]] int get_free_tree_index() const;
 
-    std::vector<std::shared_ptr<Node>> &get_flatten_tree();
+    std::vector<Leaf> &get_flatten_tree();
 
-    void print_tree(std::shared_ptr<ContainerNode> &node, const std::string &indent = "");
+    void print_tree(std::shared_ptr<Node> &node, EngineContext &ctx);
 
-    std::vector<sf::Transform> &get_transform_tracker();
+    void traverse_print(std::shared_ptr<Node> &node, const std::string &indent = "");
+
+    void drop_tree();
+
+    std::vector<Leaf> &get_tree();
 };
 
 

@@ -8,12 +8,12 @@
 
 void ControlSystem::update(EngineContext &ctx) {
     for (int i = 0; i < ctx.app->tree->get_free_tree_index(); i++) {
-        if (!ctx.app->tree->get_active_update_indices()[i]) {
+        if (!ctx.app->tree->get_flatten_tree()[i].is_update_active) {
             continue;
         }
-        if (ctx.app->tree->get_flatten_tree()[i]->get_node_type() == 5 or
-            ctx.app->tree->get_flatten_tree()[i]->get_node_type() == 7) {
-            auto node = std::static_pointer_cast<Controller>(ctx.app->tree->get_flatten_tree()[i]);
+        if (ctx.app->tree->get_flatten_tree()[i].node->get_node_type() == 5 or
+            ctx.app->tree->get_flatten_tree()[i].node->get_node_type() == 7) {
+            auto node = std::static_pointer_cast<Controller>(ctx.app->tree->get_flatten_tree()[i].node);
             for (sf::Event &event: this->control_events) {
                 if (event.type == sf::Event::KeyPressed) {
                     node->on_key_press(event, ctx);

@@ -8,25 +8,24 @@
 #include "EditorInterface/EditorInterface.h"
 
 std::shared_ptr<Dock>
-Dock::create(std::shared_ptr<ContainerNode> parent, EngineContext &ctx, std::shared_ptr<World> world,
+Dock::create(const std::shared_ptr<Node> &parent, EngineContext &ctx, const std::shared_ptr<World> &world,
              sf::Vector2f position,
-             sf::Vector2i grid_size, float b2_cell_size, std::shared_ptr<BlueprintLoader> blueprint_loader,
-             std::shared_ptr<BlockFactory> block_factory,
-             int render_priority,
-             int render_priority_layers) {
+             sf::Vector2i grid_size, float b2_cell_size, const std::shared_ptr<BlueprintLoader> &blueprint_loader,
+             const std::shared_ptr<BlockFactory> &block_factory,
+             int render_priority) {
     auto node = std::make_shared<Dock>(parent, render_priority);
-    node->set_render_layers_count(render_priority_layers + 1);
     Dock::setup(node, ctx, world, position, grid_size, b2_cell_size, blueprint_loader, block_factory);
     parent->add_node(node);
     return node;
 }
 
 
-void Dock::setup(std::shared_ptr<Dock> node, EngineContext &ctx, std::shared_ptr<World> world, sf::Vector2f position,
-                 sf::Vector2i grid_size, float b2_cell_size, std::shared_ptr<BlueprintLoader> blueprint_loader,
-                 std::shared_ptr<BlockFactory> block_factory) {
+void Dock::setup(const std::shared_ptr<Dock> &node, EngineContext &ctx, const std::shared_ptr<World> &world,
+                 sf::Vector2f position,
+                 sf::Vector2i grid_size, float b2_cell_size, const std::shared_ptr<BlueprintLoader> &blueprint_loader,
+                 const std::shared_ptr<BlockFactory> &block_factory) {
     node->world = world;
-    node->background_collider = UI::Collider::create(node);
+    node->background_collider = UI::Collider::create(node, 0);
     {
         node->background_collider->set_vertices({{0,                                   0},
                                                  {float(ctx.app->window->getSize().x), 0},
@@ -61,7 +60,7 @@ void Dock::setup(std::shared_ptr<Dock> node, EngineContext &ctx, std::shared_ptr
     }
     node->editor_controller = EditorController::create(ctx, node, node->building_grid, blueprint_loader);
 
-    node->interface = EditorInterface::create(node, ctx, node, blueprint_loader, 2);
+    node->interface = EditorInterface::create(node, ctx, node, blueprint_loader, 6);
     {
         node->interface->set_position({-ctx.app->get_window_size().x / 2, -ctx.app->get_window_size().y / 2});
     }

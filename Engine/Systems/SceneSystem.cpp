@@ -29,7 +29,7 @@ void SceneSystem::set_loaded_scene(int id, EngineContext &ctx) {
     }
 }
 
-void SceneSystem::update_scene_selection(std::shared_ptr<ContainerNode> &scene, EngineContext &ctx) {
+void SceneSystem::update_scene_selection(std::shared_ptr<Node> &scene, EngineContext &ctx) {
     if (need_to_load_new_scene) {
         currentScene = loaded_scenes[selected_scene_id];
         need_to_load_new_scene = false;
@@ -40,8 +40,8 @@ void SceneSystem::update_scene_selection(std::shared_ptr<ContainerNode> &scene, 
         currentScene = it->second();
         currentScene->init_tree(ctx);
         loaded_scenes[selected_scene_id] = currentScene;
-        scene = std::static_pointer_cast<ContainerNode>(currentScene);
-        ctx.app->tree->print_tree(scene);
+        scene = std::static_pointer_cast<Node>(currentScene);
+        ctx.app->tree->print_tree(scene, ctx);
         need_to_set_new_scene = false;
         return;
     }

@@ -5,15 +5,14 @@
 #ifndef LOGISTICHELL_POLYGON_H
 #define LOGISTICHELL_POLYGON_H
 
-#include "../../Base/ContentNode.h"
+#include "../../Base/Node.h"
 #include "../../../EngineContext.h"
 
-class Polygon : public ContentNode {
+class Polygon : public Node {
 public:
-    static std::shared_ptr<Polygon> create(std::shared_ptr<ContainerNode> parent, int render_priority = 0);
+    static std::shared_ptr<Polygon> create(const std::shared_ptr<Node> &parent, int render_priority = 0);
 
-    explicit Polygon(std::shared_ptr<ContainerNode> parent, int render_priority = 0) : ContentNode(parent,
-                                                                                                   render_priority) {}
+    explicit Polygon(const std::shared_ptr<Node> &parent, int render_priority = 0) : Node(parent, render_priority) {}
 
     void set_polygon(std::vector<sf::Vector2<float>> &new_polygon);
 

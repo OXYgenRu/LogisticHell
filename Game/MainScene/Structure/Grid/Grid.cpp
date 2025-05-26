@@ -7,12 +7,11 @@
 
 
 std::shared_ptr<Grid>
-Grid::create(std::shared_ptr<ContainerNode> parent, sf::Vector2i grid_size, float cell_size,
+Grid::create(const std::shared_ptr<Node> &parent, sf::Vector2i grid_size, float cell_size,
              std::shared_ptr<Structure> rigid_body,
              int render_priority,
              int render_priority_layers) {
     auto node = std::make_shared<Grid>(parent, render_priority);
-    node->set_render_layers_count(render_priority_layers + 1);
     Grid::setup(node, grid_size, cell_size, rigid_body);
     parent->add_node(node);
     return node;
@@ -24,7 +23,7 @@ void Grid::setup(std::shared_ptr<Grid> node, sf::Vector2i grid_size, float cell_
     node->cell_size = cell_size;
     node->grid_size = grid_size;
     node->grid_cells.resize(grid_size.y, std::vector<std::shared_ptr<GridCell>>(grid_size.x, nullptr));
-    node->grid_view_layer = ContainerNode::create(node);
+    node->grid_view_layer = Node::create(node);
 
     for (int i = 0; i < grid_size.y; i++) {
         for (int j = 0; j < grid_size.x; j++) {

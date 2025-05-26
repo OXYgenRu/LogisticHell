@@ -8,11 +8,9 @@
 #include "../../Structure.h"
 
 std::shared_ptr<ComponentGrid>
-ComponentGrid::create(std::shared_ptr<ContainerNode> parent, std::shared_ptr<Component> component,
-                      int render_priority,
-                      int render_priority_layers) {
+ComponentGrid::create(const std::shared_ptr<Node> &parent, std::shared_ptr<Component> component,
+                      int render_priority) {
     auto node = std::make_shared<ComponentGrid>(parent, render_priority);
-    node->set_render_layers_count(render_priority_layers + 1);
     ComponentGrid::setup(node, component);
     parent->add_node(node);
     return node;

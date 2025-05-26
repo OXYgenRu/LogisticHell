@@ -26,7 +26,9 @@ void Builder::set_default_blueprint(EngineContext &ctx) {
     default_block.block_id = "construction_block::construction_block";
     default_block.unit_size = {1, 1};
     default_block.unit_offset = {0, 0};
+    this->building_grid->set_default_state(ctx);
     this->building_grid->clear(ctx);
+    this->building_grid->clear_background(ctx);
     this->building_grid->set_block({0, 0}, "construction_block::construction_block", 0, ctx);
 }
 
@@ -46,7 +48,10 @@ void Builder::attach_unit(sf::Vector2i position, EngineContext &ctx) {
             if (block.block_id != "empty_block::empty_block") {
                 unit_attachment_base->set_block({unit_position.x + x, unit_position.y + y}, block);
                 this->building_grid->set_block({unit_position.x + x, unit_position.y + y}, block.block_id,
-                                               this->preview_rotation, ctx);
+                                               block.rotation, ctx);
+                this->building_grid->set_background_block({unit_position.x + x, unit_position.y + y},
+                                                          block.background_block_id,
+                                                          block.rotation, ctx);
             }
         }
     }
@@ -61,7 +66,10 @@ void Builder::attach_unit(sf::Vector2i position, EngineContext &ctx) {
                 if (block.block_id != "empty_block::empty_block") {
                     new_component->set_block({unit_position.x + x, unit_position.y + y}, block);
                     this->building_grid->set_block({unit_position.x + x, unit_position.y + y}, block.block_id,
-                                                   this->preview_rotation, ctx);
+                                                   block.rotation, ctx);
+                    this->building_grid->set_background_block({unit_position.x + x, unit_position.y + y},
+                                                              block.background_block_id,
+                                                              block.rotation, ctx);
                 }
             }
         }
@@ -77,9 +85,15 @@ void Builder::destroy_unit(sf::Vector2i position, EngineContext &ctx) {
     for (int x = 0; x < block.unit_size.x; x++) {
         for (int y = 0; y < block.unit_size.y; y++) {
             sf::Vector2i block_position = {unit_position.x + x, unit_position.y + y};
-            this->blueprint->get_component(block_position)->get_block(
-                    block_position).block_id = "empty_block::empty_block";
-            this->building_grid->set_block(block_position, "empty_block::empty_block", 0, ctx);
+            if (this->blueprint->get_component(block_position) != nullptr) {
+                BlueprintBlock &destroying_block = this->blueprint->get_component(block_position)->get_block(
+                        block_position);
+                destroying_block.block_id = "empty_block::empty_block";
+                destroying_block.background_block_id = "void_block::void_block";
+                this->building_grid->set_block(block_position, "empty_block::empty_block", 0, ctx);
+                this->building_grid->set_background_block(block_position, "void_block::void_block", 0, ctx);
+            }
+
         }
     }
 }
@@ -157,7 +171,9 @@ void Builder::draw_building_preview(EngineContext &ctx) {
                     nullptr) {
                     BlueprintBlock block = component->get_block({x, y});
                     this->building_grid->set_preview_block({unit_position.x + x, unit_position.y + y},
-                                                           block.block_id, this->preview_rotation, ctx);
+                                                           block.block_id, block.rotation, ctx);
+                    this->building_grid->set_background_preview_block({unit_position.x + x, unit_position.y + y},
+                                                                      block.background_block_id, block.rotation, ctx);
                     if (i != this->selected_preview_component_index) {
                         this->building_grid->set_mask_block({unit_position.x + x, unit_position.y + y},
                                                             "discarded_block::discarded_block", this->preview_rotation,
@@ -168,6 +184,7 @@ void Builder::draw_building_preview(EngineContext &ctx) {
                 this->building_grid->set_mask_block({unit_position.x + x, unit_position.y + y},
                                                     "busy_grid_block::busy_grid_block", this->preview_rotation,
                                                     ctx);
+
             }
         }
     }
@@ -191,6 +208,7 @@ void Builder::draw_destroying_preview(EngineContext &ctx) {
 
 
 void Builder::clear_preview(EngineContext &ctx) {
+    this->building_grid->clear_background_preview(ctx);
     this->building_grid->clear_preview(ctx);
     this->building_grid->clear_mask(ctx);
 }

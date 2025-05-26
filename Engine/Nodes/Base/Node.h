@@ -8,32 +8,47 @@
 #ifndef LOGISTICHELL_NODE_H
 #define LOGISTICHELL_NODE_H
 
-class ContainerNode;
 
-class Node {
+class Node : public std::enable_shared_from_this<Node> {
 public:
+
+    static std::shared_ptr<Node>create(const std::shared_ptr<Node> &parent, int render_priority = 0);
+
     virtual ~Node() = default;
 
-    explicit Node(std::shared_ptr<ContainerNode> parent, int render_priority = 0);
-
-    virtual void render(EngineContext &ctx, sf::RenderStates &states) = 0;
-
-    virtual void update(EngineContext &ctx) = 0;
+    explicit Node(const std::shared_ptr<Node> &parent, int render_priority = 0);
 
 
-    [[nodiscard]] virtual int get_node_type() const = 0;
+    virtual void render(EngineContext &ctx, sf::RenderStates &states);
+
+    virtual void update(EngineContext &ctx) ;
+
 
     void set_render_flag(bool flag);
 
     void set_update_flag(bool flag);
 
-    bool get_render_flag();
 
-    bool get_update_flag();
+    void set_priority_relativity(bool is_priority_relative);
 
-    virtual sf::Transformable &get_transformable();
+    bool get_priority_dependency() const;
+
+    int get_render_priority() const;
+
+    void set_render_priority(int new_render_priority);
+
+
+    bool get_render_flag() const;
+
+    bool get_update_flag() const;
+
+
+    [[nodiscard]] virtual int get_node_type() const;
 
     static std::string get_node_type_str(std::shared_ptr<Node> node);
+
+
+    virtual sf::Transformable &get_transformable();
 
     void set_position(const sf::Vector2f &position);
 
@@ -43,11 +58,26 @@ public:
 
     float get_rotation();
 
-    std::weak_ptr<ContainerNode> parent;
-    int render_priority = 0;
+
+    void add_node(const std::shared_ptr<Node> &new_node);
+
+    void delete_node(const std::shared_ptr<Node> &node);
+
+
+    int get_container_volume() const;
+
+    std::vector<std::shared_ptr<Node>> &get_container();
+
+
+    std::weak_ptr<Node> parent;
+
 private:
+    int render_priority;
+    int container_volume;
+    bool priority_as_relative = true;
     bool render_enabled = true;
     bool update_enabled = true;
+    std::vector<std::shared_ptr<Node>> container;
 protected:
     sf::Transformable transform;
 };

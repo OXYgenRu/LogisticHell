@@ -3,10 +3,10 @@
 //
 
 #include "Sprite.h"
-#include "../../Base/ContainerNode.h"
+#include "../../Base/Node.h"
 #include "../../../Application.h"
 
-std::shared_ptr<Sprite> Sprite::create(std::shared_ptr<ContainerNode> parent, int render_priority) {
+std::shared_ptr<Sprite> Sprite::create(const std::shared_ptr<Node> &parent, int render_priority) {
     auto node = std::make_shared<Sprite>(parent, render_priority);
     parent->add_node(node);
     return node;

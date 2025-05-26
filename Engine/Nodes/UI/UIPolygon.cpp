@@ -6,7 +6,7 @@
 #include "../../Application.h"
 
 std::shared_ptr<UIPolygon>
-UIPolygon::create(std::shared_ptr<ContainerNode> parent, sf::Vector2f space_size,
+UIPolygon::create(const std::shared_ptr<Node> &parent, sf::Vector2f space_size,
                   AnchorType anchor_type, AnchorBinding anchor_binding,
                   int render_priority) {
     auto node = std::make_shared<UIPolygon>(parent, render_priority);

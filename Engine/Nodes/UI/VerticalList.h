@@ -5,44 +5,40 @@
 #ifndef LOGISTICHELL_VERTICALLIST_H
 #define LOGISTICHELL_VERTICALLIST_H
 
-#include "../Base/ContainerNode.h"
+#include "../Base/Node.h"
 #include "Button.h"
 #include "../../../Engine/Nodes/Render/Shapes/Text.h"
 
 namespace UI {
     class VerticalList;
 
-    class ListItem : public ContainerNode {
+    class ListItem : public Node {
     public:
         static std::shared_ptr<ListItem>
-        create(std::shared_ptr<VerticalList> parent, EngineContext &ctx, const sf::Vector2f &item_size,
-               int render_priority = 0,
-               int render_priority_layers = 10
-        );
+        create(const std::shared_ptr<VerticalList> &parent, EngineContext &ctx, const sf::Vector2f &item_size,
+               int render_priority = 0);
 
 
-        explicit ListItem(std::shared_ptr<ContainerNode> parent, int render_priority = 0)
-                : ContainerNode(parent, render_priority) {}
+        explicit ListItem(const std::shared_ptr<Node> &parent, int render_priority = 0)
+                : Node(parent, render_priority) {}
 
         static void setup(std::shared_ptr<ListItem> &node, EngineContext &ctx, const sf::Vector2f &item_size);
 
         std::shared_ptr<UI::Button> button;
-        std::shared_ptr<ContainerNode> text_layer;
+        std::shared_ptr<Node> text_layer;
         std::shared_ptr<Text> text;
     };
 
-    class VerticalList : public ContainerNode {
+    class VerticalList : public Node {
     public:
         static std::shared_ptr<VerticalList>
-        create(std::shared_ptr<ContainerNode> parent, EngineContext &ctx,
+        create(const std::shared_ptr<Node> &parent, EngineContext &ctx,
                const sf::Vector2f &container_size, int list_size,
-               int render_priority = 0,
-               int render_priority_layers = 10
-        );
+               int render_priority = 0);
 
 
-        explicit VerticalList(std::shared_ptr<ContainerNode> parent, int render_priority = 0)
-                : ContainerNode(parent, render_priority) {}
+        explicit VerticalList(const std::shared_ptr<Node> parent, int render_priority = 0)
+                : Node(parent, render_priority) {}
 
         static void setup(std::shared_ptr<VerticalList> &node, EngineContext &ctx, const sf::Vector2f &container_size,
                           int list_size);

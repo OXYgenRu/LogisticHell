@@ -7,7 +7,7 @@
 
 #include "../../../Engine/Scene.h"
 #include "../../../Engine/Nodes/Base/CameraNode.h"
-#include "../../../Engine/Nodes/Base/ContainerNode.h"
+#include "../../../Engine/Nodes/Base/Node.h"
 #include "../../../Engine/Nodes/Render/Shapes/Polygon.h"
 #include "../../../Engine/Nodes/UI/Collider.h"
 
@@ -15,7 +15,6 @@ class UIScene : public Scene {
 public:
     static std::shared_ptr<UIScene> create(int render_priority_layers) {
         auto node = std::make_shared<UIScene>();
-        node->set_render_layers_count(render_priority_layers + 1);
         return node;
     }
 
@@ -28,7 +27,7 @@ public:
     std::shared_ptr<CameraNode> camera;
     std::shared_ptr<Polygon> polygon;
     std::shared_ptr<UI::Collider> ui_collider;
-    std::shared_ptr<ContainerNode> c1;
+    std::shared_ptr<Node> c1;
 
 };
 

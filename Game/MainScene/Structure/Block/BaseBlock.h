@@ -12,17 +12,17 @@
 
 class Component;
 
-class BaseBlock : public ContainerNode {
+class BaseBlock : public Node {
 public:
     static std::shared_ptr<BaseBlock>
-    create(std::shared_ptr<ContainerNode> parent, std::shared_ptr<RigidBody> rigid_body, b2Vec2 grid_position,
+    create(const std::shared_ptr<Node> &parent, std::shared_ptr<RigidBody> rigid_body, b2Vec2 grid_position,
            float cell_size,
            int render_priority = 0,
            int render_priority_layers = 10);
 
 
-    explicit BaseBlock(std::shared_ptr<ContainerNode> parent, int render_priority = 0)
-            : ContainerNode(parent, render_priority) {}
+    explicit BaseBlock(const std::shared_ptr<Node> &parent, int render_priority = 0)
+            : Node(parent, render_priority) {}
 
     static void setup(std::shared_ptr<BaseBlock> node, b2Vec2 grid, std::shared_ptr<RigidBody> rigid_body,
                       int render_priority_layers, float cell_size);

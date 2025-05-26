@@ -3,13 +3,13 @@
 //
 
 #include "DockController.h"
-#include "../../../../Engine/Nodes/Base/ContainerNode.h"
+#include "../../../../Engine/Nodes/Base/Node.h"
 #include "../Dock.h"
 #include "iostream"
 
 
 std::shared_ptr<DockController>
-DockController::create(std::shared_ptr<ContainerNode> parent, std::shared_ptr<Dock> dock, int render_priority) {
+DockController::create(const std::shared_ptr<Node> &parent,const  std::shared_ptr<Dock> &dock, int render_priority) {
     auto node = std::make_shared<DockController>(parent, render_priority);
     node->dock = dock;
     parent->add_node(node);

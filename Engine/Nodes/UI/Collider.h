@@ -5,18 +5,18 @@
 #ifndef LOGISTICHELL_COLLIDER_H
 #define LOGISTICHELL_COLLIDER_H
 
-#include "../Base/ContentNode.h"
+#include "../Base/Node.h"
 #include "SFML/Graphics.hpp"
 #include "Anchor.h"
 
 namespace UI {
-    class Collider : public ContentNode {
+    class Collider : public Node {
     public:
         static std::shared_ptr<Collider>
-        create(std::shared_ptr<ContainerNode> parent, int render_priority = 0);
+        create(const std::shared_ptr<Node> &parent, int render_priority = 0);
 
-        explicit Collider(std::shared_ptr<ContainerNode> parent, int render_priority = 0) : ContentNode(parent,
-                                                                                                        render_priority) {}
+        explicit Collider(const std::shared_ptr<Node> &parent, int render_priority = 0) : Node(parent,
+                                                                                               render_priority) {}
 
         static void setup(std::shared_ptr<Collider> &node);
 

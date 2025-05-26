@@ -3,11 +3,11 @@
 //
 
 #include "Polygon.h"
-#include "../../Base/ContainerNode.h"
+#include "../../Base/Node.h"
 #include "../../../EngineContext.h"
 #include "../../../Application.h"
 
-std::shared_ptr<Polygon> Polygon::create(std::shared_ptr<ContainerNode> parent, int render_priority) {
+std::shared_ptr<Polygon> Polygon::create(const std::shared_ptr<Node> &parent, int render_priority) {
     auto node = std::make_shared<Polygon>(parent, render_priority);
     parent->add_node(node);
     return node;

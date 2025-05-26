@@ -5,19 +5,18 @@
 #ifndef LOGISTICHELL_CONTROLLER_H
 #define LOGISTICHELL_CONTROLLER_H
 
-#include "../Base/ContentNode.h"
+#include "../Base/Node.h"
 #include "SFML/Graphics.hpp"
 
-class Controller : public ContentNode {
+class Controller : public Node {
 public:
-    static std::shared_ptr<Controller> create(std::shared_ptr<ContainerNode> parent, int render_priority = 0);
+    static std::shared_ptr<Controller> create(const std::shared_ptr<Node> &parent, int render_priority = 0);
 
-    explicit Controller(std::shared_ptr<ContainerNode> parent, int render_priority = 0) : ContentNode(parent,
-                                                                                                      render_priority) {}
+    explicit Controller(const std::shared_ptr<Node> &parent, int render_priority = 0) : Node(parent, render_priority) {}
 
     void render(EngineContext &ctx, sf::RenderStates &states) override;
-    void update(EngineContext &ctx) override;
 
+    void update(EngineContext &ctx) override;
 
     int get_node_type() const override;
 

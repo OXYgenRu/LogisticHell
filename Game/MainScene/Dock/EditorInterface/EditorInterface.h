@@ -6,7 +6,7 @@
 #define LOGISTICHELL_EDITORINTERFACE_H
 
 
-#include "../../../../Engine/Nodes/Base/ContainerNode.h"
+#include "../../../../Engine/Nodes/Base/Node.h"
 #include "../../../../Engine/Nodes/UI/UIPolygon.h"
 #include "../../../../Engine/Nodes/UI/Button.h"
 #include "../../../../Engine/Nodes/Render/Shapes/Text.h"
@@ -16,26 +16,25 @@
 
 class Dock;
 
-class EditorInterface : public ContainerNode {
+class EditorInterface : public Node {
 public:
     static std::shared_ptr<EditorInterface>
-    create(std::shared_ptr<ContainerNode> parent, EngineContext &ctx, std::shared_ptr<Dock> dock,
-           std::shared_ptr<BlueprintLoader> &blueprint_loader,
-           int render_priority = 0,
-           int render_priority_layers = 10);
+    create(const std::shared_ptr<Node> &parent, EngineContext &ctx, const std::shared_ptr<Dock> &dock,
+           const std::shared_ptr<BlueprintLoader> &blueprint_loader,
+           int render_priority = 0);
 
 
-    explicit EditorInterface(std::shared_ptr<ContainerNode> parent,
-                             int render_priority = 0) : ContainerNode(parent,
+    explicit EditorInterface(const std::shared_ptr<Node> &parent,
+                             int render_priority = 0) : Node(parent,
                                                                       render_priority) {}
 
-    static void setup(std::shared_ptr<EditorInterface> node, EngineContext &ctx, std::shared_ptr<Dock> dock,
-                      std::shared_ptr<BlueprintLoader> &blueprint_loader);
+    static void setup(const std::shared_ptr<EditorInterface> &node, EngineContext &ctx, const std::shared_ptr<Dock> &dock,
+                      const std::shared_ptr<BlueprintLoader> &blueprint_loader);
 
     void update(EngineContext &ctx) override;
 
     std::weak_ptr<Dock> dock;
-    std::shared_ptr<ContainerNode> buttons_layer;
+    std::shared_ptr<Node> buttons_layer;
     std::shared_ptr<UI::Button> buttons_layer_background;
     std::shared_ptr<UI::Button> attachment_mode;
     std::shared_ptr<UI::Button> destroying_mode;

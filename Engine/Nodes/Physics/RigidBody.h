@@ -6,21 +6,19 @@
 #define LOGISTICHELL_RIGIDBODY_H
 
 #include <box2d/box2d.h>
-#include "../Base/ContainerNode.h"
+#include "../Base/Node.h"
 #include "World.h"
 
-class RigidBody : public ContainerNode {
+class RigidBody : public Node {
 public:
     static std::shared_ptr<RigidBody>
-    create(std::shared_ptr<ContainerNode> parent, std::shared_ptr<World> world, b2BodyDef &body_def,
-           int render_priority = 0,
-           int render_priority_layers = 10);
+    create(const std::shared_ptr<Node> &parent, const std::shared_ptr<World> &world, b2BodyDef &body_def,
+           int render_priority = 0);
 
-    explicit RigidBody(std::shared_ptr<ContainerNode> parent, int render_priority = 0)
-            : ContainerNode(parent, render_priority) {}
+    explicit RigidBody(const std::shared_ptr<Node> &parent, int render_priority = 0)
+            : Node(parent, render_priority) {}
 
-    static void setup(std::shared_ptr<RigidBody> node, std::shared_ptr<World> world, b2BodyDef &body_def,
-                      int render_priority_layers);
+    static void setup(const std::shared_ptr<RigidBody> &node, const std::shared_ptr<World> &world, b2BodyDef &body_def);
 
     sf::Vector2f sf_get_world_point(b2Vec2 local_point, EngineContext &ctx);
 

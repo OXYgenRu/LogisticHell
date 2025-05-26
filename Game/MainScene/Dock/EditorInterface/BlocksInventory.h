@@ -6,27 +6,25 @@
 #define LOGISTICHELL_BLOCKSINVENTORY_H
 
 
-#include "../../../../Engine/Nodes/Base/ContainerNode.h"
+#include "../../../../Engine/Nodes/Base/Node.h"
 #include "../../../../Engine/Nodes/UI/VerticalList.h"
 
 class Dock;
 
 class BlueprintLoader;
 
-class BlocksInventory : public ContainerNode {
+class BlocksInventory : public Node {
 public:
     static std::shared_ptr<BlocksInventory>
-    create(std::shared_ptr<ContainerNode> parent, EngineContext &ctx, std::shared_ptr<Dock> &dock,
-           const sf::Vector2f &container_size, std::shared_ptr<BlueprintLoader> &blueprint_loader,
-           int render_priority = 0,
-           int render_priority_layers = 10);
+    create(const std::shared_ptr<Node> &parent, EngineContext &ctx, const  std::shared_ptr<Dock> &dock,
+           const sf::Vector2f &container_size, const std::shared_ptr<BlueprintLoader> &blueprint_loader,
+           int render_priority = 0);
 
 
-    explicit BlocksInventory(std::shared_ptr<ContainerNode> parent, int render_priority = 0) : ContainerNode(parent,
-                                                                                                             render_priority) {}
+    explicit BlocksInventory(const std::shared_ptr<Node> &parent, int render_priority = 0) : Node(parent,render_priority) {}
 
-    static void setup(std::shared_ptr<BlocksInventory> &node, EngineContext &ctx, std::shared_ptr<Dock> &dock,
-                      const sf::Vector2f &container_size, std::shared_ptr<BlueprintLoader> &blueprint_loader);
+    static void setup(const std::shared_ptr<BlocksInventory> &node, EngineContext &ctx, const std::shared_ptr<Dock> &dock,
+                      const sf::Vector2f &container_size, const std::shared_ptr<BlueprintLoader> &blueprint_loader);
 
 private:
     std::weak_ptr<Dock> dock;
