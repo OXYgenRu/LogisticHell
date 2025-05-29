@@ -22,7 +22,6 @@ public:
 
     void set_font(const std::string &path);
 
-
     sf::Font font;
     sf::Text text;
 };

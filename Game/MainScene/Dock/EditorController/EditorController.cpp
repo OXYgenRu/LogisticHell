@@ -140,6 +140,6 @@ sf::Vector2i EditorController::get_grid_cell_position(EngineContext &ctx, const 
 }
 
 void EditorController::set_unit(const std::string &new_unit_id, EngineContext &ctx) {
-    this->builder->unit_id = new_unit_id;
+    this->builder->set_unit_id(new_unit_id);
     this->editor_mode = EditorMode::Attachment;
 }

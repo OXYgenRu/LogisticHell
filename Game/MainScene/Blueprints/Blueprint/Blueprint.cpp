@@ -25,10 +25,26 @@ std::shared_ptr<BlueprintComponent> Blueprint::add_component() {
     return this->components.back();
 }
 
-std::shared_ptr<BlueprintComponent> Blueprint::get_component(sf::Vector2i position) {
+bool Blueprint::is_block_empty(sf::Vector2i position) {
+    if (get_component(position, true) != nullptr) {
+        return false;
+    }
+    if (get_component(position, false) != nullptr) {
+        return false;
+    }
+    return true;
+}
+
+std::shared_ptr<BlueprintComponent> Blueprint::get_component(sf::Vector2i position, bool find_background) {
     for (auto &component: this->components) {
-        if (component->get_block(position).block_id != "empty_block::empty_block") {
-            return component;
+        if (find_background) {
+            if (component->get_block(position).background_block_id != "void_block::void_block") {
+                return component;
+            }
+        } else {
+            if (component->get_block(position).block_id != "void_block::void_block") {
+                return component;
+            }
         }
     }
     return nullptr;

@@ -14,22 +14,24 @@ struct BlueprintBlock {
     sf::Vector2i unit_offset;
     sf::Vector2i unit_size;
     int rotation;
-//    bool
+    bool allow_attachments;
 
     BlueprintBlock() {
-        this->block_id = "empty_block::empty_block";
+        this->block_id = "void_block::void_block";
         this->background_block_id = "void_block::void_block";
         this->unit_offset = {0, 0};
         this->rotation = 0;
+        this->allow_attachments = true;
     }
 
-    BlueprintBlock(std::string block_id, std::string background_block_id, sf::Vector2i unit_offset,
-                   sf::Vector2i unit_size, int rotation) {
+    BlueprintBlock(const std::string &block_id, const std::string &background_block_id, sf::Vector2i unit_offset,
+                   sf::Vector2i unit_size, int rotation, bool allow_attachments) {
         this->block_id = block_id;
         this->background_block_id = background_block_id;
         this->unit_offset = unit_offset;
         this->unit_size = unit_size;
         this->rotation = rotation;
+        this->allow_attachments = allow_attachments;
     }
 };
 

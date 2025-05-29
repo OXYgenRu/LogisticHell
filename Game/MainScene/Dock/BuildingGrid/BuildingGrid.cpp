@@ -143,7 +143,7 @@ void BuildingGrid::clear_background(EngineContext &ctx) {
 void BuildingGrid::clear(EngineContext &ctx) {
     for (int i = 0; i < this->grid_size.y; i++) {
         for (int j = 0; j < this->grid_size.x; j++) {
-            this->cells[i][j]->set_block("empty_block::empty_block", ctx, 0);
+            this->cells[i][j]->set_block("void_block::void_block", ctx, 0);
         }
     }
 }

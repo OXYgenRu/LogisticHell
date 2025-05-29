@@ -33,6 +33,7 @@ void Builder::set_default_blueprint(EngineContext &ctx) {
 }
 
 void Builder::attach_unit(sf::Vector2i position, EngineContext &ctx) {
+    std::cout << "attach_unit" << '\n';
     std::shared_ptr<Blueprint> unit = this->blueprint_loader.lock()->create_blueprint(this->unit_id,
                                                                                       this->preview_rotation);
     sf::Vector2i unit_position = {position.x - unit->grid_size.x / 2, position.y - unit->grid_size.y / 2};
@@ -45,14 +46,21 @@ void Builder::attach_unit(sf::Vector2i position, EngineContext &ctx) {
     for (int y = 0; y < unit->grid_size.y; y++) {
         for (int x = 0; x < unit->grid_size.x; x++) {
             BlueprintBlock block = unit_connecting_component->get_block({x, y});
-            if (block.block_id != "empty_block::empty_block") {
-                unit_attachment_base->set_block({unit_position.x + x, unit_position.y + y}, block);
+            if (block.block_id == "void_block::void_block" and block.background_block_id != "void_block::void_block") {
+                continue;
+            }
+            if (block.block_id != "void_block::void_block") {
+
                 this->building_grid->set_block({unit_position.x + x, unit_position.y + y}, block.block_id,
                                                block.rotation, ctx);
+
+            }
+            if (block.background_block_id != "void_block::void_block") {
                 this->building_grid->set_background_block({unit_position.x + x, unit_position.y + y},
                                                           block.background_block_id,
                                                           block.rotation, ctx);
             }
+            unit_attachment_base->set_block({unit_position.x + x, unit_position.y + y}, block);
         }
     }
     for (auto &component: unit->components) {
@@ -63,35 +71,52 @@ void Builder::attach_unit(sf::Vector2i position, EngineContext &ctx) {
         for (int y = 0; y < unit->grid_size.y; y++) {
             for (int x = 0; x < unit->grid_size.x; x++) {
                 BlueprintBlock block = component->get_block({x, y});
-                if (block.block_id != "empty_block::empty_block") {
-                    new_component->set_block({unit_position.x + x, unit_position.y + y}, block);
+                if (block.block_id == "void_block::void_block" and
+                    block.background_block_id == "void_block::void_block") {
+                    continue;
+                }
+                if (block.block_id != "void_block::void_block") {
+
                     this->building_grid->set_block({unit_position.x + x, unit_position.y + y}, block.block_id,
                                                    block.rotation, ctx);
+
+                }
+                if (block.background_block_id != "void_block::void_block") {
                     this->building_grid->set_background_block({unit_position.x + x, unit_position.y + y},
                                                               block.background_block_id,
                                                               block.rotation, ctx);
                 }
+                new_component->set_block({unit_position.x + x, unit_position.y + y}, block);
+
             }
         }
     }
 }
 
 void Builder::destroy_unit(sf::Vector2i position, EngineContext &ctx) {
-    if (this->blueprint->get_component(position) == nullptr) {
+    std::cout << "destroy_unit" << '\n';
+    if (this->blueprint->get_component(position, false) == nullptr and this->blueprint->get_component(position, true) ==
+                                                                       nullptr) {
         return;
     }
-    BlueprintBlock &block = this->blueprint->get_component(position)->get_block(position);
+    BlueprintBlock &block = this->blueprint->get_component(position, false)->get_block(position);
     sf::Vector2i unit_position = position - block.unit_offset;
     for (int x = 0; x < block.unit_size.x; x++) {
         for (int y = 0; y < block.unit_size.y; y++) {
             sf::Vector2i block_position = {unit_position.x + x, unit_position.y + y};
-            if (this->blueprint->get_component(block_position) != nullptr) {
-                BlueprintBlock &destroying_block = this->blueprint->get_component(block_position)->get_block(
+            if (this->blueprint->get_component(block_position, false) != nullptr) {
+                BlueprintBlock &destroying_block = this->blueprint->get_component(block_position, false)->get_block(
                         block_position);
-                destroying_block.block_id = "empty_block::empty_block";
+                destroying_block.block_id = "void_block::void_block";
+                this->building_grid->set_block(block_position, "void_block::void_block", 0, ctx);
+                this->building_grid->set_mask_block(block_position, "empty_block::empty_block", 0, ctx);
+            }
+            if (this->blueprint->get_component(block_position, true) != nullptr) {
+                BlueprintBlock &destroying_block = this->blueprint->get_component(block_position, true)->get_block(
+                        block_position);
                 destroying_block.background_block_id = "void_block::void_block";
-                this->building_grid->set_block(block_position, "empty_block::empty_block", 0, ctx);
                 this->building_grid->set_background_block(block_position, "void_block::void_block", 0, ctx);
+                this->building_grid->set_mask_block(block_position, "empty_block::empty_block", 0, ctx);
             }
 
         }
@@ -99,6 +124,7 @@ void Builder::destroy_unit(sf::Vector2i position, EngineContext &ctx) {
 }
 
 bool Builder::validate_unit_attachment(sf::Vector2i position) {
+    std::cout << "validate_unit_attachment" << '\n';
     std::shared_ptr<Blueprint> unit = this->blueprint_loader.lock()->create_blueprint(this->unit_id,
                                                                                       this->preview_rotation);
     if (this->blueprint_attachment_components.empty()) {
@@ -106,14 +132,19 @@ bool Builder::validate_unit_attachment(sf::Vector2i position) {
     }
     for (int y = 0; y < unit->grid_size.y; y++) {
         for (int x = 0; x < unit->grid_size.x; x++) {
-            if (unit->get_component({x, y}) == nullptr) {
+            if (unit->get_component({x, y}, false) == nullptr and
+                unit->get_component({x, y}, true) == nullptr) {
                 continue;
             }
             if (!this->blueprint->is_cell_exist({position.x + x, position.y + y})) {
                 return false;
             }
-            if (this->blueprint->get_component({position.x + x, position.y + y}) != nullptr and
-                unit->get_component({x, y}) != nullptr) {
+            if (this->blueprint->get_component({position.x + x, position.y + y}, false) != nullptr and
+                unit->get_component({x, y}, false) != nullptr) {
+                return false;
+            }
+            if (this->blueprint->get_component({position.x + x, position.y + y}, true) != nullptr and
+                unit->get_component({x, y}, true) != nullptr) {
                 return false;
             }
         }
@@ -123,6 +154,7 @@ bool Builder::validate_unit_attachment(sf::Vector2i position) {
 
 
 void Builder::draw_building_preview(EngineContext &ctx) {
+    std::cout << "draw_building_preview" << '\n';
     std::shared_ptr<Blueprint> unit = this->blueprint_loader.lock()->create_blueprint(this->unit_id,
                                                                                       this->preview_rotation);
     sf::Vector2i unit_position = {this->preview_position.x - unit->grid_size.x / 2,
@@ -133,22 +165,21 @@ void Builder::draw_building_preview(EngineContext &ctx) {
                                       {0,  -1},
                                       {-1, 0}};
 
-
     for (int y = 0; y < blueprint->grid_size.y; y++) {
         for (int x = 0; x < blueprint->grid_size.x; x++) {
             if (unit->is_cell_exist({x - unit_position.x, y - unit_position.y}) and
-                unit->get_component({x - unit_position.x, y - unit_position.y}) !=
-                nullptr) {
+                unit->is_block_empty({x - unit_position.x, y - unit_position.y})) {
                 continue;
             }
-            if (this->blueprint->get_component({x, y}) ==
-                nullptr) {
+            if (this->blueprint->is_block_empty({x, y})) {
                 continue;
             }
             if (this->blueprint_attachment_components.empty()) {
                 continue;
             }
-            if (this->blueprint->get_component({x, y}) !=
+            if (this->blueprint->get_component({x, y}, false) !=
+                this->blueprint_attachment_components[this->selected_blueprint_component_index] and
+                this->blueprint->get_component({x, y}, true) !=
                 this->blueprint_attachment_components[this->selected_blueprint_component_index]) {
                 continue;
             }
@@ -164,25 +195,36 @@ void Builder::draw_building_preview(EngineContext &ctx) {
                 if (!this->blueprint->is_cell_exist({unit_position.x + x, unit_position.y + y})) {
                     continue;
                 }
-                if (component->get_block({x, y}).block_id == "empty_block::empty_block") {
+                if (component->get_block({x, y}).block_id == "void_block::void_block" and
+                    component->get_block({x, y}).background_block_id == "void_block::void_block") {
                     continue;
                 }
-                if (this->blueprint->get_component({unit_position.x + x, unit_position.y + y}) ==
-                    nullptr) {
+                if (this->blueprint->is_block_empty({unit_position.x + x, unit_position.y + y})) {
                     BlueprintBlock block = component->get_block({x, y});
-                    this->building_grid->set_preview_block({unit_position.x + x, unit_position.y + y},
-                                                           block.block_id, block.rotation, ctx);
-                    this->building_grid->set_background_preview_block({unit_position.x + x, unit_position.y + y},
-                                                                      block.background_block_id, block.rotation, ctx);
+                    if (block.block_id != "void_block::void_block") {
+                        this->building_grid->set_preview_block({unit_position.x + x, unit_position.y + y},
+                                                               block.block_id, block.rotation, ctx);
+                        this->building_grid->set_mask_block({unit_position.x + x, unit_position.y + y},
+                                                            "void_block::void_block", this->preview_rotation,
+                                                            ctx);
+                    }
+                    if (block.background_block_id != "void_block::void_block") {
+                        this->building_grid->set_background_preview_block({unit_position.x + x, unit_position.y + y},
+                                                                          block.background_block_id, block.rotation,
+                                                                          ctx);
+                        this->building_grid->set_mask_block({unit_position.x + x, unit_position.y + y},
+                                                            "void_block::void_block", this->preview_rotation,
+                                                            ctx);
+                    }
                     if (i != this->selected_preview_component_index) {
                         this->building_grid->set_mask_block({unit_position.x + x, unit_position.y + y},
-                                                            "discarded_block::discarded_block", this->preview_rotation,
+                                                            "discarded_block::discarded_block", 0,
                                                             ctx);
                     }
                     continue;
                 }
                 this->building_grid->set_mask_block({unit_position.x + x, unit_position.y + y},
-                                                    "busy_grid_block::busy_grid_block", this->preview_rotation,
+                                                    "busy_grid_block::busy_grid_block", 0,
                                                     ctx);
 
             }
@@ -191,16 +233,18 @@ void Builder::draw_building_preview(EngineContext &ctx) {
 }
 
 void Builder::draw_destroying_preview(EngineContext &ctx) {
-    if (this->blueprint->get_component(this->preview_position) == nullptr) {
+    std::cout << "draw_destroying_preview" << '\n';
+    if (this->blueprint->is_block_empty(preview_position)) {
         return;
     }
-    BlueprintBlock &block = this->blueprint->get_component(this->preview_position)->get_block(this->preview_position);
+    BlueprintBlock &block = this->blueprint->get_component(this->preview_position, false)->get_block(
+            this->preview_position);
     sf::Vector2i unit_position = this->preview_position - block.unit_offset;
     for (int x = 0; x < block.unit_size.x; x++) {
         for (int y = 0; y < block.unit_size.y; y++) {
             sf::Vector2i block_position = {unit_position.x + x, unit_position.y + y};
             this->building_grid->set_mask_block(block_position,
-                                                "busy_grid_block::busy_grid_block", this->preview_rotation,
+                                                "busy_grid_block::busy_grid_block", 0,
                                                 ctx);
         }
     }
@@ -210,7 +254,20 @@ void Builder::draw_destroying_preview(EngineContext &ctx) {
 void Builder::clear_preview(EngineContext &ctx) {
     this->building_grid->clear_background_preview(ctx);
     this->building_grid->clear_preview(ctx);
-    this->building_grid->clear_mask(ctx);
+
+    for (int y = 0; y < blueprint->grid_size.y; y++) {
+        for (int x = 0; x < blueprint->grid_size.x; x++) {
+            if (this->blueprint->is_block_empty({x, y})) {
+                this->building_grid->set_mask_block({x, y},
+                                                    "empty_block::empty_block", this->preview_rotation,
+                                                    ctx);
+            } else {
+                this->building_grid->set_mask_block({x, y},
+                                                    "void_block::void_block", this->preview_rotation,
+                                                    ctx);
+            }
+        }
+    }
 }
 
 int Builder::get_preview_rotation() {
@@ -248,6 +305,7 @@ void Builder::select_next_blueprint_component(EngineContext &ctx) {
 }
 
 void Builder::find_blueprint_attachment_components() {
+    std::cout << "find" << '\n';
     this->selected_blueprint_component_index = 0;
     std::shared_ptr<Blueprint> unit = this->blueprint_loader.lock()->create_blueprint(this->unit_id,
                                                                                       this->preview_rotation);
@@ -265,11 +323,10 @@ void Builder::find_blueprint_attachment_components() {
             if (!this->blueprint->is_cell_exist({unit_position.x + x, unit_position.y + y})) {
                 continue;
             }
-            if (selected_component->get_block({x, y}).block_id == "empty_block::empty_block") {
+            if (selected_component->get_block({x, y}).block_id == "void_block::void_block") {
                 continue;
             }
-            if (this->blueprint->get_component({unit_position.x + x, unit_position.y + y}) !=
-                nullptr) {
+            if (!this->blueprint->is_block_empty({unit_position.x + x, unit_position.y + y})) {
                 continue;
             }
             for (int i = 0; i < 4; i++) {
@@ -277,20 +334,35 @@ void Builder::find_blueprint_attachment_components() {
                 if (!this->blueprint->is_cell_exist(block_position)) {
                     continue;
                 }
-                if (this->blueprint->get_component(block_position) ==
-                    nullptr) {
+                if (this->blueprint->is_block_empty(block_position)) {
                     continue;
                 }
                 if (unit->is_cell_exist({block_position.x - unit_position.x, block_position.y - unit_position.y}) and
-                    unit->get_component({block_position.x - unit_position.x, block_position.y - unit_position.y}) !=
-                    nullptr) {
+                    !unit->is_block_empty({block_position.x - unit_position.x, block_position.y - unit_position.y})) {
                     continue;
                 }
-                this->blueprint_attachment_components.push_back(this->blueprint->get_component(block_position));
+                if (this->blueprint->get_component(block_position, false) != nullptr and
+                    this->blueprint->get_component(block_position, false)->get_block(
+                            block_position).allow_attachments) {
+                    this->blueprint_attachment_components.push_back(
+                            this->blueprint->get_component(block_position, false));
+                }
+                if (this->blueprint->get_component(block_position, true) != nullptr and
+                    this->blueprint->get_component(block_position, true)->get_block(
+                            block_position).allow_attachments) {
+                    this->blueprint_attachment_components.push_back(
+                            this->blueprint->get_component(block_position, true));
+                }
             }
         }
     }
     std::sort(this->blueprint_attachment_components.begin(), this->blueprint_attachment_components.end());
     auto last = std::unique(this->blueprint_attachment_components.begin(), this->blueprint_attachment_components.end());
     this->blueprint_attachment_components.erase(last, this->blueprint_attachment_components.end());
+}
+
+
+void Builder::set_unit_id(const std::string &new_unit_id) {
+    this->unit_id = new_unit_id;
+    this->selected_preview_component_index = 0;
 }

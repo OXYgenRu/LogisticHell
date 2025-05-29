@@ -25,5 +25,5 @@ BlueprintBlock &BlueprintComponent::get_block(sf::Vector2i position) {
 }
 
 void BlueprintComponent::delete_block(sf::Vector2i position) {
-    this->grid[position.y][position.x].block_id = "empty_block::empty_block";
+    this->grid[position.y][position.x].block_id = "void_block::void_block";
 }

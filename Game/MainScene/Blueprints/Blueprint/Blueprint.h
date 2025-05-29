@@ -15,7 +15,9 @@ public:
 
     std::shared_ptr<BlueprintComponent> add_component();
 
-    std::shared_ptr<BlueprintComponent> get_component(sf::Vector2i position);
+    std::shared_ptr<BlueprintComponent> get_component(sf::Vector2i position, bool find_background);
+
+    bool is_block_empty(sf::Vector2i position);
 
     bool is_cell_exist(sf::Vector2i position) const;
 

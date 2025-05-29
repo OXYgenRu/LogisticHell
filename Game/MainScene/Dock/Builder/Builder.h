@@ -47,6 +47,8 @@ public:
 
     void draw_destroying_preview(EngineContext &ctx);
 
+    void set_unit_id(const std::string &new_unit_id);
+
     std::string unit_id;
     std::shared_ptr<Blueprint> blueprint;
     std::shared_ptr<BuildingGrid> building_grid;
