@@ -33,6 +33,7 @@ int main() {
     app.texture_atlas->register_texture("selected_grid_block", "blocks/SelectedGridBlock.png");
     app.texture_atlas->register_texture("attach_icon", "blocks/Attach_icon.png");
     app.texture_atlas->register_texture("remove_icon", "blocks/Remove_icon.png");
+    app.texture_atlas->register_texture("assemble_icon", "blocks/Assemble_icon.png");
     app.texture_atlas->register_texture("joint", "blocks/TestJoint.png");
 
     app.texture_atlas->register_texture("joint-0_0", "units/joint/Joint-3.png");

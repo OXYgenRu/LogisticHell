@@ -3,7 +3,6 @@
 //
 
 #include "Dock.h"
-#include "../Structure/Structure.h"
 #include "../../../Engine/Application.h"
 #include "EditorInterface/EditorInterface.h"
 

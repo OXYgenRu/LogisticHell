@@ -7,7 +7,6 @@
 
 
 #include "../../Engine/Scene.h"
-#include "Structure/Structure.h"
 #include "../../Engine/Nodes/Base/CameraNode.h"
 #include "../../Engine/Nodes/Physics/World.h"
 #include "Dock/Dock.h"

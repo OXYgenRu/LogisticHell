@@ -5,7 +5,6 @@
 #include <iostream>
 #include "MainScene.h"
 #include "../../Engine/Application.h"
-#include "Structure/Component/Component.h"
 
 void MainScene::init_tree(EngineContext &ctx) {
     auto scene = shared_from_this();
@@ -14,72 +13,76 @@ void MainScene::init_tree(EngineContext &ctx) {
 
 //    Blueprint empty_block_blueprint({1, 1}, true, 0);
 //    empty_block_blueprint.add_component()->set_block({0, 0},
-//                                                     BlueprintBlock("empty_block::empty_block", {0, 0}, {1, 1}, 0));
+//                                                     BlueprintBlock("empty_block::empty_block",
+//                                                                    "void_block::void_block", 0,
+//                                                                    true));
 //    blueprint_loader->register_blueprint("empty_block", empty_block_blueprint);
 
     Blueprint construction_block_blueprint({1, 1}, true, 0);
     construction_block_blueprint.add_component()->set_block({0, 0},
                                                             BlueprintBlock("construction_block::construction_block",
                                                                            "void_block::void_block",
-                                                                           {0, 0}, {1, 1}, 0, true));
+                                                                           0, true));
     blueprint_loader->register_blueprint("construction_block", construction_block_blueprint);
-
-
-    Blueprint heavy_construction_blueprint({1, 1}, true, 0);
-    heavy_construction_blueprint.add_component()->set_block({0, 0},
-                                                            BlueprintBlock("heavy_construction::heavy_construction",
-                                                                           "void_block::void_block",
-                                                                           {0, 0}, {1, 1}, 0, true));
-    blueprint_loader->register_blueprint("heavy_construction", heavy_construction_blueprint);
-
-    Blueprint big_construction({2, 2}, true, 0);
-    big_construction.add_component()->set_block({0, 0},
-                                                BlueprintBlock("heavy_construction::heavy_construction",
-                                                               "void_block::void_block",
-                                                               {0, 0}, {2, 2}, 0, true));
-    big_construction.components[0]->set_block({1, 0},
-                                              BlueprintBlock("heavy_construction::heavy_construction",
-                                                             "void_block::void_block",
-                                                             {1, 0}, {2, 2}, 0, true));
-    big_construction.add_component()->set_block({0, 1},
-                                                BlueprintBlock("light_construction::light_construction",
-                                                               "void_block::void_block",
-                                                               {2, 0}, {2, 2}, 0, true));
-    big_construction.components[1]->set_block({1, 1},
-                                              BlueprintBlock("light_construction::light_construction",
-                                                             "void_block::void_block",
-                                                             {1, 1}, {2, 2}, 0, true));
-    blueprint_loader->register_blueprint("big_construction", big_construction);
-
-
-    Blueprint light_construction({1, 1}, true, 0);
-    light_construction.add_component()->set_block({0, 0},
-                                                  BlueprintBlock("light_construction::light_construction",
-                                                                 "void_block::void_block",
-                                                                 {0, 0}, {1, 1}, 0, true));
-    blueprint_loader->register_blueprint("light_construction", light_construction);
-
-    Blueprint beam({1, 1}, true, 0);
-    beam.add_component()->set_block({0, 0},
-                                    BlueprintBlock("beam::beam", "void_block::void_block",
-                                                   {0, 0}, {1, 1}, 0, true));
-    blueprint_loader->register_blueprint("beam", beam);
-
 
     Blueprint joint({1, 3}, true, 0);
     joint.add_component()->set_block({0, 0},
                                      BlueprintBlock("joint::0_0", "joint::background-0_0",
-                                                    {0, 0}, {1, 3}, 0, true));
+                                                    0, true));
     joint.components[0]->set_block({0, 1},
                                    BlueprintBlock("joint::0_1", "void_block::void_block",
-                                                  {0, 1}, {1, 3}, 0, false));
+                                                  0, false));
     joint.add_component()->set_block({0, 2},
                                      BlueprintBlock("joint::0_2", "joint::background-0_2",
-                                                    {0, 2}, {1, 3}, 0, true));
+                                                    0, true));
     joint.components[1]->set_block({0, 1},
                                    BlueprintBlock("void_block::void_block", "joint::background-0_1",
-                                                  {0, 1}, {1, 3}, 0, false));
+                                                  0, false));
     blueprint_loader->register_blueprint("joint", joint);
+    //
+//
+//    Blueprint heavy_construction_blueprint({1, 1}, true, 0);
+//    heavy_construction_blueprint.add_component()->set_block({0, 0},
+//                                                            BlueprintBlock("heavy_construction::heavy_construction",
+//                                                                           "void_block::void_block",
+//                                                                           {0, 0}, {1, 1}, 0, true));
+//    blueprint_loader->register_blueprint("heavy_construction", heavy_construction_blueprint);
+//
+//    Blueprint big_construction({2, 2}, true, 0);
+//    big_construction.add_component()->set_block({0, 0},
+//                                                BlueprintBlock("heavy_construction::heavy_construction",
+//                                                               "void_block::void_block",
+//                                                               {0, 0}, {2, 2}, 0, true));
+//    big_construction.components[0]->set_block({1, 0},
+//                                              BlueprintBlock("heavy_construction::heavy_construction",
+//                                                             "void_block::void_block",
+//                                                             {1, 0}, {2, 2}, 0, true));
+//    big_construction.add_component()->set_block({0, 1},
+//                                                BlueprintBlock("light_construction::light_construction",
+//                                                               "void_block::void_block",
+//                                                               {2, 0}, {2, 2}, 0, true));
+//    big_construction.components[1]->set_block({1, 1},
+//                                              BlueprintBlock("light_construction::light_construction",
+//                                                             "void_block::void_block",
+//                                                             {1, 1}, {2, 2}, 0, true));
+//    blueprint_loader->register_blueprint("big_construction", big_construction);
+//
+//
+//    Blueprint light_construction({1, 1}, true, 0);
+//    light_construction.add_component()->set_block({0, 0},
+//                                                  BlueprintBlock("light_construction::light_construction",
+//                                                                 "void_block::void_block",
+//                                                                 {0, 0}, {1, 1}, 0, true));
+//    blueprint_loader->register_blueprint("light_construction", light_construction);
+//
+//    Blueprint beam({1, 1}, true, 0);
+//    beam.add_component()->set_block({0, 0},
+//                                    BlueprintBlock("beam::beam", "void_block::void_block",
+//                                                   {0, 0}, {1, 1}, 0, true));
+//    blueprint_loader->register_blueprint("beam", beam);
+//
+//
+
 
     block_factory = std::make_shared<BlockFactory>();
     block_factory->register_block("light_construction", "light_construction", "light_construction");

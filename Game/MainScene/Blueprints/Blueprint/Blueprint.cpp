@@ -15,9 +15,9 @@ sf::Vector2i rotate_grid(sf::Vector2i grid_size, int rotation) {
 }
 
 
-Blueprint::Blueprint(sf::Vector2i grid_size, bool is_unit, int rotation) {
+Blueprint::Blueprint(sf::Vector2i grid_size, bool as_unit, int rotation) {
     this->grid_size = rotate_grid(grid_size, rotation);
-    this->as_unit = is_unit;
+    this->as_unit = as_unit;
 }
 
 std::shared_ptr<BlueprintComponent> Blueprint::add_component() {
@@ -35,7 +35,7 @@ bool Blueprint::is_block_empty(sf::Vector2i position) {
     return true;
 }
 
-std::shared_ptr<BlueprintComponent> Blueprint::get_component(sf::Vector2i position, bool find_background) {
+std::shared_ptr<BlueprintComponent> Blueprint::get_component(sf::Vector2i position, bool find_background) const {
     for (auto &component: this->components) {
         if (find_background) {
             if (component->get_block(position).background_block_id != "void_block::void_block") {
@@ -58,4 +58,25 @@ bool Blueprint::is_cell_exist(sf::Vector2i position) const {
         return false;
     }
     return true;
+}
+
+void
+Blueprint::set_unit_properties(const sf::Vector2i &position, const std::shared_ptr<UnitProperties> &new_properties) {
+    this->units_properties[position] = new_properties;
+}
+
+std::shared_ptr<UnitProperties> Blueprint::get_unit_properties(const sf::Vector2i &position) const {
+    const auto &found = this->units_properties.find(position);
+    if (found == this->units_properties.end()) {
+        return nullptr;
+    }
+    return found->second;
+}
+
+std::vector<std::shared_ptr<UnitProperties>> &Blueprint::get_units_properties() {
+    return this->units;
+}
+
+void Blueprint::add_unit_properties(const std::shared_ptr<UnitProperties> &new_properties) {
+    this->units.push_back(new_properties);
 }

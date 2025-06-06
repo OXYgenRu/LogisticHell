@@ -38,6 +38,7 @@ public:
     std::shared_ptr<UI::Button> buttons_layer_background;
     std::shared_ptr<UI::Button> attachment_mode;
     std::shared_ptr<UI::Button> destroying_mode;
+    std::shared_ptr<UI::Button> assemble_blueprint;
     std::shared_ptr<BlocksInventory> inventory;
 };
 

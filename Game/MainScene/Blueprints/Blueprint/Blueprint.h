@@ -7,15 +7,17 @@
 
 #include <SFML/Graphics/View.hpp>
 #include "../BlueprintComponent/BlueprintComponent.h"
+#include "../UnitProperties/UnitProperties.h"
 #include "memory"
+#include "Utils.h"
 
 class Blueprint : public std::enable_shared_from_this<Blueprint> {
 public:
-    explicit Blueprint(sf::Vector2i grid_size, bool is_unit, int rotation);
+    explicit Blueprint(sf::Vector2i grid_size, bool as_unit, int rotation);
 
     std::shared_ptr<BlueprintComponent> add_component();
 
-    std::shared_ptr<BlueprintComponent> get_component(sf::Vector2i position, bool find_background);
+    std::shared_ptr<BlueprintComponent> get_component(sf::Vector2i position, bool find_background) const;
 
     bool is_block_empty(sf::Vector2i position);
 
@@ -25,8 +27,18 @@ public:
 
     std::vector<std::shared_ptr<BlueprintComponent>> components;
 
-    bool as_unit;
-};
+    void set_unit_properties(const sf::Vector2i &position, const std::shared_ptr<UnitProperties> &new_properties);
 
+    std::shared_ptr<UnitProperties> get_unit_properties(const sf::Vector2i &position) const;
+
+    std::vector<std::shared_ptr<UnitProperties>> &get_units_properties();
+
+    void add_unit_properties(const std::shared_ptr<UnitProperties> &new_properties);
+
+    bool as_unit;
+private:
+    std::unordered_map<sf::Vector2i, std::shared_ptr<UnitProperties>> units_properties;
+    std::vector<std::shared_ptr<UnitProperties>> units;
+};
 
 #endif //LOGISTICHELL_BLUEPRINT_H

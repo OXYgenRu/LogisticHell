@@ -20,7 +20,7 @@ void BlocksInventory::setup(const std::shared_ptr<BlocksInventory> &node, Engine
                             const std::shared_ptr<Dock> &dock,
                             const sf::Vector2f &container_size,
                             const std::shared_ptr<BlueprintLoader> &blueprint_loader) {
-    std::vector<std::string> units = blueprint_loader->get_all_blueprints();
+    std::vector<std::string> units = blueprint_loader->get_all_units();
     node->vertical_list = UI::VerticalList::create(node, ctx, container_size, int(units.size()));
     node->dock = dock;
     node->blueprint_loader = blueprint_loader;
