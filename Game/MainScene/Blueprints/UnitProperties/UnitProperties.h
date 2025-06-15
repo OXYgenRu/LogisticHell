@@ -7,6 +7,15 @@
 
 #include "SFML/Graphics.hpp"
 #include "memory"
+#include "UnitRenderFeature.h"
+
+class Unit;
+
+class UnitBehavior {
+    virtual void on_update(const std::shared_ptr<Unit> &unit);
+
+    virtual void on_clicked(const std::shared_ptr<Unit> &unit);
+};
 
 namespace BlueprintJoints {
     struct RevoluteJoint {
@@ -21,7 +30,7 @@ namespace BlueprintJoints {
 
 class UnitProperties {
 public:
-    UnitProperties() = default;
+    UnitProperties(const std::shared_ptr<UnitBehavior> &behavior);
 
     UnitProperties(const sf::Vector2i &position, const std::shared_ptr<UnitProperties> &other);
 
@@ -29,13 +38,21 @@ public:
 
     void add_unit_block(const sf::Vector2i &new_position);
 
+    void add_render_feature(const UnitRenderFeature &new_feature);
+
+    std::shared_ptr<UnitBehavior> &get_behavior();
+
     std::vector<sf::Vector2i> &get_unit_blocks();
 
     std::vector<BlueprintJoints::RevoluteJoint> &get_revolute_joints();
 
+    std::vector<UnitRenderFeature> &get_render_features();
+
 private:
+    std::shared_ptr<UnitBehavior> behavior;
     std::vector<BlueprintJoints::RevoluteJoint> revolute_joints;
     std::vector<sf::Vector2i> unit_blocks;
+    std::vector<UnitRenderFeature> render_features;
 };
 
 

@@ -19,7 +19,7 @@ public:
 
     void set_texture(const std::string &new_texture_name, int rotation, EngineContext &ctx);
 
-    void set_quad(std::vector<sf::Vector2f> &vertices);
+    void set_quad(const std::vector<sf::Vector2f> &vertices);
 
     void render(EngineContext &ctx, sf::RenderStates &states) override;
 

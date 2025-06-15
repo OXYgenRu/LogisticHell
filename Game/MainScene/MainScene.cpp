@@ -18,27 +18,46 @@ void MainScene::init_tree(EngineContext &ctx) {
 //                                                                    true));
 //    blueprint_loader->register_blueprint("empty_block", empty_block_blueprint);
 
-    Blueprint construction_block_blueprint({1, 1}, true, 0);
+    Blueprint construction_block_blueprint({1, 1}, 0);
     construction_block_blueprint.add_component()->set_block({0, 0},
-                                                            BlueprintBlock("construction_block::construction_block",
-                                                                           "void_block::void_block",
-                                                                           0, true));
-    blueprint_loader->register_blueprint("construction_block", construction_block_blueprint);
+                                                            BlueprintBlock(BlockType::BusyAttachable));
+    std::shared_ptr<UnitProperties> construction_block_properties = std::make_shared<UnitProperties>(
+            std::make_shared<UnitBehavior>());
+    construction_block_properties->add_render_feature(
+            UnitRenderFeature("construction_block", {0, 0}, 0, {-0.5, -0.5}, {1, 1}, 0));
+    blueprint_loader->register_unit("construction_block", construction_block_blueprint,
+                                    construction_block_properties);
 
-    Blueprint joint({1, 3}, true, 0);
+    Blueprint joint({1, 3}, 0);
     joint.add_component()->set_block({0, 0},
-                                     BlueprintBlock("joint::0_0", "joint::background-0_0",
-                                                    0, true));
+                                     BlueprintBlock(BlockType::BusyAttachable));
     joint.components[0]->set_block({0, 1},
-                                   BlueprintBlock("joint::0_1", "void_block::void_block",
-                                                  0, false));
+                                   BlueprintBlock(BlockType::BusyLocked));
     joint.add_component()->set_block({0, 2},
-                                     BlueprintBlock("joint::0_2", "joint::background-0_2",
-                                                    0, true));
+                                     BlueprintBlock(BlockType::BusyAttachable));
     joint.components[1]->set_block({0, 1},
-                                   BlueprintBlock("void_block::void_block", "joint::background-0_1",
-                                                  0, false));
-    blueprint_loader->register_blueprint("joint", joint);
+                                   BlueprintBlock(BlockType::BusyLocked));
+    std::shared_ptr<UnitProperties> joint_properties = std::make_shared<UnitProperties>(
+            std::make_shared<UnitBehavior>());
+    joint_properties->add_render_feature(UnitRenderFeature("joint-0_0", {0, 0}, 1, {-0.5, -0.5}, {1, 1}, 0));
+    joint_properties->add_render_feature(UnitRenderFeature("joint-0_1", {0,
+                                                                         0}, 1, {-0.5, 0.5}, {1, 1}, 0
+                                                                         ));
+    joint_properties->add_render_feature(UnitRenderFeature("joint-0_2", {0,
+                                                                         2}, 1, {-0.5, -0.5}, {1, 1}, 0));
+    joint_properties->add_render_feature(UnitRenderFeature("joint-background-0_0", {0, 0}, 0, {-0.5, -0.5}, {1, 1}, 0));
+    joint_properties->add_render_feature(UnitRenderFeature("joint-background-0_1", {0,
+                                                                         2}, 0, {-0.5, -1.5}, {1, 1}, 0
+    ));
+    joint_properties->add_render_feature(UnitRenderFeature("joint-background-0_2", {0,
+                                                                         2}, 0, {-0.5, -0.5}, {1, 1}, 0));
+//    joint_properties->add_render_feature(UnitRenderFeature("joint-0_0", {{0, 0},
+//                                                                         {0, 1},
+//                                                                         {1, 1},
+//                                                                         {1, 0}}, {0, 0}));
+    blueprint_loader->register_unit("joint", joint, joint_properties);
+
+
     //
 //
 //    Blueprint heavy_construction_blueprint({1, 1}, true, 0);
@@ -84,29 +103,29 @@ void MainScene::init_tree(EngineContext &ctx) {
 //
 
 
-    block_factory = std::make_shared<BlockFactory>();
-    block_factory->register_block("light_construction", "light_construction", "light_construction");
-    block_factory->register_block("heavy_construction", "heavy_construction", "heavy_construction");
-    block_factory->register_block("empty_block", "empty_block", "empty_block");
-    block_factory->register_block("discarded_block", "discarded_block", "discarded_block");
-    block_factory->register_block("construction_block", "construction_block", "construction_block");
-    block_factory->register_block("test_unit", "construction_block", "construction_block");
-    block_factory->register_block("void_block", "void_block", "void_block");
-    block_factory->register_block("busy_grid_block", "busy_grid_block", "busy_grid_block");
-    block_factory->register_block("icon", "icon", "icon");
-    block_factory->register_block("beam", "beam", "beam");
-    block_factory->register_block("selected_grid_block", "selected_grid_block", "selected_grid_block");
-
-    block_factory->register_block("joint", "0_0", "joint-0_0");
-    block_factory->register_block("joint", "0_1", "joint-0_1");
-    block_factory->register_block("joint", "0_2", "joint-0_2");
-    block_factory->register_block("joint", "background-0_0", "joint-background-0_0");
-    block_factory->register_block("joint", "background-0_1", "joint-background-0_1");
-    block_factory->register_block("joint", "background-0_2", "joint-background-0_2");
+//    block_factory = std::make_shared<BlockFactory>();
+//    block_factory->register_block("light_construction", "light_construction", "light_construction");
+//    block_factory->register_block("heavy_construction", "heavy_construction", "heavy_construction");
+//    block_factory->register_block("empty_block", "empty_block", "empty_block");
+//    block_factory->register_block("discarded_block", "discarded_block", "discarded_block");
+//    block_factory->register_block("construction_block", "construction_block", "construction_block");
+//    block_factory->register_block("test_unit", "construction_block", "construction_block");
+//    block_factory->register_block("void_block", "void_block", "void_block");
+//    block_factory->register_block("busy_grid_block", "busy_grid_block", "busy_grid_block");
+//    block_factory->register_block("icon", "icon", "icon");
+//    block_factory->register_block("beam", "beam", "beam");
+//    block_factory->register_block("selected_grid_block", "selected_grid_block", "selected_grid_block");
+//
+//    block_factory->register_block("joint", "0_0", "joint-0_0");
+//    block_factory->register_block("joint", "0_1", "joint-0_1");
+//    block_factory->register_block("joint", "0_2", "joint-0_2");
+//    block_factory->register_block("joint", "background-0_0", "joint-background-0_0");
+//    block_factory->register_block("joint", "background-0_1", "joint-background-0_1");
+//    block_factory->register_block("joint", "background-0_2", "joint-background-0_2");
 
 
     world = World::create(scene, b2Vec2({0, 0}), 240);
-    dock = Dock::create(world, ctx, world, {200, 600}, sf::Vector2i({10, 10}), 0.2, blueprint_loader, block_factory);
+    dock = Dock::create(world, ctx, world, {200, 600}, sf::Vector2i({10, 10}), 0.2, blueprint_loader);
 }
 
 void MainScene::update(EngineContext &ctx) {

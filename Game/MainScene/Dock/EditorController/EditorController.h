@@ -6,7 +6,7 @@
 #define LOGISTICHELL_EDITORCONTROLLER_H
 
 #include "memory"
-#include "../BuildingGrid/BuildingGrid.h"
+#include "../Builder/BuildingGrid.h"
 #include "../../Blueprints/BlueprintLoader.h"
 #include "../Builder/Builder.h"
 #include "DockController.h"

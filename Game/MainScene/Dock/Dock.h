@@ -12,20 +12,19 @@
 #include "../../../Engine/Nodes/Render/Shapes/Text.h"
 #include "../../../Engine/Nodes/Base/CameraNode.h"
 #include "EditorController/DockController.h"
-#include "BuildingGrid/BuildingGrid.h"
 #include "Builder/Builder.h"
 #include "EditorInterface/EditorInterface.h"
 #include "EditorController/EditorController.h"
+#include "Builder/BuildingGrid.h"
 
 class Structure;
 
 class Dock : public Node {
 public:
     static std::shared_ptr<Dock>
-    create(const std::shared_ptr<Node> &parent, EngineContext &ctx, const  std::shared_ptr<World>& world,
+    create(const std::shared_ptr<Node> &parent, EngineContext &ctx, const std::shared_ptr<World> &world,
            sf::Vector2f position,
            sf::Vector2i grid_size, float b2_cell_size, const std::shared_ptr<BlueprintLoader> &blueprint_loader,
-           const std::shared_ptr<BlockFactory> &block_factory,
            int render_priority = 0);
 
 
@@ -33,9 +32,9 @@ public:
             : Node(parent, render_priority) {}
 
     static void
-    setup(const std::shared_ptr<Dock> &node, EngineContext &ctx,const  std::shared_ptr<World> &world, sf::Vector2f position,
-          sf::Vector2i grid_size, float b2_cell_size, const  std::shared_ptr<BlueprintLoader> &blueprint_loader,
-          const std::shared_ptr<BlockFactory> &block_factory);
+    setup(const std::shared_ptr<Dock> &node, EngineContext &ctx, const std::shared_ptr<World> &world,
+          sf::Vector2f position,
+          sf::Vector2i grid_size, float b2_cell_size, const std::shared_ptr<BlueprintLoader> &blueprint_loader);
 
     std::shared_ptr<UI::Collider> background_collider;
     std::shared_ptr<EditorController> editor_controller;

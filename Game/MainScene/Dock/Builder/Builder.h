@@ -7,9 +7,11 @@
 
 #include "../../Blueprints/Blueprint/Blueprint.h"
 #include "memory"
-#include "../BuildingGrid/BuildingGrid.h"
 #include "../../Blueprints/BlueprintLoader.h"
 #include "set"
+#include "../../../../Engine/EngineContext.h"
+#include "../../../../Engine/Nodes/Base/Node.h"
+#include "BuildingGrid.h"
 
 class Builder {
 public:
@@ -51,8 +53,8 @@ public:
 
     std::string unit_id;
     std::shared_ptr<Blueprint> blueprint;
-    std::shared_ptr<BuildingGrid> building_grid;
     std::weak_ptr<BlueprintLoader> blueprint_loader;
+    std::shared_ptr<BuildingGrid> building_grid;
     int unit_index;
 private:
     std::vector<std::shared_ptr<BlueprintComponent>> blueprint_attachment_components;

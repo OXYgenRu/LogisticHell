@@ -10,10 +10,9 @@ std::shared_ptr<Dock>
 Dock::create(const std::shared_ptr<Node> &parent, EngineContext &ctx, const std::shared_ptr<World> &world,
              sf::Vector2f position,
              sf::Vector2i grid_size, float b2_cell_size, const std::shared_ptr<BlueprintLoader> &blueprint_loader,
-             const std::shared_ptr<BlockFactory> &block_factory,
              int render_priority) {
     auto node = std::make_shared<Dock>(parent, render_priority);
-    Dock::setup(node, ctx, world, position, grid_size, b2_cell_size, blueprint_loader, block_factory);
+    Dock::setup(node, ctx, world, position, grid_size, b2_cell_size, blueprint_loader);
     parent->add_node(node);
     return node;
 }
@@ -21,8 +20,7 @@ Dock::create(const std::shared_ptr<Node> &parent, EngineContext &ctx, const std:
 
 void Dock::setup(const std::shared_ptr<Dock> &node, EngineContext &ctx, const std::shared_ptr<World> &world,
                  sf::Vector2f position,
-                 sf::Vector2i grid_size, float b2_cell_size, const std::shared_ptr<BlueprintLoader> &blueprint_loader,
-                 const std::shared_ptr<BlockFactory> &block_factory) {
+                 sf::Vector2i grid_size, float b2_cell_size, const std::shared_ptr<BlueprintLoader> &blueprint_loader) {
     node->world = world;
     node->background_collider = UI::Collider::create(node, 0);
     {
@@ -37,8 +35,10 @@ void Dock::setup(const std::shared_ptr<Dock> &node, EngineContext &ctx, const st
     }
     node->camera = CameraNode::create(node, ctx, 1);
     node->controller = DockController::create(node, node);
-    node->building_grid = BuildingGrid::create(node->camera, node, world->pixel_per_meter * b2_cell_size,
-                                               grid_size, block_factory, 1);
+
+    node->building_grid = BuildingGrid::create(node->camera, ctx, world->pixel_per_meter * b2_cell_size, grid_size);
+
+
     {
         node->building_grid->grid_collider->bind_on_mouse_release(
                 [node](sf::Event &event, EngineContext &ctx, const sf::Vector2f &local_position) {
@@ -59,7 +59,7 @@ void Dock::setup(const std::shared_ptr<Dock> &node, EngineContext &ctx, const st
     }
     node->editor_controller = EditorController::create(ctx, node, node->building_grid, blueprint_loader);
 
-    node->interface = EditorInterface::create(node, ctx, node, blueprint_loader, 6);
+    node->interface = EditorInterface::create(node, ctx, node, blueprint_loader, 20);
     {
         node->interface->set_position({-ctx.app->get_window_size().x / 2, -ctx.app->get_window_size().y / 2});
     }

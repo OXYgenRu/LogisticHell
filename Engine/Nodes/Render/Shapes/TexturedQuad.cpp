@@ -36,7 +36,7 @@ void TexturedQuad::set_texture(const std::string &new_texture_name, int rotation
 
 }
 
-void TexturedQuad::set_quad(std::vector<sf::Vector2f> &vertices) {
+void TexturedQuad::set_quad(const std::vector<sf::Vector2f> &vertices) {
     for (int i = 0; i < 4; i++) {
         this->quad[i].position = vertices[i];
     }

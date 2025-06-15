@@ -8,25 +8,22 @@
 #include "SFML/Graphics.hpp"
 #include "memory"
 
+
+enum class BlockType {
+    Empty,
+    BusyAttachable,
+    BusyLocked
+};
+
 struct BlueprintBlock {
-    std::string block_id;
-    std::string background_block_id;
-    int rotation;
-    bool allow_attachments;
+    BlockType type;
 
     BlueprintBlock() {
-        this->block_id = "void_block::void_block";
-        this->background_block_id = "void_block::void_block";
-        this->rotation = 0;
-        this->allow_attachments = true;
+        type = BlockType::Empty;
     }
 
-    BlueprintBlock(const std::string &block_id, const std::string &background_block_id, int rotation,
-                   bool allow_attachments) {
-        this->block_id = block_id;
-        this->background_block_id = background_block_id;
-        this->rotation = rotation;
-        this->allow_attachments = allow_attachments;
+    BlueprintBlock(BlockType block_type) {
+        type = block_type;
     }
 };
 
@@ -46,7 +43,7 @@ public:
 
     BlueprintBlock &get_block(sf::Vector2i position);
 
-private:
+private:    
     std::vector<std::vector<BlueprintBlock>> grid;
 };
 

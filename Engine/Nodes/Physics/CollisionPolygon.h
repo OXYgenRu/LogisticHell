@@ -15,7 +15,9 @@ public:
            b2Polygon &polygon,
            int render_priority = 0);
 
-    explicit CollisionPolygon(const std::shared_ptr<Node> &parent, int render_priority = 0) : Node(parent, render_priority) {}
+    explicit CollisionPolygon(const std::shared_ptr<Node> &parent, int render_priority = 0) : Node(parent,
+                                                                                                   render_priority) {}
+
 
     b2ShapeDef shape_def;
     b2Polygon polygon;
