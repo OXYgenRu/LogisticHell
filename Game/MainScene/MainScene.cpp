@@ -24,7 +24,7 @@ void MainScene::init_tree(EngineContext &ctx) {
     std::shared_ptr<UnitProperties> construction_block_properties = std::make_shared<UnitProperties>(
             std::make_shared<UnitBehavior>());
     construction_block_properties->add_render_feature(
-            UnitRenderFeature("construction_block", {0, 0}, 0, {-0.5, -0.5}, {1, 1}, 0));
+            UnitRenderFeature("0_0", "construction_block", {0, 0}, 0, {-0.5, -0.5}, {1, 1}, 0));
     blueprint_loader->register_unit("construction_block", construction_block_blueprint,
                                     construction_block_properties);
 
@@ -39,18 +39,21 @@ void MainScene::init_tree(EngineContext &ctx) {
                                    BlueprintBlock(BlockType::BusyLocked));
     std::shared_ptr<UnitProperties> joint_properties = std::make_shared<UnitProperties>(
             std::make_shared<UnitBehavior>());
-    joint_properties->add_render_feature(UnitRenderFeature("joint-0_0", {0, 0}, 1, {-0.5, -0.5}, {1, 1}, 0));
-    joint_properties->add_render_feature(UnitRenderFeature("joint-0_1", {0,
-                                                                         0}, 1, {-0.5, 0.5}, {1, 1}, 0
-                                                                         ));
-    joint_properties->add_render_feature(UnitRenderFeature("joint-0_2", {0,
-                                                                         2}, 1, {-0.5, -0.5}, {1, 1}, 0));
-    joint_properties->add_render_feature(UnitRenderFeature("joint-background-0_0", {0, 0}, 0, {-0.5, -0.5}, {1, 1}, 0));
-    joint_properties->add_render_feature(UnitRenderFeature("joint-background-0_1", {0,
-                                                                         2}, 0, {-0.5, -1.5}, {1, 1}, 0
+    joint_properties->add_render_feature(UnitRenderFeature("0_0", "joint-0_0", {0, 0}, 1, {-0.5, -0.5}, {1, 1}, 0));
+    joint_properties->add_render_feature(UnitRenderFeature("0_1", "joint-0_1", {0,
+                                                                                0}, 1, {-0.5, 0.5}, {1, 1}, 0
     ));
-    joint_properties->add_render_feature(UnitRenderFeature("joint-background-0_2", {0,
-                                                                         2}, 0, {-0.5, -0.5}, {1, 1}, 0));
+    joint_properties->add_render_feature(UnitRenderFeature("0_2", "joint-0_2", {0,
+                                                                                2}, 1, {-0.5, -0.5}, {1, 1}, 0));
+    joint_properties->add_render_feature(
+            UnitRenderFeature("0_0-background", "joint-background-0_0", {0, 0}, 0, {-0.5, -0.5}, {1, 1}, 0));
+    joint_properties->add_render_feature(UnitRenderFeature("0_1-background", "joint-background-0_1", {0,
+                                                                                                      2}, 0,
+                                                           {-0.5, -1.5}, {1, 1}, 0
+    ));
+    joint_properties->add_render_feature(UnitRenderFeature("0_2-background", "joint-background-0_2", {0,
+                                                                                                      2}, 0,
+                                                           {-0.5, -0.5}, {1, 1}, 0));
 //    joint_properties->add_render_feature(UnitRenderFeature("joint-0_0", {{0, 0},
 //                                                                         {0, 1},
 //                                                                         {1, 1},

@@ -101,6 +101,9 @@ std::string Node::get_node_type_str(std::shared_ptr<Node> node) {
     if (node->get_node_type() == 10) {
         return "Sprite";
     }
+    if (node->get_node_type() == 11) {
+        return "RigidBody";
+    }
     return "Not found";
 }
 

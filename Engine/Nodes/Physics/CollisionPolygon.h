@@ -18,10 +18,13 @@ public:
     explicit CollisionPolygon(const std::shared_ptr<Node> &parent, int render_priority = 0) : Node(parent,
                                                                                                    render_priority) {}
 
+    ~CollisionPolygon();
+
+    void destroy();
 
     b2ShapeDef shape_def;
     b2Polygon polygon;
-    b2BodyId rigid_body_id;
+    b2ShapeId shape_id;
     std::weak_ptr<RigidBody> rigid_body;
 };
 

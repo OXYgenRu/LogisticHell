@@ -64,13 +64,14 @@ void BlueprintLoader::register_blueprint(const std::string &blueprint_id, Bluepr
                         get_block_position(revolute_joint.block_position_a, blueprint->grid_size, rotation)));
             }
             for (auto &render_feature: to->get_render_features()) {
-                new_properties->add_render_feature(UnitRenderFeature(render_feature.texture_name,
-                                                                     get_block_position(render_feature.anchor_block,
-                                                                                        blueprint->grid_size,
-                                                                                        rotation
-                                                                     ), render_feature.render_priority,
-                                                                     transform.transformPoint(render_feature.position),
-                                                                     render_feature.size, render_feature.angle));
+                new_properties->add_render_feature(
+                        UnitRenderFeature(render_feature.feature_name, render_feature.texture_name,
+                                          get_block_position(render_feature.anchor_block,
+                                                             blueprint->grid_size,
+                                                             rotation
+                                          ), render_feature.render_priority,
+                                          transform.transformPoint(render_feature.position),
+                                          render_feature.size, render_feature.angle));
             }
             for (sf::Vector2i &block_position: to->get_unit_blocks()) {
                 sf::Vector2i new_position = get_block_position(block_position, blueprint->grid_size, rotation);

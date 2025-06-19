@@ -9,6 +9,8 @@
 #include "../../../Engine/Nodes/Base/Node.h"
 #include "../../../Engine/Nodes/Physics/RigidBody.h"
 #include "../../../Engine/Nodes/Physics/CollisionPolygon.h"
+#include "UnitRenderQuad.h"
+#include "ComponentBlock.h"
 
 class Structure;
 
@@ -20,7 +22,8 @@ public:
             : Node(parent, render_priority) {}
 
     std::shared_ptr<RigidBody> rigid_body;
-    std::vector<std::vector<std::shared_ptr<CollisionPolygon>>> blocks;
+    std::vector<std::vector<std::shared_ptr<CollisionPolygon>>> collision_blocks;
+    std::vector<std::vector<std::shared_ptr<ComponentBlock>>> blocks;
     std::weak_ptr<Structure> structure;
 };
 

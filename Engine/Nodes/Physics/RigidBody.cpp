@@ -8,32 +8,27 @@
 #include "../../../Engine/Application.h"
 
 std::shared_ptr<RigidBody>
-RigidBody::create(const std::shared_ptr<Node> &parent, const std::shared_ptr<World> &world, b2BodyDef &body_def,
+RigidBody::create(const std::shared_ptr<World> &world, b2BodyDef &body_def,
                   int render_priority) {
-    auto node = std::make_shared<RigidBody>(parent, render_priority);
+    auto node = std::make_shared<RigidBody>(world, render_priority);
     RigidBody::setup(node, world, body_def);
-    parent->add_node(node);
+    world->add_node(node);
     return node;
 }
 
-void RigidBody::setup(const std::shared_ptr<RigidBody> &node, const std::shared_ptr<World> &world, b2BodyDef &body_def) {
-    node->body = b2CreateBody(world->world_id, &body_def);
-    node->pixel_per_meter = world->pixel_per_meter;
+void
+RigidBody::setup(const std::shared_ptr<RigidBody> &node, const std::shared_ptr<World> &world, b2BodyDef &body_def) {
+    node->body_id = b2CreateBody(world->world_id, &body_def);
 }
 
-sf::Vector2f RigidBody::sf_get_world_point(b2Vec2 local_point, EngineContext &ctx) {
-    b2Vec2 worldVertex = b2Body_GetWorldPoint(this->body, local_point);
-    return {worldVertex.x * pixel_per_meter, -worldVertex.y * pixel_per_meter + ctx.app->window->getSize().y};
+
+RigidBody::~RigidBody() {
+    this->destroy();
 }
 
-b2Vec2 RigidBody::b2_get_world_point(b2Vec2 local_point, EngineContext &ctx) {
-    return b2Body_GetWorldPoint(this->body, local_point);
-}
-
-b2Vec2 RigidBody::b2_get_local_point(sf::Vector2f &world_point, EngineContext &ctx) {
-    b2Vec2 world_vertex = b2Vec2(
-            {world_point.x / pixel_per_meter,
-             (ctx.app->window->getSize().y - world_point.y) / pixel_per_meter});
-
-    return b2Body_GetLocalPoint(this->body, world_vertex);
+void RigidBody::destroy() {
+    if (!b2Body_IsValid(this->body_id)) {
+        return;
+    }
+    b2DestroyBody(this->body_id);
 }

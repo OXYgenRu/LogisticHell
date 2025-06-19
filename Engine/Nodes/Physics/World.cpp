@@ -5,6 +5,7 @@
 #include "World.h"
 #include "box2d/box2d.h"
 #include "../Base/Node.h"
+#include "RigidBody.h"
 
 std::shared_ptr<World>
 World::create(const std::shared_ptr<Node> &parent, b2Vec2 gravity, float pixel_per_meter, int render_priority) {
@@ -17,3 +18,14 @@ World::create(const std::shared_ptr<Node> &parent, b2Vec2 gravity, float pixel_p
     return node;
 }
 
+World::~World() {
+    this->destroy();
+
+}
+
+void World::destroy() {
+    if (!b2World_IsValid(this->world_id)) {
+        return;
+    }
+    b2DestroyWorld(this->world_id);
+}

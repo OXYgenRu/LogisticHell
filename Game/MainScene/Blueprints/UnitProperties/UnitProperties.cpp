@@ -17,7 +17,7 @@ UnitProperties::UnitProperties(const sf::Vector2i &position, const std::shared_p
         this->add_unit_block(block_position + position);
     }
     for (UnitRenderFeature &feature: other->render_features) {
-        this->render_features.emplace_back(feature.texture_name, feature.anchor_block + position,
+        this->render_features.emplace_back(feature.feature_name, feature.texture_name, feature.anchor_block + position,
                                            feature.render_priority,
                                            feature.position, feature.size, feature.angle);
     }

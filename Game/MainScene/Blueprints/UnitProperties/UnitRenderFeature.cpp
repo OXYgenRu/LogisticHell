@@ -4,7 +4,8 @@
 
 #include "UnitRenderFeature.h"
 
-UnitRenderFeature::UnitRenderFeature(const std::string &texture_name, const sf::Vector2i &anchor_block,
+UnitRenderFeature::UnitRenderFeature(const std::string &feature_name, const std::string &texture_name,
+                                     const sf::Vector2i &anchor_block,
                                      int render_priority,
                                      const sf::Vector2f &position, const sf::Vector2f &size, float angle) {
     this->texture_name = texture_name;
@@ -13,4 +14,5 @@ UnitRenderFeature::UnitRenderFeature(const std::string &texture_name, const sf::
     this->position = position;
     this->size = size;
     this->angle = angle;
+    this->feature_name = feature_name;
 }

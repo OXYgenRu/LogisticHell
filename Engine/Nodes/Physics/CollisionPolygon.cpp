@@ -11,10 +11,20 @@ CollisionPolygon::create(const std::shared_ptr<Node> &parent, const std::shared_
     auto node = std::make_shared<CollisionPolygon>(parent, render_priority);
     node->shape_def = shape_def;
     node->polygon = polygon;
-    node->rigid_body_id = rigid_body->body;
     node->rigid_body = rigid_body;
-    b2CreatePolygonShape(rigid_body->body, &node->shape_def, &node->polygon);
+    node->shape_id = b2CreatePolygonShape(rigid_body->body_id, &node->shape_def, &node->polygon);
     parent->add_node(node);
     return node;
 }
 
+
+CollisionPolygon::~CollisionPolygon() {
+    this->destroy();
+}
+
+void CollisionPolygon::destroy() {
+    if (!b2Shape_IsValid(this->shape_id)) {
+        return;
+    }
+    b2DestroyShape(this->shape_id);
+}

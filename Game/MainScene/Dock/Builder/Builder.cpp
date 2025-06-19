@@ -27,7 +27,7 @@ void Builder::set_default_blueprint(EngineContext &ctx) {
 
     std::shared_ptr<UnitProperties> standard_blueprint_properties = std::make_shared<UnitProperties>(nullptr);
     standard_blueprint_properties->add_render_feature(
-            UnitRenderFeature("construction_block", {0, 0}, 0, {-0.5, -0.5}, {1, 1}, 0));
+            UnitRenderFeature("main_texture", "construction_block", {0, 0}, 0, {-0.5, -0.5}, {1, 1}, 0));
     standard_blueprint_properties->add_unit_block({0, 0});
     this->blueprint->set_unit_properties({0, 0}, standard_blueprint_properties);
     this->blueprint->add_unit_properties(standard_blueprint_properties);
