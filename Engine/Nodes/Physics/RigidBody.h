@@ -11,24 +11,6 @@
 #include "RevoluteJoint.h"
 
 
-struct JointIdHash {
-    std::size_t operator()(const b2JointId &id) const noexcept {
-        std::size_t h1 = std::hash<int32_t>{}(id.index1);
-        std::size_t h2 = std::hash<uint16_t>{}(id.world0);
-        std::size_t h3 = std::hash<uint16_t>{}(id.generation);
-
-        return h1 ^ (h2 << 1) ^ (h3 << 2);
-    }
-};
-
-struct JointIdEqual {
-    bool operator()(const b2JointId &a, const b2JointId &b) const noexcept {
-        return a.index1 == b.index1 &&
-               a.world0 == b.world0 &&
-               a.generation == b.generation;
-    }
-};
-
 class RigidBody : public Node {
 public:
     static std::shared_ptr<RigidBody>
@@ -43,6 +25,10 @@ public:
     static void setup(const std::shared_ptr<RigidBody> &node, const std::shared_ptr<World> &world, b2BodyDef &body_def);
 
     void destroy();
+
+    void update(EngineContext &ctx);
+
+
 
     b2BodyId body_id;
 

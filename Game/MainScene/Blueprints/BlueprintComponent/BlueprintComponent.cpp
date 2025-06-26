@@ -27,3 +27,11 @@ BlueprintBlock &BlueprintComponent::get_block(sf::Vector2i position) {
 void BlueprintComponent::delete_block(sf::Vector2i position) {
     this->grid[position.y][position.x].type = BlockType::Empty;
 }
+
+void BlueprintComponent::set_body_type(ComponentBodyType new_type) {
+    this->body_type = new_type;
+}
+
+const ComponentBodyType &BlueprintComponent::get_body_type() {
+    return body_type;
+}

@@ -7,12 +7,14 @@
 
 #include "memory"
 #include "box2d/box2d.h"
+#include "iostream"
 
 class RigidBody;
 
 class RevoluteJoint {
 public:
-    RevoluteJoint(const std::shared_ptr<RigidBody> &body_a, const std::shared_ptr<RigidBody> &body_b,
+    RevoluteJoint( const std::shared_ptr<RigidBody> &body_a,
+                  const std::shared_ptr<RigidBody> &body_b,
                   b2RevoluteJointDef &joint_def);
 
     ~RevoluteJoint();

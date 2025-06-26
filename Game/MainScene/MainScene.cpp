@@ -7,7 +7,7 @@
 #include "../../Engine/Application.h"
 
 void MainScene::init_tree(EngineContext &ctx) {
-    auto scene = shared_from_this();
+    auto scene = std::static_pointer_cast<MainScene>(shared_from_this());
     ctx.app->set_background_color(sf::Color(1, 2, 74));
     blueprint_loader = std::make_shared<BlueprintLoader>();
 
@@ -33,10 +33,12 @@ void MainScene::init_tree(EngineContext &ctx) {
                                      BlueprintBlock(BlockType::BusyAttachable));
     joint.components[0]->set_block({0, 1},
                                    BlueprintBlock(BlockType::BusyLocked));
+    joint.components[0]->set_body_type(ComponentBodyType::Static);
     joint.add_component()->set_block({0, 2},
                                      BlueprintBlock(BlockType::BusyAttachable));
     joint.components[1]->set_block({0, 1},
                                    BlueprintBlock(BlockType::BusyLocked));
+    joint.components[1]->set_body_type(ComponentBodyType::Dynamic);
     std::shared_ptr<UnitProperties> joint_properties = std::make_shared<UnitProperties>(
             std::make_shared<UnitBehavior>());
     joint_properties->add_render_feature(UnitRenderFeature("0_0", "joint-0_0", {0, 0}, 1, {-0.5, -0.5}, {1, 1}, 0));
@@ -54,6 +56,7 @@ void MainScene::init_tree(EngineContext &ctx) {
     joint_properties->add_render_feature(UnitRenderFeature("0_2-background", "joint-background-0_2", {0,
                                                                                                       2}, 0,
                                                            {-0.5, -0.5}, {1, 1}, 0));
+    joint_properties->add_revolute_joint(BlueprintJoints::RevoluteJoint("1", {0, 1}, {0, 0}, {0, 2}));
 //    joint_properties->add_render_feature(UnitRenderFeature("joint-0_0", {{0, 0},
 //                                                                         {0, 1},
 //                                                                         {1, 1},
@@ -126,13 +129,51 @@ void MainScene::init_tree(EngineContext &ctx) {
 //    block_factory->register_block("joint", "background-0_1", "joint-background-0_1");
 //    block_factory->register_block("joint", "background-0_2", "joint-background-0_2");
 
+    background_collider = UI::Collider::create(scene, 0);
+    background_collider->set_vertices({{-800, -450},
+                                       {800,  -450},
+                                       {800,  450},
+                                       {-800, 450}});
+    world_camera = CameraNode::create(scene, ctx, 1);
 
-    world = World::create(scene, b2Vec2({0, 0}), 240);
-    dock = Dock::create(world, ctx, world, {200, 600}, sf::Vector2i({10, 10}), 0.2, blueprint_loader);
+
+    std::shared_ptr<UI::Button> go_to_dock = UI::Button::create(world_camera, ctx, 0);
+    go_to_dock->set_position({-800, -450});
+    go_to_dock->set_rectangle({0, 0}, {200, 200});
+    go_to_dock->set_color(sf::Color(1, 106, 20));
+    go_to_dock->set_hold_reaction(true);
+
+
+    world = World::create(world_camera, b2Vec2({0, -1}), 240, 1);
+    auto dock_rectangle = UI::Rectangle::create(world, ctx, -1);
+    dock_rectangle->set_rectangle({0, 0}, {800, 450});
+    dock_rectangle->set_color(sf::Color(1, 56, 20));
+//    world->set_position({-ctx.app->get_window_size().x / 2, -ctx.app->get_window_size().y / 2});
+    structures_system = std::make_shared<StructuresSystem>(std::static_pointer_cast<MainScene>(scene), 0.2);
+
+    //    dock->interface->assemble_blueprint.bi
+    go_to_dock->bind_on_mouse_release([scene](sf::Event &event, EngineContext &ctx) {
+        scene->world->delete_node(scene->dock);
+//        scene->world_camera->set_camera_target({0, 0});
+//        scene->world_camera->set_zoom(1);
+        scene->dock = Dock::create(scene->world, ctx, scene->world, scene->world_camera,
+                                   scene->structures_system, {500, 0},
+                                   sf::Vector2i({10, 10}), 0.2,
+                                   scene->blueprint_loader);
+        scene->dock->interface->assemble_blueprint->bind_on_mouse_release(
+                [scene](sf::Event &event, EngineContext &ctx) {
+                    scene->structures_system->create_structure(scene->dock->editor_controller->builder->blueprint,
+                                                               scene->dock->position, ctx);
+                    scene->world->delete_node(scene->dock);
+                    scene->dock = nullptr;
+                });
+    });
+
+
 }
 
 void MainScene::update(EngineContext &ctx) {
 //    std::cout << 1 / ctx.last_frame_delta_time << '\n';
 
-//    b2World_Step(world->world_id, ctx.last_frame_delta_time, 1);
+    b2World_Step(world->world_id, ctx.last_frame_delta_time, 1);
 }

@@ -20,6 +20,7 @@ Application::Application(const sf::VideoMode &videoMode, const std::string &titl
                                    sf::Vector2f(float(videoMode.width), float(videoMode.height)));
     this->frame_limit = frame_limit;
     this->texture_atlas = new Atlas(sf::Vector2i(256, 256));
+    this->batch = new Batch();
 }
 
 void Application::start() {
@@ -30,6 +31,7 @@ void Application::start() {
     std::shared_ptr<Node> scene = this->scene_system->currentScene;
     this->window->setFramerateLimit(this->frame_limit);
     this->texture_atlas->build();
+    this->batch->set_texture(this->texture_atlas->get_texture());
     sf::Transform scene_transform;
     scene_transform.translate(this->get_window_size().x / 2, this->get_window_size().y / 2);
     try {
@@ -40,7 +42,7 @@ void Application::start() {
             this->scene_system->update_scene_selection(scene, ctx);
 
             this->tree->drop_tree();
-//        scene = this->scene_system->currentScene;
+
             this->tree->traverse(scene, ctx, scene_transform, 0);
 
             this->tree->prepare_tree();

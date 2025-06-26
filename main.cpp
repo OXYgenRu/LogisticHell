@@ -5,7 +5,6 @@
 #include "Engine/Application.h"
 #include "Engine/Nodes/Base/Node.h"
 
-#include "Engine/Nodes/Render/Shapes/Polygon.h"
 #include "Engine/Nodes/Control/Controller.h"
 #include "Game/Tests/UITest/UIScene.h"
 #include "box2d/box2d.h"
@@ -19,6 +18,7 @@ int main() {
     app.set_new_scene(3);
 
     app.texture_atlas->register_texture("empty_block", "blocks/EmptyGridBlockBlue.png");
+    app.texture_atlas->register_texture("white", "blocks/WhiteStandart.png");
     app.texture_atlas->register_texture("discarded_block", "blocks/DiscardedGridBlockBlue.png");
     app.texture_atlas->register_texture("icon", "blocks/Icon.png");
     app.texture_atlas->register_texture("construction_block", "blocks/TestConstructionBlock.png");

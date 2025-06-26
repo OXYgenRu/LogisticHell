@@ -3,6 +3,7 @@
 //
 
 #include "CollisionPolygon.h"
+#include "box2d/box2d.h"
 
 std::shared_ptr<CollisionPolygon>
 CollisionPolygon::create(const std::shared_ptr<Node> &parent, const std::shared_ptr<RigidBody> &rigid_body,
@@ -26,5 +27,5 @@ void CollisionPolygon::destroy() {
     if (!b2Shape_IsValid(this->shape_id)) {
         return;
     }
-    b2DestroyShape(this->shape_id);
+    b2DestroyShape(this->shape_id, true);
 }

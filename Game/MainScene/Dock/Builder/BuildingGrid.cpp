@@ -21,9 +21,9 @@ void BuildingGrid::setup(const std::shared_ptr<BuildingGrid> &node, float sf_cel
     node->grid_size = grid_size;
     node->grid_collider = UI::Collider::create(node);
     node->grid_collider->set_vertices(
-            {sf::Vector2f(0, 0), sf::Vector2f(grid_size.x * sf_cell_size, 0),
-             sf::Vector2f(grid_size.x * sf_cell_size, grid_size.y * sf_cell_size),
-             sf::Vector2f(0, grid_size.y * sf_cell_size)});
+            {sf::Vector2f(0, 0), sf::Vector2f(float(grid_size.x) * sf_cell_size, 0),
+             sf::Vector2f(float(grid_size.x) * sf_cell_size, float(grid_size.y) * sf_cell_size),
+             sf::Vector2f(0, float(grid_size.y) * sf_cell_size)});
 
     node->grid_collider->set_position(sf::Vector2f(-sf_cell_size / 2, -sf_cell_size / 2));
     node->render_features.resize(grid_size.y,
@@ -60,14 +60,9 @@ void BuildingGrid::add_render_feature(const UnitRenderFeature &new_feature,
             render_features[new_feature.anchor_block.y][new_feature.anchor_block.x], new_feature.render_priority);
     new_quad->set_texture(new_feature.texture_name, 0, ctx);
     new_quad->set_position({new_feature.position.x * sf_cell_size, -new_feature.position.y * sf_cell_size});
-    new_quad->quad[0].position = {0, 0};
-    new_quad->quad[1].position = {0, -new_feature.size.y};
-    new_quad->quad[2].position = {new_feature.size.x, -new_feature.size.y};
-    new_quad->quad[3].position = {new_feature.size.x, 0};
-    new_quad->quad[0].position *= sf_cell_size;
-    new_quad->quad[1].position *= sf_cell_size;
-    new_quad->quad[2].position *= sf_cell_size;
-    new_quad->quad[3].position *= sf_cell_size;
+    for (int i = 0; i < 4; i++) {
+        new_quad->quad[i].position = {new_feature.vertices[i].x  * sf_cell_size,-new_feature.vertices[i].y  * sf_cell_size};
+    }
     new_quad->set_rotation(new_feature.angle);
 }
 
@@ -79,14 +74,9 @@ void BuildingGrid::add_preview_render_feature(const UnitRenderFeature &new_featu
             new_feature.render_priority);
     new_quad->set_texture(new_feature.texture_name, 0, ctx);
     new_quad->set_position({new_feature.position.x * sf_cell_size, -new_feature.position.y * sf_cell_size});
-    new_quad->quad[0].position = {0, 0};
-    new_quad->quad[1].position = {0, -new_feature.size.y};
-    new_quad->quad[2].position = {new_feature.size.x, -new_feature.size.y};
-    new_quad->quad[3].position = {new_feature.size.x, 0};
-    new_quad->quad[0].position *= sf_cell_size;
-    new_quad->quad[1].position *= sf_cell_size;
-    new_quad->quad[2].position *= sf_cell_size;
-    new_quad->quad[3].position *= sf_cell_size;
+    for (int i = 0; i < 4; i++) {
+        new_quad->quad[i].position = {new_feature.vertices[i].x  * sf_cell_size,-new_feature.vertices[i].y  * sf_cell_size};
+    }
     new_quad->set_rotation(new_feature.angle);
 }
 
@@ -95,9 +85,9 @@ void BuildingGrid::set_mask(const std::string &texture_name, const sf::Vector2i 
 }
 
 void BuildingGrid::remove_features(const sf::Vector2i &position) {
-    this->render_features[position.y][position.x]->get_container().clear();
+    this->render_features[position.y][position.x]->clear_container();
 }
 
 void BuildingGrid::remove_preview_features(const sf::Vector2i &position) {
-    this->preview_render_features[position.y][position.x]->get_container().clear();
+    this->preview_render_features[position.y][position.x]->clear_container();
 }

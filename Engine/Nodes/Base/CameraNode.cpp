@@ -11,8 +11,7 @@ CameraNode::create(const std::shared_ptr<Node> &parent, EngineContext &ctx, int 
     auto node = std::make_shared<CameraNode>(parent, render_priority);
     parent->add_node(node);
     node->zoom = 1;
-    node->set_zoom(2);
-    node->set_camera_target({100, 100});
+    node->set_zoom(1);
     node->camera_controller = CameraController::create(node, node, 0);
     return node;
 }
@@ -32,4 +31,9 @@ int CameraNode::get_node_type() const {
 
 const sf::Transform &CameraNode::get_transform() {
     return this->transform.getInverseTransform();
+}
+
+void CameraNode::set_locked(bool is_locked) {
+    this->locked = is_locked;
+    this->camera_controller->set_update_flag(!is_locked);
 }

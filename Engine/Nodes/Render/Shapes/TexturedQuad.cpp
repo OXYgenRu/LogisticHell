@@ -20,8 +20,7 @@ void TexturedQuad::setup(std::shared_ptr<TexturedQuad> node) {
 }
 
 void TexturedQuad::render(EngineContext &ctx, sf::RenderStates &states) {
-    states.texture = ctx.app->texture_atlas->get_texture();
-    ctx.app->window->draw(quad, states);
+    ctx.app->batch->add_vertices(quad, states.transform);
 }
 
 void TexturedQuad::update(EngineContext &ctx) {

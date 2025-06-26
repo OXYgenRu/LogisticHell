@@ -21,8 +21,7 @@ void UIScene::init_tree(EngineContext &ctx) {
                                    {500, 500},
                                    {300, 500}};
 //    camera->get_transformable().setRotation(20);
-    polygon = Polygon::create(camera);
-    polygon->set_polygon(a);
+
 //    c1->set_render_flag(false);
     ui_collider = TestCollider::create(camera);
 //    ui_collider->vertices = a;

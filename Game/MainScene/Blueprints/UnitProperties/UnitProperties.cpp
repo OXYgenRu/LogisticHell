@@ -11,7 +11,8 @@ UnitProperties::UnitProperties(const std::shared_ptr<UnitBehavior> &behavior) {
 
 UnitProperties::UnitProperties(const sf::Vector2i &position, const std::shared_ptr<UnitProperties> &other) {
     for (BlueprintJoints::RevoluteJoint &joint: other->get_revolute_joints()) {
-        this->revolute_joints.emplace_back(joint.block_position_a + position, joint.block_position_b + position);
+        this->revolute_joints.emplace_back(joint.joint_name, joint.block_position + position,
+                                           joint.component_block_a + position, joint.component_block_b + position);
     }
     for (sf::Vector2i &block_position: other->get_unit_blocks()) {
         this->add_unit_block(block_position + position);
@@ -19,7 +20,7 @@ UnitProperties::UnitProperties(const sf::Vector2i &position, const std::shared_p
     for (UnitRenderFeature &feature: other->render_features) {
         this->render_features.emplace_back(feature.feature_name, feature.texture_name, feature.anchor_block + position,
                                            feature.render_priority,
-                                           feature.position, feature.size, feature.angle);
+                                           feature.position, feature.vertices, feature.angle);
     }
 }
 

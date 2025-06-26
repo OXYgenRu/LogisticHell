@@ -33,16 +33,19 @@ void EditorInterface::setup(const std::shared_ptr<EditorInterface> &node, Engine
         node->attachment_mode->set_texture("attach_icon", ctx);
         node->attachment_mode->set_hold_reaction(true);
 
+
+        node->assemble_blueprint = UI::Button::create(node->buttons_layer, ctx, 2);
+        node->assemble_blueprint->set_texture("assemble_icon", ctx);
+        node->assemble_blueprint->set_hold_reaction(true);
+        node->assemble_blueprint->set_rectangle({270, 30}, {360, 120});
+
         node->destroying_mode = UI::Button::create(node->buttons_layer, ctx, 2);
         node->destroying_mode->set_rectangle({150, 30},
                                              {240, 120});
         node->destroying_mode->set_texture("remove_icon", ctx);
         node->destroying_mode->set_hold_reaction(true);
 
-        node->assemble_blueprint = UI::Button::create(node->buttons_layer, ctx, 1);
-        node->assemble_blueprint->set_texture("assemble_icon", ctx);
-        node->assemble_blueprint->set_hold_reaction(true);
-        node->assemble_blueprint->set_rectangle({270, 30}, {360, 120});
+
     }
 
 

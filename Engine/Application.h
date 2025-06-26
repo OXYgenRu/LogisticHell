@@ -9,6 +9,7 @@
 #include "Systems/ControlSystem.h"
 #include "Systems/UICollidersSystem.h"
 #include "Systems/Atlas.h"
+#include "Systems/Batch.h"
 
 #ifndef LOGISTICHELL_APPLICATION_H
 #define LOGISTICHELL_APPLICATION_H
@@ -29,7 +30,7 @@ public:
 
     void set_background_color(sf::Color new_color);
 
-     sf::Vector2f get_window_size() const;
+    sf::Vector2f get_window_size() const;
 
     std::shared_ptr<Scene> get_current_scene() const;
 
@@ -38,6 +39,8 @@ public:
     ControlSystem *control_system;
 
     UICollidersSystem *ui_colliders_system;
+
+    Batch *batch;
 
     Tree *tree;
 

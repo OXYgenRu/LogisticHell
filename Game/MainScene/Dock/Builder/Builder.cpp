@@ -35,7 +35,7 @@ void Builder::set_default_blueprint(EngineContext &ctx) {
 }
 
 void Builder::attach_unit(sf::Vector2i position, EngineContext &ctx) {
-    std::cout << "attach_unit" << '\n';
+//    std::cout << "attach_unit" << '\n';
     std::shared_ptr<Blueprint> unit = this->blueprint_loader.lock()->create_blueprint(this->unit_id,
                                                                                       this->preview_rotation);
     sf::Vector2i unit_position = {position.x - unit->grid_size.x / 2, position.y - unit->grid_size.y / 2};
@@ -51,17 +51,6 @@ void Builder::attach_unit(sf::Vector2i position, EngineContext &ctx) {
             if (block.type == BlockType::Empty) {
                 continue;
             }
-//            if (block.block_id != "void_block::void_block") {
-//
-//                this->building_grid->set_block({unit_position.x + x, unit_position.y + y}, block.block_id,
-//                                               block.rotation, ctx);
-//
-//            }
-//            if (block.background_block_id != "void_block::void_block") {
-//                this->building_grid->set_background_block({unit_position.x + x, unit_position.y + y},
-//                                                          block.background_block_id,
-//                                                          block.rotation, ctx);
-//            }
             unit_attachment_base->set_block({unit_position.x + x, unit_position.y + y}, block);
         }
     }
@@ -70,23 +59,13 @@ void Builder::attach_unit(sf::Vector2i position, EngineContext &ctx) {
             continue;
         }
         std::shared_ptr<BlueprintComponent> new_component = this->blueprint->add_component();
+        new_component->set_body_type(component->get_body_type());
         for (int y = 0; y < unit->grid_size.y; y++) {
             for (int x = 0; x < unit->grid_size.x; x++) {
                 BlueprintBlock block = component->get_block({x, y});
                 if (block.type == BlockType::Empty) {
                     continue;
                 }
-//                if (block.block_id != "void_block::void_block") {
-//
-//                    this->building_grid->set_block({unit_position.x + x, unit_position.y + y}, block.block_id,
-//                                                   block.rotation, ctx);
-//
-//                }
-//                if (block.background_block_id != "void_block::void_block") {
-//                    this->building_grid->set_background_block({unit_position.x + x, unit_position.y + y},
-//                                                              block.background_block_id,
-//                                                              block.rotation, ctx);
-//                }
                 new_component->set_block({unit_position.x + x, unit_position.y + y}, block);
 
             }
@@ -108,7 +87,7 @@ void Builder::attach_unit(sf::Vector2i position, EngineContext &ctx) {
 }
 
 void Builder::destroy_unit(sf::Vector2i position, EngineContext &ctx) {
-    std::cout << "destroy_unit" << '\n';
+//    std::cout << "destroy_unit" << '\n';
     if (this->blueprint->get_component(position) == nullptr) {
         return;
     }
@@ -130,7 +109,7 @@ void Builder::destroy_unit(sf::Vector2i position, EngineContext &ctx) {
 }
 
 bool Builder::validate_unit_attachment(sf::Vector2i position) {
-    std::cout << "validate_unit_attachment" << '\n';
+//    std::cout << "validate_unit_attachment" << '\n';
     std::shared_ptr<Blueprint> unit = this->blueprint_loader.lock()->create_blueprint(this->unit_id,
                                                                                       this->preview_rotation);
     if (this->blueprint_attachment_components.empty()) {
@@ -156,7 +135,7 @@ bool Builder::validate_unit_attachment(sf::Vector2i position) {
 
 
 void Builder::draw_building_preview(EngineContext &ctx) {
-    std::cout << "draw_building_preview" << '\n';
+//    std::cout << "draw_building_preview" << '\n';
     std::shared_ptr<Blueprint> unit = this->blueprint_loader.lock()->create_blueprint(this->unit_id,
                                                                                       this->preview_rotation);
     sf::Vector2i unit_position = {this->preview_position.x - unit->grid_size.x / 2,
@@ -219,7 +198,7 @@ void Builder::draw_building_preview(EngineContext &ctx) {
 }
 
 void Builder::draw_destroying_preview(EngineContext &ctx) {
-    std::cout << "draw_destroying_preview" << '\n';
+//    std::cout << "draw_destroying_preview" << '\n';
     if (this->blueprint->is_block_empty(preview_position)) {
         return;
     }
@@ -281,7 +260,7 @@ void Builder::select_next_blueprint_component(EngineContext &ctx) {
 }
 
 void Builder::find_blueprint_attachment_components() {
-    std::cout << "find" << '\n';
+//    std::cout << "find" << '\n';
     this->selected_blueprint_component_index = 0;
     std::shared_ptr<Blueprint> unit = this->blueprint_loader.lock()->create_blueprint(this->unit_id,
                                                                                       this->preview_rotation);

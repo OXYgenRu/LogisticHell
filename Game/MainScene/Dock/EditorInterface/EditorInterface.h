@@ -7,7 +7,6 @@
 
 
 #include "../../../../Engine/Nodes/Base/Node.h"
-#include "../../../../Engine/Nodes/UI/UIPolygon.h"
 #include "../../../../Engine/Nodes/UI/Button.h"
 #include "../../../../Engine/Nodes/Render/Shapes/Text.h"
 #include "../../../../Engine/Nodes/UI/Rectangle.h"

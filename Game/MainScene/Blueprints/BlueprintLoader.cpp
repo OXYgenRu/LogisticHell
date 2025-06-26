@@ -45,6 +45,7 @@ void BlueprintLoader::register_blueprint(const std::string &blueprint_id, Bluepr
         auto blueprint = std::make_shared<Blueprint>(grid_size, rotation);
         for (auto &to: components) {
             std::shared_ptr<BlueprintComponent> component = blueprint->add_component();
+            component->set_body_type(to->get_body_type());
             for (int i = 0; i < grid_size.y; i++) {
                 for (int j = 0; j < grid_size.x; j++) {
                     sf::Vector2i new_position = get_block_position({j, i}, blueprint->grid_size, rotation);
@@ -59,19 +60,33 @@ void BlueprintLoader::register_blueprint(const std::string &blueprint_id, Bluepr
             std::shared_ptr<UnitProperties> new_properties = std::make_shared<UnitProperties>(to->get_behavior());
             blueprint->add_unit_properties(new_properties);
             for (auto &revolute_joint: to->get_revolute_joints()) {
-                new_properties->add_revolute_joint(BlueprintJoints::RevoluteJoint(
-                        get_block_position(revolute_joint.block_position_a, blueprint->grid_size, rotation),
-                        get_block_position(revolute_joint.block_position_a, blueprint->grid_size, rotation)));
+                new_properties->add_revolute_joint(BlueprintJoints::RevoluteJoint(revolute_joint.joint_name,
+                                                                                  get_block_position(
+                                                                                          revolute_joint.block_position,
+                                                                                          blueprint->grid_size,
+                                                                                          rotation),
+                                                                                  get_block_position(
+                                                                                          revolute_joint.component_block_a,
+                                                                                          blueprint->grid_size,
+                                                                                          rotation),
+                                                                                  get_block_position(
+                                                                                          revolute_joint.component_block_b,
+                                                                                          blueprint->grid_size,
+                                                                                          rotation)));
             }
             for (auto &render_feature: to->get_render_features()) {
+                std::vector<sf::Vector2f> vertices = render_feature.vertices;
+                for (int i = 0; i < 4; i++) {
+                    vertices[i] = transform.transformPoint(vertices[i]);
+                }
                 new_properties->add_render_feature(
                         UnitRenderFeature(render_feature.feature_name, render_feature.texture_name,
                                           get_block_position(render_feature.anchor_block,
                                                              blueprint->grid_size,
                                                              rotation
                                           ), render_feature.render_priority,
-                                          transform.transformPoint(render_feature.position),
-                                          render_feature.size, render_feature.angle));
+                                          transform.transformPoint(render_feature.position), vertices,
+                                          render_feature.angle));
             }
             for (sf::Vector2i &block_position: to->get_unit_blocks()) {
                 sf::Vector2i new_position = get_block_position(block_position, blueprint->grid_size, rotation);

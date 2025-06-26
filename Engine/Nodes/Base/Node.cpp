@@ -57,6 +57,14 @@ void Node::set_position(const sf::Vector2f &position) {
     transform.setPosition(position);
 }
 
+const sf::Vector2f &Node::get_origin() {
+    return transform.getOrigin();
+}
+
+void Node::set_origin(const sf::Vector2f &position) {
+    this->transform.setOrigin(position);
+}
+
 const sf::Vector2f &Node::get_position() {
     return transform.getPosition();
 }
@@ -145,4 +153,9 @@ void Node::render(EngineContext &ctx, sf::RenderStates &states) {
 
 void Node::update(EngineContext &ctx) {
 
+}
+
+void Node::clear_container() {
+    this->container.clear();
+    this->container_volume = 0;
 }

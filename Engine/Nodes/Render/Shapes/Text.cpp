@@ -13,6 +13,7 @@ std::shared_ptr<Text> Text::create(const std::shared_ptr<Node> &parent, int rend
 }
 
 void Text::render(EngineContext &ctx, sf::RenderStates &states) {
+    ctx.app->batch->flush(ctx);
     ctx.app->window->draw(this->text, states);
 }
 

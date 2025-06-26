@@ -18,7 +18,7 @@ void UI::Button::setup(std::shared_ptr<Button> &node, EngineContext &ctx) {
     node->is_pressed = false;
     node->color = sf::Color(255, 255, 255);
     node->react_to_hold = false;
-    node->rectangle = UI::Rectangle::create(node);
+    node->rectangle = UI::Rectangle::create(node, ctx);
     node->collider = UI::Collider::create(node);
     node->collider->bind_on_mouse_release(
             [node](sf::Event &event, EngineContext &ctx, const sf::Vector2f &local_position) {
@@ -108,6 +108,7 @@ void UI::Button::handle_on_mouse_enter(EngineContext &ctx) {
 }
 
 void UI::Button::handle_on_mouse_exit(EngineContext &ctx) {
+
     if (this->react_to_hold and this->is_pressed) {
         this->rectangle->set_color(this->color);
     }

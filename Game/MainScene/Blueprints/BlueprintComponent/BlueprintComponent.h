@@ -15,6 +15,12 @@ enum class BlockType {
     BusyLocked
 };
 
+enum class ComponentBodyType {
+    Dynamic,
+    Static,
+    Kinematic,
+};
+
 struct BlueprintBlock {
     BlockType type;
 
@@ -33,7 +39,12 @@ public:
 
     explicit BlueprintComponent(sf::Vector2i grid_size) {
         this->grid.resize(grid_size.y, std::vector<BlueprintBlock>(grid_size.x));
+        this->body_type = ComponentBodyType::Dynamic;
     }
+
+    void set_body_type(ComponentBodyType new_type);
+
+    const ComponentBodyType &get_body_type();
 
     void set_block(sf::Vector2i position, BlueprintBlock new_block);
 
@@ -43,7 +54,8 @@ public:
 
     BlueprintBlock &get_block(sf::Vector2i position);
 
-private:    
+private:
+    ComponentBodyType body_type;
     std::vector<std::vector<BlueprintBlock>> grid;
 };
 

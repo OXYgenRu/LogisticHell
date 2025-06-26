@@ -8,7 +8,6 @@
 #include "../../../Engine/Scene.h"
 #include "../../../Engine/Nodes/Base/CameraNode.h"
 #include "../../../Engine/Nodes/Base/Node.h"
-#include "../../../Engine/Nodes/Render/Shapes/Polygon.h"
 #include "../../../Engine/Nodes/UI/Collider.h"
 
 class UIScene : public Scene {
@@ -25,7 +24,6 @@ public:
     void update(EngineContext &ctx) override;
 
     std::shared_ptr<CameraNode> camera;
-    std::shared_ptr<Polygon> polygon;
     std::shared_ptr<UI::Collider> ui_collider;
     std::shared_ptr<Node> c1;
 

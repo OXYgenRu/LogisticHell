@@ -8,22 +8,30 @@
 #include "iostream"
 #include "vector"
 #include "SFML/Graphics.hpp"
+#include "../../../Engine/Nodes/Render/Shapes/TexturedQuad.h"
 
-class UnitRenderQuad {
+class UnitRenderQuad : public TexturedQuad {
 public:
-    UnitRenderQuad(const std::string &texture_name, const sf::Vector2f &anchor_block, int render_priority,
-                   const sf::Vector2f &position, const sf::Vector2f &size, float angle);
+    static std::shared_ptr<UnitRenderQuad>
+    create(const std::shared_ptr<Node> &parent,EngineContext&ctx ,const std::string &texture_name, const sf::Vector2i &anchor_block,
+           const sf::Vector2f &position, const std::vector<sf::Vector2f> &vertices, float angle,
+           float sf_block_side_size,
+           int render_priority = 0);
 
-    void set_position(const sf::Vector2f &new_position);
 
-    void set_rotation(float new_angle);
+    explicit UnitRenderQuad(const std::shared_ptr<Node> &parent, int render_priority = 0) : TexturedQuad(parent,
+                                                                                                         render_priority) {};
 
-    std::string texture_name;
-    std::vector<sf::Vector2f> vertices;
-    int render_priority;
-    sf::Vector2f anchor_block;
+    static void setup(const std::shared_ptr<UnitRenderQuad> &node,EngineContext&ctx, const std::string &texture_name,
+                      const sf::Vector2i &anchor_block,
+                      const sf::Vector2f &position, const std::vector<sf::Vector2f> &vertices, float angle,
+                      float sf_block_side_size);
+
+    void render(EngineContext &ctx, sf::RenderStates &states) override;
+
 private:
-    sf::Transform transform;
+    sf::Transform feature_transform;
+    sf::Vector2i anchor_block;
 };
 
 

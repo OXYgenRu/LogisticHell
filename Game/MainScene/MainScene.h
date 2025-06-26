@@ -10,6 +10,7 @@
 #include "../../Engine/Nodes/Base/CameraNode.h"
 #include "../../Engine/Nodes/Physics/World.h"
 #include "Dock/Dock.h"
+#include "Structure/StructuresSystem.h"
 
 class MainScene : public Scene {
 public:
@@ -24,9 +25,12 @@ public:
 
     void update(EngineContext &ctx) override;
 
+    std::shared_ptr<UI::Collider> background_collider;
+    std::shared_ptr<CameraNode> world_camera;
     std::shared_ptr<World> world;
-    std::shared_ptr<Dock> dock;
+    std::shared_ptr<StructuresSystem> structures_system;
     std::shared_ptr<BlueprintLoader> blueprint_loader;
+    std::shared_ptr<Dock> dock;
 
 };
 

@@ -12,7 +12,7 @@
 class Node : public std::enable_shared_from_this<Node> {
 public:
 
-    static std::shared_ptr<Node>create(const std::shared_ptr<Node> &parent, int render_priority = 0);
+    static std::shared_ptr<Node> create(const std::shared_ptr<Node> &parent, int render_priority = 0);
 
     virtual ~Node() = default;
 
@@ -21,7 +21,7 @@ public:
 
     virtual void render(EngineContext &ctx, sf::RenderStates &states);
 
-    virtual void update(EngineContext &ctx) ;
+    virtual void update(EngineContext &ctx);
 
 
     void set_render_flag(bool flag);
@@ -52,12 +52,17 @@ public:
 
     void set_position(const sf::Vector2f &position);
 
+    void set_origin(const sf::Vector2f &position);
+
+    const sf::Vector2f &get_origin();
+
     const sf::Vector2f &get_position();
 
     void set_rotation(float angle);
 
     float get_rotation();
 
+    void clear_container();
 
     void add_node(const std::shared_ptr<Node> &new_node);
 

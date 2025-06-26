@@ -15,7 +15,7 @@ public:
     static std::shared_ptr<CameraNode>
     create(const std::shared_ptr<Node> &parent, EngineContext &ctx, int render_priority = 0);
 
-    explicit CameraNode(const std::shared_ptr<Node>& parent, int render_priority = 0)
+    explicit CameraNode(const std::shared_ptr<Node> &parent, int render_priority = 0)
             : Node(parent, render_priority) {}
 
 
@@ -23,12 +23,16 @@ public:
 
     void set_camera_target(sf::Vector2f camera_target);
 
+    void set_locked(bool is_locked);
+
     int get_node_type() const override;
 
     const sf::Transform &get_transform();
 
     std::shared_ptr<CameraController> camera_controller;
     float zoom;
+private:
+    bool locked;
 };
 
 

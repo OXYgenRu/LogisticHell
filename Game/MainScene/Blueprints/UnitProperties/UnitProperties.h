@@ -19,11 +19,16 @@ class UnitBehavior {
 
 namespace BlueprintJoints {
     struct RevoluteJoint {
-        sf::Vector2i block_position_a, block_position_b;
+        sf::Vector2i block_position;
+        sf::Vector2i component_block_a, component_block_b;
+        std::string joint_name;
 
-        RevoluteJoint(const sf::Vector2i &block_position_a, const sf::Vector2i &block_position_b) {
-            this->block_position_a = block_position_a;
-            this->block_position_b = block_position_b;
+        RevoluteJoint(const std::string &joint_name, const sf::Vector2i &block_position,
+                      sf::Vector2i component_block_a, sf::Vector2i component_block_b) {
+            this->joint_name = joint_name;
+            this->block_position = block_position;
+            this->component_block_a = component_block_a;
+            this->component_block_b = component_block_b;
         }
     };
 }

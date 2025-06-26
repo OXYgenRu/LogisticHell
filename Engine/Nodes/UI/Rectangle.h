@@ -13,12 +13,12 @@ namespace UI {
     class Rectangle : public Node {
     public:
         static std::shared_ptr<Rectangle>
-        create(const std::shared_ptr<Node> &parent, int render_priority = 0);
+        create(const std::shared_ptr<Node> &parent, EngineContext &ctx, int render_priority = 0);
 
         explicit Rectangle(const std::shared_ptr<Node> &parent, int render_priority = 0) : Node(parent,
                                                                                                 render_priority) {}
 
-        static void setup(std::shared_ptr<Rectangle> &node);
+        static void setup(std::shared_ptr<Rectangle> &node, EngineContext &ctx);
 
         void set_rectangle(sf::Vector2f new_top_left, sf::Vector2f new_bottom_right);
 
@@ -29,7 +29,7 @@ namespace UI {
         void render(EngineContext &ctx, sf::RenderStates &states) override;
 
     private:
-        sf::RectangleShape polygon;
+        sf::VertexArray vertices;
         sf::Vector2f top_left;
         sf::Vector2f bottom_right;
     };

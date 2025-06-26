@@ -94,6 +94,7 @@ void Tree::render(EngineContext &ctx) {
         states.transform = this->flatten_tree[i].transform;
         this->flatten_tree[i].node->render(ctx, states);
     }
+    ctx.app->batch->flush(ctx);
 }
 
 void Tree::update(EngineContext &ctx) {

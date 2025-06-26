@@ -24,7 +24,7 @@ void Atlas::register_texture(const std::string &id, const std::string &image_nam
 }
 
 void Atlas::build() {
-    std::sort(this->images.begin(), this->images.end(), compare_by_width);
+    std::sort(this->images.rbegin(), this->images.rend(), compare_by_width);
     sf::Vector2i position = {0, 0};
     int height_step = 0;
     if (!this->images.empty()) {
