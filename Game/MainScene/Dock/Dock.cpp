@@ -30,24 +30,11 @@ void Dock::setup(const std::shared_ptr<Dock> &node, EngineContext &ctx, const st
     node->position = position;
     node->structures_system = structures_system;
     node->world = world;
-//    node->background_collider = UI::Collider::create(node, 0);
-//    {
-//        node->background_collider->set_vertices({{0,                                   0},
-//                                                 {float(ctx.app->window->getSize().x), 0},
-//                                                 {float(ctx.app->window->getSize().x), float(
-//                                                         ctx.app->window->getSize().y)},
-//                                                 {0,                                   float(
-//                                                         ctx.app->window->getSize().x)}});
-//        node->background_collider->set_position({-ctx.app->get_window_size().x / 2,
-//                                                 -ctx.app->get_window_size().y / 2});
-//    }
     node->camera = CameraNode::create(node, ctx, 1);
-//    node->camera->set_position({-ctx.app->get_window_size().x / 2,
-//                                                 -ctx.app->get_window_size().y / 2});
+
     node->controller = DockController::create(node, node);
 
     node->building_grid = BuildingGrid::create(node->camera, ctx, world->pixel_per_meter * b2_cell_size, grid_size);
-//    node->building_grid->set_position({ctx.app->get_window_size().x / 2, ctx.app->get_window_size().y / 2});
 
     {
         node->building_grid->grid_collider->bind_on_mouse_release(
@@ -72,13 +59,9 @@ void Dock::setup(const std::shared_ptr<Dock> &node, EngineContext &ctx, const st
     node->interface = EditorInterface::create(node, ctx, node, blueprint_loader, 20);
     {
         node->interface->set_position({-ctx.app->get_window_size().x / 2, -ctx.app->get_window_size().y / 2});
-//        node->interface->assemble_blueprint->bind_on_mouse_release([weak_dock](sf::Event &event, EngineContext &ctx) {
-//            weak_dock.lock()->structures_system.lock()->create_structure(
-//                    weak_dock.lock()->editor_controller->builder->blueprint, ctx);
-//
-//            weak_dock.lock()->parent.lock()->delete_node(weak_dock.lock());
-//
-//        });
     }
+    node->background = UI::Rectangle::create(node, ctx, 0);
+    node->background->set_rectangle(-ctx.app->get_window_size() * 0.5f, ctx.app->get_window_size() * 0.5f);
+    node->background->set_color(sf::Color(1, 2, 74));
 }
 

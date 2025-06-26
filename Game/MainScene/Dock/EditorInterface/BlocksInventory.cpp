@@ -25,6 +25,7 @@ void BlocksInventory::setup(const std::shared_ptr<BlocksInventory> &node, Engine
     node->dock = dock;
     node->blueprint_loader = blueprint_loader;
 
+    std::cout << "----------------" << units.size() << '\n';
 
     for (int i = 0; i < node->vertical_list->get_list_size(); i++) {
         std::shared_ptr<UI::ListItem> item = node->vertical_list->get_item(i);

@@ -40,7 +40,7 @@ public:
           sf::Vector2i grid_size, float b2_cell_size, const std::shared_ptr<BlueprintLoader> &blueprint_loader);
 
     sf::Vector2f position;
-    std::shared_ptr<UI::Collider> background_collider;
+    std::shared_ptr<UI::Rectangle> background;
     std::shared_ptr<EditorController> editor_controller;
     std::shared_ptr<BuildingGrid> building_grid;
     std::shared_ptr<DockController> controller;

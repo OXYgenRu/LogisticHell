@@ -57,77 +57,21 @@ void MainScene::init_tree(EngineContext &ctx) {
                                                                                                       2}, 0,
                                                            {-0.5, -0.5}, {1, 1}, 0));
     joint_properties->add_revolute_joint(BlueprintJoints::RevoluteJoint("1", {0, 1}, {0, 0}, {0, 2}));
-//    joint_properties->add_render_feature(UnitRenderFeature("joint-0_0", {{0, 0},
-//                                                                         {0, 1},
-//                                                                         {1, 1},
-//                                                                         {1, 0}}, {0, 0}));
+
     blueprint_loader->register_unit("joint", joint, joint_properties);
 
 
-    //
-//
-//    Blueprint heavy_construction_blueprint({1, 1}, true, 0);
-//    heavy_construction_blueprint.add_component()->set_block({0, 0},
-//                                                            BlueprintBlock("heavy_construction::heavy_construction",
-//                                                                           "void_block::void_block",
-//                                                                           {0, 0}, {1, 1}, 0, true));
-//    blueprint_loader->register_blueprint("heavy_construction", heavy_construction_blueprint);
-//
-//    Blueprint big_construction({2, 2}, true, 0);
-//    big_construction.add_component()->set_block({0, 0},
-//                                                BlueprintBlock("heavy_construction::heavy_construction",
-//                                                               "void_block::void_block",
-//                                                               {0, 0}, {2, 2}, 0, true));
-//    big_construction.components[0]->set_block({1, 0},
-//                                              BlueprintBlock("heavy_construction::heavy_construction",
-//                                                             "void_block::void_block",
-//                                                             {1, 0}, {2, 2}, 0, true));
-//    big_construction.add_component()->set_block({0, 1},
-//                                                BlueprintBlock("light_construction::light_construction",
-//                                                               "void_block::void_block",
-//                                                               {2, 0}, {2, 2}, 0, true));
-//    big_construction.components[1]->set_block({1, 1},
-//                                              BlueprintBlock("light_construction::light_construction",
-//                                                             "void_block::void_block",
-//                                                             {1, 1}, {2, 2}, 0, true));
-//    blueprint_loader->register_blueprint("big_construction", big_construction);
-//
-//
-//    Blueprint light_construction({1, 1}, true, 0);
-//    light_construction.add_component()->set_block({0, 0},
-//                                                  BlueprintBlock("light_construction::light_construction",
-//                                                                 "void_block::void_block",
-//                                                                 {0, 0}, {1, 1}, 0, true));
-//    blueprint_loader->register_blueprint("light_construction", light_construction);
-//
-//    Blueprint beam({1, 1}, true, 0);
-//    beam.add_component()->set_block({0, 0},
-//                                    BlueprintBlock("beam::beam", "void_block::void_block",
-//                                                   {0, 0}, {1, 1}, 0, true));
-//    blueprint_loader->register_blueprint("beam", beam);
-//
-//
+    Blueprint construction_block_static_blueprint({1, 1}, 0);
+    construction_block_static_blueprint.add_component()->set_block({0, 0},
+                                                                   BlueprintBlock(BlockType::BusyAttachable));
+    construction_block_static_blueprint.components[0]->set_body_type(ComponentBodyType::Static);
+    std::shared_ptr<UnitProperties> construction_block_static_properties = std::make_shared<UnitProperties>(
+            std::make_shared<UnitBehavior>());
+    construction_block_static_properties->add_render_feature(
+            UnitRenderFeature("0_0", "construction_block", {0, 0}, 0, {-0.5, -0.5}, {1, 1}, 0));
+    blueprint_loader->register_unit("static_construction_block", construction_block_static_blueprint,
+                                    construction_block_static_properties);
 
-
-//    block_factory = std::make_shared<BlockFactory>();
-//    block_factory->register_block("light_construction", "light_construction", "light_construction");
-//    block_factory->register_block("heavy_construction", "heavy_construction", "heavy_construction");
-//    block_factory->register_block("empty_block", "empty_block", "empty_block");
-//    block_factory->register_block("discarded_block", "discarded_block", "discarded_block");
-//    block_factory->register_block("construction_block", "construction_block", "construction_block");
-//    block_factory->register_block("test_unit", "construction_block", "construction_block");
-//    block_factory->register_block("void_block", "void_block", "void_block");
-//    block_factory->register_block("busy_grid_block", "busy_grid_block", "busy_grid_block");
-//    block_factory->register_block("icon", "icon", "icon");
-//    block_factory->register_block("beam", "beam", "beam");
-//    block_factory->register_block("selected_grid_block", "selected_grid_block", "selected_grid_block");
-//
-//    block_factory->register_block("joint", "0_0", "joint-0_0");
-//    block_factory->register_block("joint", "0_1", "joint-0_1");
-//    block_factory->register_block("joint", "0_2", "joint-0_2");
-//    block_factory->register_block("joint", "background-0_0", "joint-background-0_0");
-//    block_factory->register_block("joint", "background-0_1", "joint-background-0_1");
-//    block_factory->register_block("joint", "background-0_2", "joint-background-0_2");
 
     background_collider = UI::Collider::create(scene, 0);
     background_collider->set_vertices({{-800, -450},
@@ -154,12 +98,10 @@ void MainScene::init_tree(EngineContext &ctx) {
     //    dock->interface->assemble_blueprint.bi
     go_to_dock->bind_on_mouse_release([scene](sf::Event &event, EngineContext &ctx) {
         scene->world->delete_node(scene->dock);
-//        scene->world_camera->set_camera_target({0, 0});
-//        scene->world_camera->set_zoom(1);
         scene->dock = Dock::create(scene->world, ctx, scene->world, scene->world_camera,
-                                   scene->structures_system, {500, 0},
+                                   scene->structures_system, {100, 0},
                                    sf::Vector2i({10, 10}), 0.2,
-                                   scene->blueprint_loader);
+                                   scene->blueprint_loader, 3);
         scene->dock->interface->assemble_blueprint->bind_on_mouse_release(
                 [scene](sf::Event &event, EngineContext &ctx) {
                     scene->structures_system->create_structure(scene->dock->editor_controller->builder->blueprint,
@@ -167,6 +109,8 @@ void MainScene::init_tree(EngineContext &ctx) {
                     scene->world->delete_node(scene->dock);
                     scene->dock = nullptr;
                 });
+        scene->world_camera->set_camera_target({0, 0});
+        scene->world_camera->set_zoom(1);
     });
 
 

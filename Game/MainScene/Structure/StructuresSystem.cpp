@@ -87,12 +87,13 @@ void StructuresSystem::create_structure(std::shared_ptr<Blueprint> &blueprint, c
             std::shared_ptr<RigidBody> body_b = new_structure->units[j]->get_block(
                     joint.component_block_b)->get_component()->rigid_body;
             b2RevoluteJointDef joint_def = b2DefaultRevoluteJointDef();
+            b2Vec2 world_point = {dock_position.x / pixels_per_meter,-dock_position.y / pixels_per_meter};
+            world_point += {float(joint.block_position.x) * block_side_size,
+                            float(joint.block_position.y) * block_side_size};
             joint_def.localAnchorA =
-                    b2Body_GetLocalPoint(body_a->body_id, {float(joint.block_position.x) * block_side_size,
-                                                           float(joint.block_position.y) * block_side_size});
+                    b2Body_GetLocalPoint(body_a->body_id, world_point);
             joint_def.localAnchorB =
-                    b2Body_GetLocalPoint(body_b->body_id, {float(joint.block_position.x) * block_side_size,
-                                                           float(joint.block_position.y) * block_side_size});
+                    b2Body_GetLocalPoint(body_b->body_id, world_point);
             new_structure->units[j]->set_joint(joint.joint_name,
                                                std::make_shared<RevoluteJoint>(body_a, body_b, joint_def));
         }
