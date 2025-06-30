@@ -27,7 +27,6 @@ std::shared_ptr<ComponentBlock> Unit::get_block(const sf::Vector2i &position) {
 
 void Unit::set_joint(const std::string &joint_name, const std::shared_ptr<RevoluteJoint> &new_joint) {
     this->joints[joint_name] = new_joint;
-    std::cout << "set_joint" << '\n';
 }
 
 Unit::~Unit(){

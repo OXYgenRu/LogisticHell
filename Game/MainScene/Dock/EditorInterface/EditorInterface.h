@@ -25,10 +25,11 @@ public:
 
     explicit EditorInterface(const std::shared_ptr<Node> &parent,
                              int render_priority = 0) : Node(parent,
-                                                                      render_priority) {}
+                                                             render_priority) {}
 
-    static void setup(const std::shared_ptr<EditorInterface> &node, EngineContext &ctx, const std::shared_ptr<Dock> &dock,
-                      const std::shared_ptr<BlueprintLoader> &blueprint_loader);
+    static void
+    setup(const std::shared_ptr<EditorInterface> &node, EngineContext &ctx, const std::shared_ptr<Dock> &dock,
+          const std::shared_ptr<BlueprintLoader> &blueprint_loader);
 
     void update(EngineContext &ctx) override;
 
@@ -38,6 +39,7 @@ public:
     std::shared_ptr<UI::Button> attachment_mode;
     std::shared_ptr<UI::Button> destroying_mode;
     std::shared_ptr<UI::Button> assemble_blueprint;
+    std::shared_ptr<UI::Button> quit_dock;
     std::shared_ptr<BlocksInventory> inventory;
 };
 

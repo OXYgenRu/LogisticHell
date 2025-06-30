@@ -5,6 +5,7 @@
 #include "Dock.h"
 #include "../../../Engine/Application.h"
 #include "EditorInterface/EditorInterface.h"
+#include "../MainScene.h"
 
 std::shared_ptr<Dock>
 Dock::create(const std::shared_ptr<Node> &parent, EngineContext &ctx, const std::shared_ptr<World> &world,
@@ -57,11 +58,78 @@ void Dock::setup(const std::shared_ptr<Dock> &node, EngineContext &ctx, const st
     node->editor_controller = EditorController::create(ctx, node, node->building_grid, blueprint_loader);
 
     node->interface = EditorInterface::create(node, ctx, node, blueprint_loader, 20);
-    {
-        node->interface->set_position({-ctx.app->get_window_size().x / 2, -ctx.app->get_window_size().y / 2});
-    }
+    node->interface->set_position({-ctx.app->get_window_size().x / 2, -ctx.app->get_window_size().y / 2});
+
     node->background = UI::Rectangle::create(node, ctx, 0);
     node->background->set_rectangle(-ctx.app->get_window_size() * 0.5f, ctx.app->get_window_size() * 0.5f);
     node->background->set_color(sf::Color(1, 2, 74));
 }
 
+
+std::shared_ptr<DockSpawner>
+DockSpawner::create(const std::shared_ptr<Node> &parent, EngineContext &ctx, const std::shared_ptr<MainScene> &scene,
+                    const sf::Vector2f &position, const sf::Vector2i &grid_size, float b2_block_side_size,
+                    int render_priority) {
+    auto node = std::make_shared<DockSpawner>(parent, render_priority);
+    DockSpawner::setup(node, ctx, scene, position, grid_size, b2_block_side_size);
+    parent->add_node(node);
+    return node;
+}
+
+void DockSpawner::setup(const std::shared_ptr<DockSpawner> &node, EngineContext &ctx,
+                        const std::shared_ptr<MainScene> &scene,
+                        const sf::Vector2f &position, const sf::Vector2i &grid_size, float b2_block_side_size) {
+    std::weak_ptr<MainScene> weak_scene = scene;
+    std::weak_ptr<DockSpawner> weak_spawner = node;
+    float sf_block_side_size = b2_block_side_size * scene->world->pixel_per_meter;
+    node->scene = scene;
+    node->position = position;
+    node->grid_size = grid_size;
+    node->b2_block_side_size = b2_block_side_size;
+
+    node->set_position({position.x - sf_block_side_size / 2,
+                        position.y - float(grid_size.y) * sf_block_side_size + sf_block_side_size / 2});
+
+    node->text = Text::create(node, 1);
+    node->text->set_text("Dock, position {x:" + std::to_string(position.x) + ",y:" + std::to_string(position.y) + "}");
+//    node->text->set_text(
+//            L"Dock, position {x:" + std::to_wstring(position.x) + L",y:" + std::to_wstring(position.y) + L"}");
+    node->text->set_font("Minecraftia-Regular.ttf");
+    node->text->set_character_size(24);
+    node->text->set_scale(0.3);
+
+    node->dock_area = UI::Button::create(node, ctx);
+    node->dock_area->set_rectangle({0, 0},
+                                   {float(grid_size.x) * sf_block_side_size,
+                                    float(grid_size.y) * sf_block_side_size});
+    node->dock_area->set_color(sf::Color(1, 56, 20));
+    node->dock_area->bind_on_mouse_release([weak_spawner, weak_scene](sf::Event &event, EngineContext &ctx) {
+        auto scene = weak_scene.lock();
+        auto spawner = weak_spawner.lock();
+        scene->world->delete_node(spawner->dock);
+        spawner->dock = Dock::create(scene->world, ctx, scene->world, scene->world_camera,
+                                     scene->structures_system, spawner->position,
+                                     spawner->grid_size, spawner->b2_block_side_size,
+                                     scene->blueprint_loader, 3);
+        spawner->dock->interface->assemble_blueprint->bind_on_mouse_release(
+                [weak_scene, weak_spawner](sf::Event &event, EngineContext &ctx) {
+                    auto scene = weak_scene.lock();
+                    auto spawner = weak_spawner.lock();
+                    scene->structures_system->create_structure(spawner->dock->editor_controller->builder->blueprint,
+                                                               spawner->dock->position, ctx);
+                    scene->world->delete_node(spawner->dock);
+                    spawner->dock = nullptr;
+                    scene->world_camera->set_locked(false);
+                });
+        spawner->dock->interface->quit_dock->bind_on_mouse_release(
+                [weak_scene, weak_spawner](sf::Event &event, EngineContext &ctx) {
+                    auto scene = weak_scene.lock();
+                    auto spawner = weak_spawner.lock();
+                    scene->world->delete_node(spawner->dock);
+                    spawner->dock = nullptr;
+                    scene->world_camera->set_locked(false);
+                });
+        scene->world_camera->set_camera_target({0, 0});
+        scene->world_camera->set_zoom(1);
+    });
+}

@@ -21,9 +21,7 @@ public:
 
     void flush(EngineContext &ctx);
 
-    void set_texture(sf::Texture *new_texture);
-
-
+    void set_texture(const sf::Texture  &new_texture,EngineContext &ctx);
 };
 
 

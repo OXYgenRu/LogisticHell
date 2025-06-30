@@ -65,6 +65,10 @@ void Node::set_origin(const sf::Vector2f &position) {
     this->transform.setOrigin(position);
 }
 
+void Node::set_scale(float new_scale) {
+    this->transform.setScale(new_scale, new_scale);
+}
+
 const sf::Vector2f &Node::get_position() {
     return transform.getPosition();
 }

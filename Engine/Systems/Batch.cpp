@@ -24,6 +24,10 @@ void Batch::flush(EngineContext &ctx) {
 
 }
 
-void Batch::set_texture(sf::Texture *new_texture) {
-    this->states.texture = new_texture;
+void Batch::set_texture(const sf::Texture &new_texture, EngineContext &ctx) {
+    if (this->states.texture == &new_texture) {
+        return;
+    }
+    this->flush(ctx);
+    this->states.texture = &new_texture;
 }

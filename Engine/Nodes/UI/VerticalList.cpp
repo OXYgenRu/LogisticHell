@@ -21,7 +21,7 @@ void UI::ListItem::setup(std::shared_ptr<UI::ListItem> &node, EngineContext &ctx
     node->text_layer = Node::create(node, 1);
     node->text = Text::create(node->text_layer);
     node->text->set_font("C:/Windows/Fonts/arial.ttf");
-    node->text->text.setString("Test Text");
+    node->text->set_text("Test text");
 }
 
 

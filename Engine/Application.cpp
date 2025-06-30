@@ -31,7 +31,7 @@ void Application::start() {
     std::shared_ptr<Node> scene = this->scene_system->currentScene;
     this->window->setFramerateLimit(this->frame_limit);
     this->texture_atlas->build();
-    this->batch->set_texture(this->texture_atlas->get_texture());
+    this->batch->set_texture(*this->texture_atlas->get_texture(), ctx);
     sf::Transform scene_transform;
     scene_transform.translate(this->get_window_size().x / 2, this->get_window_size().y / 2);
     try {

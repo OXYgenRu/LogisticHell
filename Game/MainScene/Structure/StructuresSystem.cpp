@@ -13,12 +13,10 @@ StructuresSystem::StructuresSystem(const std::shared_ptr<MainScene> &scene, floa
 
 void StructuresSystem::create_structure(std::shared_ptr<Blueprint> &blueprint, const sf::Vector2f &dock_position,
                                         EngineContext &ctx) {
-    scene.lock()->world_camera->set_locked(false);
     std::shared_ptr<Structure> new_structure = std::make_shared<Structure>(blueprint);
     float pixels_per_meter = this->scene.lock()->world->pixel_per_meter;
     this->structures.push_back(new_structure);
     for (auto &blueprint_component: blueprint->components) {
-//        std::shared_ptr<Node> new_node = Node::create(world);
         std::shared_ptr<Component> new_component = Component::create(scene.lock()->world, new_structure);
         new_structure->components.push_back(new_component);
         b2BodyDef new_def = b2DefaultBodyDef();
@@ -35,8 +33,6 @@ void StructuresSystem::create_structure(std::shared_ptr<Blueprint> &blueprint, c
                 break;
         }
         new_component->rigid_body = RigidBody::create(scene.lock()->world, new_def);
-
-//        b2Body_SetAngularVelocity(new_component->rigid_body->body_id, 1);
         for (int i = 0; i < blueprint->grid_size.y; i++) {
             for (int j = 0; j < blueprint->grid_size.x; j++) {
                 if (blueprint_component->get_block({j, i}).type == BlockType::BusyAttachable) {
@@ -87,7 +83,7 @@ void StructuresSystem::create_structure(std::shared_ptr<Blueprint> &blueprint, c
             std::shared_ptr<RigidBody> body_b = new_structure->units[j]->get_block(
                     joint.component_block_b)->get_component()->rigid_body;
             b2RevoluteJointDef joint_def = b2DefaultRevoluteJointDef();
-            b2Vec2 world_point = {dock_position.x / pixels_per_meter,-dock_position.y / pixels_per_meter};
+            b2Vec2 world_point = {dock_position.x / pixels_per_meter, -dock_position.y / pixels_per_meter};
             world_point += {float(joint.block_position.x) * block_side_size,
                             float(joint.block_position.y) * block_side_size};
             joint_def.localAnchorA =
@@ -98,5 +94,9 @@ void StructuresSystem::create_structure(std::shared_ptr<Blueprint> &blueprint, c
                                                std::make_shared<RevoluteJoint>(body_a, body_b, joint_def));
         }
     }
-
+    for(auto &component : new_structure->components){
+        component->set_position(component->rigid_body->get_position());
+        component->set_rotation(component->rigid_body->get_rotation());
+        component->set_origin(component->rigid_body->get_origin());
+    }
 }

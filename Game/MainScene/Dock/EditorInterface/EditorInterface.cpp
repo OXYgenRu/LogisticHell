@@ -19,6 +19,9 @@ EditorInterface::create(const std::shared_ptr<Node> &parent, EngineContext &ctx,
 void EditorInterface::setup(const std::shared_ptr<EditorInterface> &node, EngineContext &ctx,
                             const std::shared_ptr<Dock> &dock,
                             const std::shared_ptr<BlueprintLoader> &blueprint_loader) {
+
+    std::weak_ptr<Dock> weak_dock = dock;
+
     node->dock = dock;
     node->buttons_layer = Node::create(node);
     node->buttons_layer->set_position({0, ctx.app->get_window_size().y - 130});
@@ -45,33 +48,22 @@ void EditorInterface::setup(const std::shared_ptr<EditorInterface> &node, Engine
         node->destroying_mode->set_texture("remove_icon", ctx);
         node->destroying_mode->set_hold_reaction(true);
 
+        node->quit_dock = UI::Button::create(node->buttons_layer, ctx, 2);
+        node->quit_dock->set_rectangle({390, 30}, {480, 120});
+        node->quit_dock->set_texture("quit_dock", ctx);
+        node->quit_dock->set_hold_reaction(true);
+
 
     }
 
 
-//    node->text = Text::create(node);
-//    node->text->set_font("C:/Windows/Fonts/arial.ttf");
-//    node->text->text.setString("Dock");
-//    node->text->text.setPosition(1430, 200);
-//    node->text->text.setFillColor(sf::Color::Black);
-//    node->text->text.setCharacterSize(30);
-//
-//    node->selected_unit = Text::create(node);
-//    node->selected_unit->set_font("C:/Windows/Fonts/arial.ttf");
-//    node->selected_unit->text.setString("");
-//    node->selected_unit->text.setPosition(1430, 500);
-//    node->selected_unit->text.setFillColor(sf::Color::Black);
-//    node->selected_unit->text.setCharacterSize(30);
-
-
-
     {
-        node->attachment_mode->bind_on_mouse_release([dock, node](sf::Event &event, EngineContext &ctx) {
-            dock->editor_controller->set_mode(EditorMode::Attachment, ctx);
+        node->attachment_mode->bind_on_mouse_release([weak_dock](sf::Event &event, EngineContext &ctx) {
+            weak_dock.lock()->editor_controller->set_mode(EditorMode::Attachment, ctx);
 
         });
-        node->destroying_mode->bind_on_mouse_release([dock, node](sf::Event &event, EngineContext &ctx) {
-            dock->editor_controller->set_mode(EditorMode::Destroying, ctx);
+        node->destroying_mode->bind_on_mouse_release([weak_dock](sf::Event &event, EngineContext &ctx) {
+            weak_dock.lock()->editor_controller->set_mode(EditorMode::Destroying, ctx);
         });
     }
     node->inventory = BlocksInventory::create(node, ctx, dock, {300, 800}, blueprint_loader, 3);

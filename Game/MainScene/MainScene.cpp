@@ -8,6 +8,7 @@
 
 void MainScene::init_tree(EngineContext &ctx) {
     auto scene = std::static_pointer_cast<MainScene>(shared_from_this());
+    std::weak_ptr<MainScene> weak_scene = scene;
     ctx.app->set_background_color(sf::Color(1, 2, 74));
     blueprint_loader = std::make_shared<BlueprintLoader>();
 
@@ -79,40 +80,9 @@ void MainScene::init_tree(EngineContext &ctx) {
                                        {800,  450},
                                        {-800, 450}});
     world_camera = CameraNode::create(scene, ctx, 1);
-
-
-    std::shared_ptr<UI::Button> go_to_dock = UI::Button::create(world_camera, ctx, 0);
-    go_to_dock->set_position({-800, -450});
-    go_to_dock->set_rectangle({0, 0}, {200, 200});
-    go_to_dock->set_color(sf::Color(1, 106, 20));
-    go_to_dock->set_hold_reaction(true);
-
-
-    world = World::create(world_camera, b2Vec2({0, -1}), 240, 1);
-    auto dock_rectangle = UI::Rectangle::create(world, ctx, -1);
-    dock_rectangle->set_rectangle({0, 0}, {800, 450});
-    dock_rectangle->set_color(sf::Color(1, 56, 20));
-//    world->set_position({-ctx.app->get_window_size().x / 2, -ctx.app->get_window_size().y / 2});
-    structures_system = std::make_shared<StructuresSystem>(std::static_pointer_cast<MainScene>(scene), 0.2);
-
-    //    dock->interface->assemble_blueprint.bi
-    go_to_dock->bind_on_mouse_release([scene](sf::Event &event, EngineContext &ctx) {
-        scene->world->delete_node(scene->dock);
-        scene->dock = Dock::create(scene->world, ctx, scene->world, scene->world_camera,
-                                   scene->structures_system, {100, 0},
-                                   sf::Vector2i({10, 10}), 0.2,
-                                   scene->blueprint_loader, 3);
-        scene->dock->interface->assemble_blueprint->bind_on_mouse_release(
-                [scene](sf::Event &event, EngineContext &ctx) {
-                    scene->structures_system->create_structure(scene->dock->editor_controller->builder->blueprint,
-                                                               scene->dock->position, ctx);
-                    scene->world->delete_node(scene->dock);
-                    scene->dock = nullptr;
-                });
-        scene->world_camera->set_camera_target({0, 0});
-        scene->world_camera->set_zoom(1);
-    });
-
+    structures_system = std::make_shared<StructuresSystem>(scene, 0.2);
+    world = World::create(world_camera, b2Vec2({0, -9.8}), 120, 1);
+    dock_spawner = DockSpawner::create(world_camera, ctx, scene, {300, 300}, {10, 10}, 0.2, 0);
 
 }
 

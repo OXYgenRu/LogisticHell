@@ -54,6 +54,8 @@ public:
 
     void set_origin(const sf::Vector2f &position);
 
+    void set_scale(float new_scale);
+
     const sf::Vector2f &get_origin();
 
     const sf::Vector2f &get_position();

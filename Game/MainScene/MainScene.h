@@ -30,7 +30,7 @@ public:
     std::shared_ptr<World> world;
     std::shared_ptr<StructuresSystem> structures_system;
     std::shared_ptr<BlueprintLoader> blueprint_loader;
-    std::shared_ptr<Dock> dock;
+    std::shared_ptr<DockSpawner> dock_spawner;
 
 };
 

@@ -42,6 +42,7 @@ int main() {
     app.texture_atlas->register_texture("joint-background-0_0", "units/joint/Joint-background3.png");
     app.texture_atlas->register_texture("joint-background-0_1", "units/joint/Joint-background2.png");
     app.texture_atlas->register_texture("joint-background-0_2", "units/joint/Joint-background1.png");
+    app.texture_atlas->register_texture("quit_dock", "blocks/QuitDock.png");
     app.start();
 
     

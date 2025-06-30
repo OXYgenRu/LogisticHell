@@ -9,16 +9,60 @@
 std::shared_ptr<Text> Text::create(const std::shared_ptr<Node> &parent, int render_priority) {
     auto node = std::make_shared<Text>(parent, render_priority);
     parent->add_node(node);
+    Text::setup(node);
     return node;
 }
 
+
+void Text::setup(const std::shared_ptr<Text> &node) {
+    node->character_size = 10;
+    node->vertices.setPrimitiveType(sf::Quads);
+}
+
 void Text::render(EngineContext &ctx, sf::RenderStates &states) {
-    ctx.app->batch->flush(ctx);
-    ctx.app->window->draw(this->text, states);
+    ctx.app->batch->set_texture(font.getTexture(character_size), ctx);
+    ctx.app->batch->add_vertices(vertices, states.transform);
+    font.setSmooth(false);
 }
 
 void Text::update(EngineContext &ctx) {
 
+}
+
+void Text::update_text() {
+    vertices.clear();
+
+    float x = 0.0f;
+    float y = -font.getGlyph('A', character_size, false).bounds.top;
+
+    for (char c: text) {
+        if (c == '\n') {
+            x = 0;
+            y += font.getLineSpacing(character_size);
+            continue;
+        }
+        const sf::Glyph &glyph = font.getGlyph(c, character_size, false);
+        sf::FloatRect bounds = glyph.bounds;
+        sf::IntRect textureRect = glyph.textureRect;
+
+        float x0 = x + bounds.left;
+        float y0 = y + bounds.top;
+        float x1 = x0 + bounds.width;
+        float y1 = y0 + bounds.height;
+
+        auto u0 = static_cast<float>(textureRect.left);
+        auto v0 = static_cast<float>(textureRect.top);
+        auto u1 = static_cast<float>(textureRect.left + textureRect.width);
+        auto v1 = static_cast<float>(textureRect.top + textureRect.height);
+
+
+        vertices.append(sf::Vertex({x0, y0}, color, {u0, v0}));
+        vertices.append(sf::Vertex({x1, y0}, color, {u1, v0}));
+        vertices.append(sf::Vertex({x1, y1}, color, {u1, v1}));
+        vertices.append(sf::Vertex({x0, y1}, color, {u0, v1}));
+
+        x += glyph.advance;
+    }
 }
 
 int Text::get_node_type() const {
@@ -27,7 +71,18 @@ int Text::get_node_type() const {
 
 void Text::set_font(const std::string &path) {
     if (!this->font.loadFromFile(path)) {
-        exit(0);
+        throw std::runtime_error("Font loading error");
     }
-    this->text.setFont(this->font);
+    update_text();
+}
+
+
+void Text::set_character_size(int new_character_size) {
+    this->character_size = new_character_size;
+    update_text();
+}
+
+void Text::set_text(const std::string &new_text) {
+    this->text = new_text;
+    update_text();
 }

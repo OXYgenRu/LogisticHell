@@ -14,6 +14,8 @@ public:
 
     explicit Text(const std::shared_ptr<Node> &parent, int render_priority = 0) : Node(parent, render_priority) {}
 
+    static void setup(const std::shared_ptr<Text> &node);
+
     void render(EngineContext &ctx, sf::RenderStates &states) override;
 
     void update(EngineContext &ctx) override;
@@ -22,8 +24,20 @@ public:
 
     void set_font(const std::string &path);
 
+    void set_character_size(int new_character_size);
+
+    void set_text(const std::string &new_text);
+
+    void set_color(const sf::Color &new_color);
+
+private:
+    void update_text();
+
+    sf::VertexArray vertices;
+    sf::Color color;
     sf::Font font;
-    sf::Text text;
+    int character_size;
+    std::string text;
 };
 
 

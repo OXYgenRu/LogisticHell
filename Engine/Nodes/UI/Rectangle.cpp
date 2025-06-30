@@ -46,5 +46,6 @@ void UI::Rectangle::set_color(sf::Color color) {
 
 
 void UI::Rectangle::render(EngineContext &ctx, sf::RenderStates &states) {
+    ctx.app->batch->set_texture(*ctx.app->texture_atlas->get_texture(), ctx);
     ctx.app->batch->add_vertices(this->vertices, states.transform);
 }

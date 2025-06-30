@@ -9,6 +9,7 @@
 #include "../../../Engine/Nodes/Base/CameraNode.h"
 #include "../../../Engine/Nodes/Base/Node.h"
 #include "../../../Engine/Nodes/UI/Collider.h"
+#include "../../../Engine/Nodes/UI/Button.h"
 
 class UIScene : public Scene {
 public:
@@ -24,8 +25,7 @@ public:
     void update(EngineContext &ctx) override;
 
     std::shared_ptr<CameraNode> camera;
-    std::shared_ptr<UI::Collider> ui_collider;
-    std::shared_ptr<Node> c1;
+    std::shared_ptr<UI::Button> ui_collider;
 
 };
 

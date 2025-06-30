@@ -18,6 +18,7 @@
 #include "../Structure/StructuresSystem.h"
 #include "../../../Engine/Nodes/Base/CameraNode.h"
 
+
 class Dock : public Node {
 public:
     static std::shared_ptr<Dock>
@@ -48,6 +49,29 @@ public:
     std::shared_ptr<CameraNode> camera;
     std::weak_ptr<StructuresSystem> structures_system;
     std::weak_ptr<World> world;
+};
+
+class DockSpawner : public Node {
+private:
+    sf::Vector2i grid_size;
+    sf::Vector2f position;
+    float b2_block_side_size;
+    std::weak_ptr<MainScene> scene;
+    std::shared_ptr<Dock> dock;
+    std::shared_ptr<UI::Button> dock_area;
+    std::shared_ptr<Text> text;
+public:
+    static std::shared_ptr<DockSpawner>
+    create(const std::shared_ptr<Node> &parent, EngineContext &ctx, const std::shared_ptr<MainScene> &scene,
+           const sf::Vector2f &position, const sf::Vector2i &grid_size, float b2_block_side_size,
+           int render_priority = 0);
+
+    explicit DockSpawner(const std::shared_ptr<Node> &parent, int render_priority = 0) : Node(parent,
+                                                                                              render_priority) {}
+
+    static void
+    setup(const std::shared_ptr<DockSpawner> &node, EngineContext &ctx, const std::shared_ptr<MainScene> &scene,
+          const sf::Vector2f &position, const sf::Vector2i &grid_size, float b2_block_side_size);
 };
 
 
