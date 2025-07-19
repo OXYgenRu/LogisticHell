@@ -33,11 +33,11 @@ class RigidBody;
 class World : public Node {
 public:
     static std::shared_ptr<World>
-    create(const std::shared_ptr<Node> &parent, b2Vec2 gravity, float pixel_per_meter, int render_priority = 0);
+    create(const std::shared_ptr<Node> &parent, b2Vec2 gravity, float pixel_per_meter,  const std::string &node_id,int render_priority = 0);
 
 
-    explicit World(const std::shared_ptr<Node> &parent, int render_priority = 0)
-            : Node(parent, render_priority) {}
+    explicit World(const std::shared_ptr<Node> &parent, const std::string &node_id, int render_priority = 0)
+            : Node(parent,node_id, render_priority) {}
 
     ~World();
 

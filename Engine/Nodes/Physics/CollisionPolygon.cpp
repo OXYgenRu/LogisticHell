@@ -7,9 +7,9 @@
 
 std::shared_ptr<CollisionPolygon>
 CollisionPolygon::create(const std::shared_ptr<Node> &parent, const std::shared_ptr<RigidBody> &rigid_body,
-                         b2ShapeDef &shape_def, b2Polygon &polygon,
+                         b2ShapeDef &shape_def, b2Polygon &polygon, const std::string &node_id,
                          int render_priority) {
-    auto node = std::make_shared<CollisionPolygon>(parent, render_priority);
+    auto node = std::make_shared<CollisionPolygon>(parent, node_id, render_priority);
     node->shape_def = shape_def;
     node->polygon = polygon;
     node->rigid_body = rigid_body;
@@ -28,4 +28,5 @@ void CollisionPolygon::destroy() {
         return;
     }
     b2DestroyShape(this->shape_id, true);
+    std::cout << "Shape destroyed" << '\n';
 }

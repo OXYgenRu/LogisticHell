@@ -23,13 +23,19 @@ enum class ComponentBodyType {
 
 struct BlueprintBlock {
     BlockType type;
+    float density;
+    float friction;
 
     BlueprintBlock() {
         type = BlockType::Empty;
+        density = 1000;
+        friction = 0.3;
     }
 
-    BlueprintBlock(BlockType block_type) {
+    BlueprintBlock(BlockType block_type, float new_density, float new_friction) {
         type = block_type;
+        density = new_density;
+        friction = new_friction;
     }
 };
 

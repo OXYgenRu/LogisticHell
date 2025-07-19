@@ -14,11 +14,11 @@
 class RigidBody : public Node {
 public:
     static std::shared_ptr<RigidBody>
-    create(const std::shared_ptr<World> &world, b2BodyDef &body_def,
+    create(const std::shared_ptr<World> &world, b2BodyDef &body_def, const std::string &node_id,
            int render_priority = 0);
 
-    explicit RigidBody(const std::shared_ptr<Node> &parent, int render_priority = 0)
-            : Node(parent, render_priority) {}
+    explicit RigidBody(const std::shared_ptr<Node> &parent, const std::string &node_id, int render_priority = 0)
+            : Node(parent, node_id, render_priority) {}
 
     ~RigidBody();
 
@@ -27,7 +27,6 @@ public:
     void destroy();
 
     void update(EngineContext &ctx);
-
 
 
     b2BodyId body_id;

@@ -1,32 +1,34 @@
 //
-// Created by EgorRychkov on 17.06.2025.
+// Created by EgorRychkov on 03.07.2025.
 //
 
-#include "RevoluteJoint.h"
+#include "WeldJoint.h"
+
+
 #include "World.h"
 #include "RigidBody.h"
 
-RevoluteJoint::RevoluteJoint(const std::shared_ptr<RigidBody> &body_a,
+WeldJoint::WeldJoint(const std::shared_ptr<RigidBody> &body_a,
                              const std::shared_ptr<RigidBody> &body_b,
-                             b2RevoluteJointDef &joint_def) {
+                             b2WeldJointDef &joint_def) {
     this->body_a = body_a;
     this->body_b = body_b;
     joint_def.bodyIdA = body_a->body_id;
     joint_def.bodyIdB = body_b->body_id;
     joint_def.collideConnected = true;
-    this->joint_id = b2CreateRevoluteJoint(body_a->world.lock()->world_id, &joint_def);
+    this->joint_id = b2CreateWeldJoint(body_a->world.lock()->world_id, &joint_def);
 
 }
 
-RevoluteJoint::~RevoluteJoint() {
+WeldJoint::~WeldJoint() {
     this->destroy();
 }
 
-void RevoluteJoint::destroy() {
+void WeldJoint::destroy() {
     if (!b2Joint_IsValid(this->joint_id)) {
         return;
     }
     b2DestroyJoint(joint_id);
-    std::cout << "RevoluteJoint destroyed" << '\n';
+    std::cout << "WeldJoint destroyed" << '\n';
 }
 

@@ -4,17 +4,19 @@
 #include "Node.h"
 
 
-std::shared_ptr<Node> Node::create(const std::shared_ptr<Node> &parent, int render_priority) {
-    auto node = std::make_shared<Node>(parent, render_priority);
+std::shared_ptr<Node>
+Node::create(const std::shared_ptr<Node> &parent, const std::string &node_id, int render_priority) {
+    auto node = std::make_shared<Node>(parent, node_id, render_priority);
     parent->add_node(node);
     return node;
 }
 
-Node::Node(const std::shared_ptr<Node> &parent, int render_priority) {
+Node::Node(const std::shared_ptr<Node> &parent, const std::string &node_id, int render_priority) {
     this->parent = parent;
     this->render_priority = render_priority;
     this->container_volume = 0;
     this->priority_as_relative = true;
+    this->node_id = node_id;
 }
 
 void Node::set_render_flag(bool flag) {
@@ -163,3 +165,8 @@ void Node::clear_container() {
     this->container.clear();
     this->container_volume = 0;
 }
+
+
+std::string &Node::get_node_id() {
+    return node_id;
+};

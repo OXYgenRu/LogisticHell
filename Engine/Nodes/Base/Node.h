@@ -12,11 +12,12 @@
 class Node : public std::enable_shared_from_this<Node> {
 public:
 
-    static std::shared_ptr<Node> create(const std::shared_ptr<Node> &parent, int render_priority = 0);
+    static std::shared_ptr<Node>
+    create(const std::shared_ptr<Node> &parent, const std::string &node_id, int render_priority = 0);
 
     virtual ~Node() = default;
 
-    explicit Node(const std::shared_ptr<Node> &parent, int render_priority = 0);
+    explicit Node(const std::shared_ptr<Node> &parent, const std::string &node_id, int render_priority = 0);
 
 
     virtual void render(EngineContext &ctx, sf::RenderStates &states);
@@ -70,6 +71,7 @@ public:
 
     void delete_node(const std::shared_ptr<Node> &node);
 
+    std::string &get_node_id();
 
     int get_container_volume() const;
 
@@ -86,6 +88,7 @@ private:
     bool update_enabled = true;
     std::vector<std::shared_ptr<Node>> container;
 protected:
+    std::string node_id;
     sf::Transformable transform;
 };
 

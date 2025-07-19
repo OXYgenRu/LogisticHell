@@ -7,16 +7,15 @@
 
 #include "../Base/Node.h"
 #include "SFML/Graphics.hpp"
+#include "functional"
 
 class Controller : public Node {
 public:
-    static std::shared_ptr<Controller> create(const std::shared_ptr<Node> &parent, int render_priority = 0);
+    static std::shared_ptr<Controller>
+    create(const std::shared_ptr<Node> &parent, const std::string &node_id, int render_priority = 0);
 
-    explicit Controller(const std::shared_ptr<Node> &parent, int render_priority = 0) : Node(parent, render_priority) {}
-
-    void render(EngineContext &ctx, sf::RenderStates &states) override;
-
-    void update(EngineContext &ctx) override;
+    explicit Controller(const std::shared_ptr<Node> &parent, const std::string &node_id, int render_priority = 0)
+            : Node(parent, node_id, render_priority) {}
 
     int get_node_type() const override;
 
@@ -31,6 +30,9 @@ public:
     virtual void on_mouse_moved(sf::Event &event, EngineContext &ctx);
 
     virtual void on_mouse_wheel_scrolled(sf::Event &event, EngineContext &ctx);
+
+private:
+
 };
 
 

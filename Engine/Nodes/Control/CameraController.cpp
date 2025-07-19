@@ -8,8 +8,9 @@
 
 std::shared_ptr<CameraController>
 CameraController::create(const std::shared_ptr<Node> &parent, const std::shared_ptr<CameraNode> &camera,
+                         const std::string &node_id,
                          int render_priority) {
-    auto node = std::make_shared<CameraController>(parent, render_priority);
+    auto node = std::make_shared<CameraController>(parent, node_id, render_priority);
     parent->add_node(node);
     node->start_mouse_pos = sf::Vector2f(0, 0);
     node->camera = camera;

@@ -9,8 +9,9 @@
 
 
 std::shared_ptr<DockController>
-DockController::create(const std::shared_ptr<Node> &parent,const  std::shared_ptr<Dock> &dock, int render_priority) {
-    auto node = std::make_shared<DockController>(parent, render_priority);
+DockController::create(const std::shared_ptr<Node> &parent, const std::shared_ptr<Dock> &dock,
+                       const std::string &node_id, int render_priority) {
+    auto node = std::make_shared<DockController>(parent, node_id, render_priority);
     node->dock = dock;
     parent->add_node(node);
     return node;

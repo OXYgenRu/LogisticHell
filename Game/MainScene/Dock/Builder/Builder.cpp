@@ -15,34 +15,34 @@ Builder::create(std::shared_ptr<BuildingGrid> building_grid, std::shared_ptr<Blu
 Builder::Builder(std::shared_ptr<BuildingGrid> building_grid, std::shared_ptr<BlueprintLoader> blueprint_loader) {
     this->building_grid = building_grid;
     this->blueprint_loader = blueprint_loader;
-    this->unit_index = 0;
     this->unit_id = "construction_block";
     this->preview_position = {0, 0};
 }
 
 void Builder::set_default_blueprint(EngineContext &ctx) {
     this->blueprint = std::make_shared<Blueprint>(this->building_grid->grid_size, 0);
-    BlueprintBlock &default_block = this->blueprint->add_component()->get_block({0, 0});
-    default_block.type = BlockType::BusyAttachable;
-
-    std::shared_ptr<UnitProperties> standard_blueprint_properties = std::make_shared<UnitProperties>(nullptr);
-    standard_blueprint_properties->add_render_feature(
-            UnitRenderFeature("main_texture", "construction_block", {0, 0}, 0, {-0.5, -0.5}, {1, 1}, 0));
-    standard_blueprint_properties->add_unit_block({0, 0});
-    this->blueprint->set_unit_properties({0, 0}, standard_blueprint_properties);
-    this->blueprint->add_unit_properties(standard_blueprint_properties);
-    this->building_grid->add_render_feature(standard_blueprint_properties->get_render_features()[0], ctx);
+//    BlueprintBlock &default_block = this->blueprint->add_component()->get_block({0, 0});
+//    default_block.type = BlockType::BusyAttachable;
+//
+//    std::shared_ptr<UnitProperties> standard_blueprint_properties = std::make_shared<UnitProperties>(nullptr);
+//    standard_blueprint_properties->add_render_feature(
+//            UnitRenderFeature("main_texture", "construction_block", {0, 0}, 0, {-0.5, -0.5}, {1, 1}, 0));
+//    standard_blueprint_properties->add_unit_block({0, 0});
+//    this->blueprint->set_unit_properties({0, 0}, standard_blueprint_properties);
+//    this->blueprint->add_unit_properties(standard_blueprint_properties);
+//    this->building_grid->add_render_feature(standard_blueprint_properties->get_render_features()[0], ctx);
+    std::shared_ptr<Blueprint> unit = this->blueprint_loader.lock()->create_blueprint(this->unit_id,
+                                                                                      this->preview_rotation);
+    this->set_blueprint(unit, ctx);
 }
 
 void Builder::attach_unit(sf::Vector2i position, EngineContext &ctx) {
-//    std::cout << "attach_unit" << '\n';
     std::shared_ptr<Blueprint> unit = this->blueprint_loader.lock()->create_blueprint(this->unit_id,
                                                                                       this->preview_rotation);
     sf::Vector2i unit_position = {position.x - unit->grid_size.x / 2, position.y - unit->grid_size.y / 2};
     if (!this->validate_unit_attachment(unit_position)) {
         return;
     }
-    this->blueprint->set_unit_properties(unit_position, unit->get_unit_properties({0, 0}));
     std::shared_ptr<BlueprintComponent> unit_attachment_base = this->blueprint_attachment_components[this->selected_blueprint_component_index];
     std::shared_ptr<BlueprintComponent> unit_connecting_component = unit->components[this->selected_preview_component_index];
     for (int y = 0; y < unit->grid_size.y; y++) {
@@ -72,7 +72,8 @@ void Builder::attach_unit(sf::Vector2i position, EngineContext &ctx) {
         }
     }
     for (auto &to: unit->get_units_properties()) {
-        std::shared_ptr<UnitProperties> new_unit_properties = std::make_shared<UnitProperties>(unit_position, to);
+        std::shared_ptr<UnitProperties> new_unit_properties = std::make_shared<UnitProperties>(unit_position, to,
+                                                                                               to->rotation);
         blueprint->add_unit_properties(new_unit_properties);
         for (sf::Vector2i &block_position: new_unit_properties->get_unit_blocks()) {
             blueprint->set_unit_properties(block_position, new_unit_properties);
@@ -318,4 +319,42 @@ void Builder::find_blueprint_attachment_components() {
 void Builder::set_unit_id(const std::string &new_unit_id) {
     this->unit_id = new_unit_id;
     this->selected_preview_component_index = 0;
+}
+
+
+void Builder::set_blueprint(const std::shared_ptr<Blueprint> &new_blueprint, EngineContext &ctx) {
+    for (int y = 0; y < blueprint->grid_size.y; y++) {
+        for (int x = 0; x < blueprint->grid_size.x; x++) {
+            this->building_grid->remove_features({x, y});
+        }
+    }
+    blueprint = std::make_shared<Blueprint>(this->building_grid->grid_size, 0);
+    for (auto &component: new_blueprint->components) {
+        std::shared_ptr<BlueprintComponent> new_component = this->blueprint->add_component();
+        new_component->set_body_type(component->get_body_type());
+        for (int y = 0; y < new_blueprint->grid_size.y; y++) {
+            for (int x = 0; x < new_blueprint->grid_size.x; x++) {
+                BlueprintBlock block = component->get_block({x, y});
+                if (block.type == BlockType::Empty) {
+                    continue;
+                }
+                new_component->set_block({x, y}, block);
+
+            }
+        }
+    }
+    for (auto &to: new_blueprint->get_units_properties()) {
+        std::shared_ptr<UnitProperties> new_unit_properties = std::make_shared<UnitProperties>(sf::Vector2i({0, 0}), to,
+                                                                                               to->rotation);
+        blueprint->add_unit_properties(new_unit_properties);
+        for (sf::Vector2i &block_position: new_unit_properties->get_unit_blocks()) {
+            blueprint->set_unit_properties(block_position, new_unit_properties);
+        }
+        for (UnitRenderFeature &feature: new_unit_properties->get_render_features()) {
+            if (!blueprint->is_cell_exist(feature.anchor_block)) {
+                continue;
+            }
+            building_grid->add_render_feature(feature, ctx);
+        }
+    }
 }

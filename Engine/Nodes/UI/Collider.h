@@ -7,15 +7,14 @@
 
 #include "../Base/Node.h"
 #include "SFML/Graphics.hpp"
-#include "Anchor.h"
 
 namespace UI {
     class Collider : public Node {
     public:
         static std::shared_ptr<Collider>
-        create(const std::shared_ptr<Node> &parent, int render_priority = 0);
+        create(const std::shared_ptr<Node> &parent,const std::string &node_id, int render_priority = 0);
 
-        explicit Collider(const std::shared_ptr<Node> &parent, int render_priority = 0) : Node(parent,
+        explicit Collider(const std::shared_ptr<Node> &parent, const std::string &node_id,int render_priority = 0) : Node(parent,node_id,
                                                                                                render_priority) {}
 
         static void setup(std::shared_ptr<Collider> &node);
@@ -32,6 +31,10 @@ namespace UI {
 
         void handle_mouse_move(sf::Event &event, EngineContext &ctx, const sf::Vector2f &local_position);
 
+        void handle_key_press(sf::Event &event, EngineContext &ctx, const sf::Vector2f &local_position);
+
+        void handle_key_release(sf::Event &event, EngineContext &ctx, const sf::Vector2f &local_position);
+
         void handle_mouse_enter(EngineContext &ctx, const sf::Vector2f &local_position);
 
         void handle_mouse_exit(EngineContext &ctx, const sf::Vector2f &local_position);
@@ -47,6 +50,12 @@ namespace UI {
                                                             const sf::Vector2f &local_position)> &new_function);
 
         void bind_on_mouse_moved(const std::function<void(sf::Event &event, EngineContext &ctx,
+                                                          const sf::Vector2f &local_position)> &new_function);
+
+        void bind_on_key_press(const std::function<void(sf::Event &event, EngineContext &ctx,
+                                                            const sf::Vector2f &local_position)> &new_function);
+
+        void bind_on_key_release(const std::function<void(sf::Event &event, EngineContext &ctx,
                                                           const sf::Vector2f &local_position)> &new_function);
 
         void bind_on_mouse_enter(
@@ -69,6 +78,16 @@ namespace UI {
                 const sf::Vector2f &local_position) {};
         std::function<void(sf::Event &event, EngineContext &ctx,
                            const sf::Vector2f &local_position)> on_mouse_moved = [](
+                sf::Event &event,
+                EngineContext &ctx,
+                const sf::Vector2f &local_position) {};
+        std::function<void(sf::Event &event, EngineContext &ctx,
+                           const sf::Vector2f &local_position)> on_key_press = [](
+                sf::Event &event,
+                EngineContext &ctx,
+                const sf::Vector2f &local_position) {};
+        std::function<void(sf::Event &event, EngineContext &ctx,
+                           const sf::Vector2f &local_position)> on_key_release = [](
                 sf::Event &event,
                 EngineContext &ctx,
                 const sf::Vector2f &local_position) {};

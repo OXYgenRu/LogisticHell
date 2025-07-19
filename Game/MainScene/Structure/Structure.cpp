@@ -8,3 +8,6 @@ Structure::Structure(const std::shared_ptr<Blueprint> &blueprint) {
     this->blueprint = blueprint;
 }
 
+Structure::~Structure(){
+    std::cout << "Structure destroyed" << '\n';
+}

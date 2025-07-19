@@ -15,11 +15,11 @@ namespace UI {
     class Button : public Node {
     public:
         static std::shared_ptr<Button>
-        create(const std::shared_ptr<Node> &parent, EngineContext &ctx,
+        create(const std::shared_ptr<Node> &parent, EngineContext &ctx, const std::string &node_id,
                int render_priority = 0);
 
-        explicit Button(const std::shared_ptr<Node> &parent, int render_priority = 0)
-                : Node(parent, render_priority) {}
+        explicit Button(const std::shared_ptr<Node> &parent, const std::string &node_id, int render_priority = 0)
+                : Node(parent, node_id, render_priority) {}
 
         static void setup(std::shared_ptr<Button> &node, EngineContext &ctx);
 

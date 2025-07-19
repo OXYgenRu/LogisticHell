@@ -4,8 +4,8 @@
 
 #include "Scene.h"
 
-std::shared_ptr<Scene> Scene::create(int render_priority_layers) {
-    auto node = std::make_shared<Scene>();
+std::shared_ptr<Scene> Scene::create(const std::string &node_id) {
+    auto node = std::make_shared<Scene>(node_id);
     return node;
 }
 

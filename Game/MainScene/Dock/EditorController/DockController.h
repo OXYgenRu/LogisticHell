@@ -12,10 +12,11 @@ class Dock;
 class DockController : public Controller {
 public:
     static std::shared_ptr<DockController>
-    create(const std::shared_ptr<Node> &parent, const std::shared_ptr<Dock> &dock, int render_priority = 0);
+    create(const std::shared_ptr<Node> &parent, const std::shared_ptr<Dock> &dock, const std::string &node_id,
+           int render_priority = 0);
 
-    explicit DockController(const std::shared_ptr<Node> &parent, int render_priority = 0) : Controller(parent,
-                                                                                                         render_priority) {}
+    explicit DockController(const std::shared_ptr<Node> &parent, const std::string &node_id,
+                            int render_priority = 0) : Controller(parent, node_id, render_priority) {}
 
     virtual void on_key_release(sf::Event &event, EngineContext &ctx);
 

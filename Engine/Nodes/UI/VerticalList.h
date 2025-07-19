@@ -16,11 +16,12 @@ namespace UI {
     public:
         static std::shared_ptr<ListItem>
         create(const std::shared_ptr<VerticalList> &parent, EngineContext &ctx, const sf::Vector2f &item_size,
+               const std::string &node_id,
                int render_priority = 0);
 
 
-        explicit ListItem(const std::shared_ptr<Node> &parent, int render_priority = 0)
-                : Node(parent, render_priority) {}
+        explicit ListItem(const std::shared_ptr<Node> &parent, const std::string &node_id, int render_priority = 0)
+                : Node(parent, node_id, render_priority) {}
 
         static void setup(std::shared_ptr<ListItem> &node, EngineContext &ctx, const sf::Vector2f &item_size);
 
@@ -33,12 +34,12 @@ namespace UI {
     public:
         static std::shared_ptr<VerticalList>
         create(const std::shared_ptr<Node> &parent, EngineContext &ctx,
-               const sf::Vector2f &container_size, int list_size,
+               const sf::Vector2f &container_size, int list_size,const std::string &node_id,
                int render_priority = 0);
 
 
-        explicit VerticalList(const std::shared_ptr<Node> parent, int render_priority = 0)
-                : Node(parent, render_priority) {}
+        explicit VerticalList(const std::shared_ptr<Node> &parent,const std::string &node_id, int render_priority = 0)
+                : Node(parent,node_id, render_priority) {}
 
         static void setup(std::shared_ptr<VerticalList> &node, EngineContext &ctx, const sf::Vector2f &container_size,
                           int list_size);

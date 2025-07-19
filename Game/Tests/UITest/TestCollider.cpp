@@ -5,8 +5,9 @@
 #include "TestCollider.h"
 #include "../../../Engine/Nodes/Base/Node.h"
 
-std::shared_ptr<TestCollider> TestCollider::create(const std::shared_ptr<Node> &parent, int render_priority) {
-    auto node = std::make_shared<TestCollider>(parent, render_priority);
+std::shared_ptr<TestCollider>
+TestCollider::create(const std::shared_ptr<Node> &parent, const std::string &node_id, int render_priority) {
+    auto node = std::make_shared<TestCollider>(parent, node_id, render_priority);
     parent->add_node(node);
     return node;
 }

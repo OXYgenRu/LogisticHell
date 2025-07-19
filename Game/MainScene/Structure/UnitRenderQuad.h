@@ -13,16 +13,18 @@
 class UnitRenderQuad : public TexturedQuad {
 public:
     static std::shared_ptr<UnitRenderQuad>
-    create(const std::shared_ptr<Node> &parent,EngineContext&ctx ,const std::string &texture_name, const sf::Vector2i &anchor_block,
+    create(const std::shared_ptr<Node> &parent, EngineContext &ctx, const std::string &texture_name,
+           const sf::Vector2i &anchor_block,
            const sf::Vector2f &position, const std::vector<sf::Vector2f> &vertices, float angle,
-           float sf_block_side_size,
+           float sf_block_side_size, const std::string &node_id,
            int render_priority = 0);
 
 
-    explicit UnitRenderQuad(const std::shared_ptr<Node> &parent, int render_priority = 0) : TexturedQuad(parent,
-                                                                                                         render_priority) {};
+    explicit UnitRenderQuad(const std::shared_ptr<Node> &parent, const std::string &node_id, int render_priority = 0)
+            : TexturedQuad(parent, node_id,
+                           render_priority) {};
 
-    static void setup(const std::shared_ptr<UnitRenderQuad> &node,EngineContext&ctx, const std::string &texture_name,
+    static void setup(const std::shared_ptr<UnitRenderQuad> &node, EngineContext &ctx, const std::string &texture_name,
                       const sf::Vector2i &anchor_block,
                       const sf::Vector2f &position, const std::vector<sf::Vector2f> &vertices, float angle,
                       float sf_block_side_size);

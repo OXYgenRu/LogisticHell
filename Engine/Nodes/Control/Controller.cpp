@@ -5,19 +5,13 @@
 #include "Controller.h"
 #include "../Base/Node.h"
 
-std::shared_ptr<Controller> Controller::create(const std::shared_ptr<Node> &parent, int render_priority) {
-    auto node = std::make_shared<Controller>(parent, render_priority);
+std::shared_ptr<Controller>
+Controller::create(const std::shared_ptr<Node> &parent, const std::string &node_id, int render_priority) {
+    auto node = std::make_shared<Controller>(parent, node_id, render_priority);
     parent->add_node(node);
     return node;
 }
 
-void Controller::render(EngineContext &ctx, sf::RenderStates &states) {
-
-}
-
-void Controller::update(EngineContext &ctx) {
-
-}
 
 int Controller::get_node_type() const {
     return 5;

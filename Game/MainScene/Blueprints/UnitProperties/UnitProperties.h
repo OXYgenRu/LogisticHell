@@ -11,11 +11,7 @@
 
 class Unit;
 
-class UnitBehavior {
-    virtual void on_update(const std::shared_ptr<Unit> &unit);
-
-    virtual void on_clicked(const std::shared_ptr<Unit> &unit);
-};
+class UnitBehavior;
 
 namespace BlueprintJoints {
     struct RevoluteJoint {
@@ -31,13 +27,17 @@ namespace BlueprintJoints {
             this->component_block_b = component_block_b;
         }
     };
+
+    struct WeldJoint {
+        
+    };
 }
 
 class UnitProperties {
 public:
-    UnitProperties(const std::shared_ptr<UnitBehavior> &behavior);
+    UnitProperties(const std::shared_ptr<UnitBehavior> &behavior, const sf::Vector2i &position, int rotation);
 
-    UnitProperties(const sf::Vector2i &position, const std::shared_ptr<UnitProperties> &other);
+    UnitProperties(const sf::Vector2i &position, const std::shared_ptr<UnitProperties> &other, int rotation);
 
     void add_revolute_joint(const BlueprintJoints::RevoluteJoint &new_revolute_joint);
 
@@ -53,6 +53,8 @@ public:
 
     std::vector<UnitRenderFeature> &get_render_features();
 
+    int rotation;
+    sf::Vector2i position;
 private:
     std::shared_ptr<UnitBehavior> behavior;
     std::vector<BlueprintJoints::RevoluteJoint> revolute_joints;

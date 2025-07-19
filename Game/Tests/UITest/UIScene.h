@@ -13,12 +13,12 @@
 
 class UIScene : public Scene {
 public:
-    static std::shared_ptr<UIScene> create(int render_priority_layers) {
-        auto node = std::make_shared<UIScene>();
+    static std::shared_ptr<UIScene> create(const std::string &node_id) {
+        auto node = std::make_shared<UIScene>(node_id);
         return node;
     }
 
-    UIScene() : Scene() {}
+    UIScene(const std::string &node_id) : Scene(node_id) {}
 
     void init_tree(EngineContext &ctx) override;
 

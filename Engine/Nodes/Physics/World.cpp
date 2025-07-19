@@ -8,8 +8,9 @@
 #include "RigidBody.h"
 
 std::shared_ptr<World>
-World::create(const std::shared_ptr<Node> &parent, b2Vec2 gravity, float pixel_per_meter, int render_priority) {
-    auto node = std::make_shared<World>(parent, render_priority);
+World::create(const std::shared_ptr<Node> &parent, b2Vec2 gravity, float pixel_per_meter, const std::string &node_id,
+              int render_priority) {
+    auto node = std::make_shared<World>(parent, node_id, render_priority);
     b2WorldDef world_def = b2DefaultWorldDef();
     world_def.gravity = gravity;
     node->world_id = b2CreateWorld(&world_def);

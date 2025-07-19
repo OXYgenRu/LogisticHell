@@ -11,9 +11,10 @@
 class TexturedQuad : public Node {
 public:
     static std::shared_ptr<TexturedQuad>
-    create(const std::shared_ptr<Node> &parent, int render_priority = 0);
+    create(const std::shared_ptr<Node> &parent, const std::string &node_id, int render_priority = 0);
 
-    explicit TexturedQuad(const std::shared_ptr<Node> &parent, int render_priority = 0) : Node(parent, render_priority) {}
+    explicit TexturedQuad(const std::shared_ptr<Node> &parent, const std::string &node_id, int render_priority = 0)
+            : Node(parent, node_id, render_priority) {}
 
     static void setup(std::shared_ptr<TexturedQuad> node);
 

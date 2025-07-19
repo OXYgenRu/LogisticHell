@@ -9,9 +9,9 @@ std::shared_ptr<UnitRenderQuad>
 UnitRenderQuad::create(const std::shared_ptr<Node> &parent, EngineContext &ctx, const std::string &texture_name,
                        const sf::Vector2i &anchor_block,
                        const sf::Vector2f &position, const std::vector<sf::Vector2f> &vertices, float angle,
-                       float sf_block_side_size,
+                       float sf_block_side_size, const std::string &node_id,
                        int render_priority) {
-    auto node = std::make_shared<UnitRenderQuad>(parent, render_priority);
+    auto node = std::make_shared<UnitRenderQuad>(parent, node_id, render_priority);
     TexturedQuad::setup(node);
     UnitRenderQuad::setup(node, ctx, texture_name, anchor_block, position, vertices, angle, sf_block_side_size);
     parent->add_node(node);

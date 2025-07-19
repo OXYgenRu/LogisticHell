@@ -6,36 +6,42 @@
 #include "../../Application.h"
 
 std::shared_ptr<UI::Button>
-UI::Button::create(const std::shared_ptr<Node> &parent, EngineContext &ctx,
+UI::Button::create(const std::shared_ptr<Node> &parent, EngineContext &ctx, const std::string &node_id,
                    int render_priority) {
-    auto node = std::make_shared<UI::Button>(parent, render_priority);
+    auto node = std::make_shared<UI::Button>(parent, node_id, render_priority);
     UI::Button::setup(node, ctx);
     parent->add_node(node);
     return node;
 }
 
 void UI::Button::setup(std::shared_ptr<Button> &node, EngineContext &ctx) {
+    std::weak_ptr<UI::Button> capture_weak_node = node;
     node->is_pressed = false;
     node->color = sf::Color(255, 255, 255);
     node->react_to_hold = false;
-    node->rectangle = UI::Rectangle::create(node, ctx);
-    node->collider = UI::Collider::create(node);
+    node->rectangle = UI::Rectangle::create(node, ctx,"ButtonRectangle");
+    node->collider = UI::Collider::create(node,"ButtonCollider");
     node->collider->bind_on_mouse_release(
-            [node](sf::Event &event, EngineContext &ctx, const sf::Vector2f &local_position) {
+            [capture_weak_node](sf::Event &event, EngineContext &ctx, const sf::Vector2f &local_position) {
+                auto node = capture_weak_node.lock();
                 node->handle_on_mouse_release(event, ctx);
             });
     node->collider->bind_on_mouse_press(
-            [node](sf::Event &event, EngineContext &ctx, const sf::Vector2f &local_position) {
+            [capture_weak_node](sf::Event &event, EngineContext &ctx, const sf::Vector2f &local_position) {
+                auto node = capture_weak_node.lock();
                 node->handle_on_mouse_press(event, ctx);
             });
     node->collider->bind_on_mouse_moved(
-            [node](sf::Event &event, EngineContext &ctx, const sf::Vector2f &local_position) {
+            [capture_weak_node](sf::Event &event, EngineContext &ctx, const sf::Vector2f &local_position) {
+                auto node = capture_weak_node.lock();
                 node->handle_on_mouse_move(event, ctx);
             });
-    node->collider->bind_on_mouse_enter([node](EngineContext &ctx, const sf::Vector2f &local_position) {
+    node->collider->bind_on_mouse_enter([capture_weak_node](EngineContext &ctx, const sf::Vector2f &local_position) {
+        auto node = capture_weak_node.lock();
         node->handle_on_mouse_enter(ctx);
     });
-    node->collider->bind_on_mouse_exit([node](EngineContext &ctx, const sf::Vector2f &local_position) {
+    node->collider->bind_on_mouse_exit([capture_weak_node](EngineContext &ctx, const sf::Vector2f &local_position) {
+        auto node = capture_weak_node.lock();
         node->handle_on_mouse_exit(ctx);
     });
 }

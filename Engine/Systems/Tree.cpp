@@ -128,7 +128,7 @@ void Tree::print_tree(std::shared_ptr<Node> &node, EngineContext &ctx) {
 }
 
 void Tree::traverse_print(std::shared_ptr<Node> &node, const std::string &indent) {
-    std::cout << indent << Node::get_node_type_str(node) << '\n';
+    std::cout << indent << node->get_node_id() << '\n';
     for (auto &child: node->get_container()) {
         this->traverse_print(child, indent + "-");
     }

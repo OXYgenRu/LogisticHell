@@ -6,8 +6,9 @@
 #include "../../Base/Node.h"
 #include "../../../Application.h"
 
-std::shared_ptr<Text> Text::create(const std::shared_ptr<Node> &parent, int render_priority) {
-    auto node = std::make_shared<Text>(parent, render_priority);
+std::shared_ptr<Text>
+Text::create(const std::shared_ptr<Node> &parent, const std::string &node_id, int render_priority) {
+    auto node = std::make_shared<Text>(parent, node_id, render_priority);
     parent->add_node(node);
     Text::setup(node);
     return node;
@@ -84,5 +85,10 @@ void Text::set_character_size(int new_character_size) {
 
 void Text::set_text(const std::string &new_text) {
     this->text = new_text;
+    update_text();
+}
+
+void Text::set_color(const sf::Color &new_color) {
+    this->color = new_color;
     update_text();
 }

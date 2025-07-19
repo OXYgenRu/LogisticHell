@@ -49,6 +49,14 @@ void UICollidersSystem::update(EngineContext &ctx) {
                     node->handle_mouse_move(event, ctx, localPos);
                     was_used = true;
                 }
+                if (event.type == sf::Event::KeyPressed) {
+                    node->handle_key_press(event, ctx, localPos);
+                    was_used = true;
+                }
+                if (event.type == sf::Event::KeyReleased) {
+                    node->handle_key_release(event, ctx, localPos);
+                    was_used = true;
+                }
             }
         }
     }
@@ -59,6 +67,12 @@ void UICollidersSystem::update(EngineContext &ctx) {
 
 
 void UICollidersSystem::collect_event(sf::Event &event) {
+    if (event.type == sf::Event::KeyPressed) {
+        this->control_events.push_back(event);
+    }
+    if (event.type == sf::Event::KeyReleased) {
+        this->control_events.push_back(event);
+    }
     if (event.type == sf::Event::MouseButtonPressed) {
         this->control_events.push_back(event);
     }
@@ -68,7 +82,7 @@ void UICollidersSystem::collect_event(sf::Event &event) {
     if (event.type == sf::Event::MouseMoved) {
         this->control_events.push_back(event);
     }
-//    if (event.type == sf::Event::MouseWheelScrolled) {
-//        this->control_events.push_back(event);
-//    }
+    if (event.type == sf::Event::MouseWheelScrolled) {
+        this->control_events.push_back(event);
+    }
 }

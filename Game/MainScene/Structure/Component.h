@@ -13,28 +13,29 @@
 #include "ComponentBlock.h"
 #include "../../../Engine/Nodes/Physics/World.h"
 #include "../Blueprints/BlueprintComponent/BlueprintComponent.h"
+#include "../../../Engine/Nodes/UI/Collider.h"
 
 class Structure;
 
 class Component : public Node {
 public:
     static std::shared_ptr<Component>
-    create(const std::shared_ptr<Node> &parent, const std::shared_ptr<Structure> &structure, int render_priority = 0);
+    create(const std::shared_ptr<Node> &parent, const std::shared_ptr<Structure> &structure, const std::string &node_id,
+           int render_priority = 0);
 
-    explicit Component(const std::shared_ptr<Node> &parent, int render_priority = 0)
-            : Node(parent, render_priority) {}
+    explicit Component(const std::shared_ptr<Node> &parent, const std::string &node_id, int render_priority = 0)
+            : Node(parent, node_id, render_priority) {}
 
     static void setup(std::shared_ptr<Component> &node, const std::shared_ptr<Structure> &structure);
 
     void update(EngineContext &ctx) override;
 
-    void create_block(const sf::Vector2i &position, BlueprintBlock &block, float block_side_size,
-                      const std::shared_ptr<Component> &component);
-
+    ~Component();
 
     sf::Vector2i grid_size;
     std::shared_ptr<RigidBody> rigid_body;
     std::vector<std::vector<std::shared_ptr<CollisionPolygon>>> collision_blocks;
+    std::vector<std::vector<std::shared_ptr<UI::Collider>>> colliders;
     std::vector<std::vector<std::shared_ptr<ComponentBlock>>> blocks;
     std::weak_ptr<Structure> structure;
 };

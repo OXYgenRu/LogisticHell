@@ -6,17 +6,18 @@
 #define LOGISTICHELL_RECTANGLE_H
 
 #include "../Base/Node.h"
-#include "Anchor.h"
 #include "../Render/Shapes/TexturedQuad.h"
 
 namespace UI {
     class Rectangle : public Node {
     public:
         static std::shared_ptr<Rectangle>
-        create(const std::shared_ptr<Node> &parent, EngineContext &ctx, int render_priority = 0);
+        create(const std::shared_ptr<Node> &parent, EngineContext &ctx, const std::string &node_id,
+               int render_priority = 0);
 
-        explicit Rectangle(const std::shared_ptr<Node> &parent, int render_priority = 0) : Node(parent,
-                                                                                                render_priority) {}
+        explicit Rectangle(const std::shared_ptr<Node> &parent, const std::string &node_id, int render_priority = 0)
+                : Node(parent, node_id,
+                       render_priority) {}
 
         static void setup(std::shared_ptr<Rectangle> &node, EngineContext &ctx);
 

@@ -5,11 +5,18 @@
 #include "UnitProperties.h"
 
 
-UnitProperties::UnitProperties(const std::shared_ptr<UnitBehavior> &behavior) {
+UnitProperties::UnitProperties(const std::shared_ptr<UnitBehavior> &behavior, const sf::Vector2i &position,
+                               int rotation) {
     this->behavior = behavior;
+    this->position = position;
+    this->rotation = rotation;
 }
 
-UnitProperties::UnitProperties(const sf::Vector2i &position, const std::shared_ptr<UnitProperties> &other) {
+UnitProperties::UnitProperties(const sf::Vector2i &position, const std::shared_ptr<UnitProperties> &other,
+                               int rotation) {
+    this->behavior = other->behavior;
+    this->rotation = rotation;
+    this->position = position + other->position;
     for (BlueprintJoints::RevoluteJoint &joint: other->get_revolute_joints()) {
         this->revolute_joints.emplace_back(joint.joint_name, joint.block_position + position,
                                            joint.component_block_a + position, joint.component_block_b + position);
@@ -52,10 +59,3 @@ std::vector<UnitRenderFeature> &UnitProperties::get_render_features() {
     return this->render_features;
 }
 
-void UnitBehavior::on_clicked(const std::shared_ptr<Unit> &unit) {
-
-}
-
-void UnitBehavior::on_update(const std::shared_ptr<Unit> &unit) {
-
-}

@@ -13,9 +13,9 @@
 
 int main() {
     Application app(sf::VideoMode(1600, 900), "LogisticHell", 165);
-    app.scene_system->registerScene(0, []() { return UIScene::create(10); });
-    app.scene_system->registerScene(3, []() { return MainScene::create(10); });
-    app.set_new_scene(3);
+    app.scene_system->registerScene(0, []() { return UIScene::create("UIScene"); });
+    app.scene_system->registerScene(1, []() { return MainScene::create("MainScene"); });
+    app.set_new_scene(1);
 
     app.texture_atlas->register_texture("empty_block", "blocks/EmptyGridBlockBlue.png");
     app.texture_atlas->register_texture("white", "blocks/WhiteStandart.png");
@@ -34,7 +34,6 @@ int main() {
     app.texture_atlas->register_texture("attach_icon", "blocks/Attach_icon.png");
     app.texture_atlas->register_texture("remove_icon", "blocks/Remove_icon.png");
     app.texture_atlas->register_texture("assemble_icon", "blocks/Assemble_icon.png");
-    app.texture_atlas->register_texture("joint", "blocks/TestJoint.png");
 
     app.texture_atlas->register_texture("joint-0_0", "units/joint/Joint-3.png");
     app.texture_atlas->register_texture("joint-0_1", "units/joint/Joint-2.png");
@@ -43,6 +42,11 @@ int main() {
     app.texture_atlas->register_texture("joint-background-0_1", "units/joint/Joint-background2.png");
     app.texture_atlas->register_texture("joint-background-0_2", "units/joint/Joint-background1.png");
     app.texture_atlas->register_texture("quit_dock", "blocks/QuitDock.png");
+
+    app.texture_atlas->register_texture("test_w_pusher", "blocks/TestWPusher.png");
+    app.texture_atlas->register_texture("test_d_pusher", "blocks/TestDPusher.png");
+    app.texture_atlas->register_texture("test_s_pusher", "blocks/TestSPusher.png");
+    app.texture_atlas->register_texture("test_a_pusher", "blocks/TestAPusher.png");
     app.start();
 
     

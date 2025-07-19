@@ -15,6 +15,9 @@ class Structure {
 public:
     Structure(const std::shared_ptr<Blueprint> &blueprint);
 
+    ~Structure();
+
+
     std::vector<std::shared_ptr<Unit>> units;
     std::vector<std::shared_ptr<Component>> components;
     std::shared_ptr<Blueprint> blueprint;

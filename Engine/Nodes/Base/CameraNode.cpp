@@ -7,12 +7,13 @@
 #include "../Control/CameraController.h"
 
 std::shared_ptr<CameraNode>
-CameraNode::create(const std::shared_ptr<Node> &parent, EngineContext &ctx, int render_priority) {
-    auto node = std::make_shared<CameraNode>(parent, render_priority);
+CameraNode::create(const std::shared_ptr<Node> &parent, EngineContext &ctx, const std::string &node_id,
+                   int render_priority) {
+    auto node = std::make_shared<CameraNode>(parent, node_id, render_priority);
     parent->add_node(node);
     node->zoom = 1;
     node->set_zoom(1);
-    node->camera_controller = CameraController::create(node, node, 0);
+    node->camera_controller = CameraController::create(node, node, "camera_controller", 0);
     return node;
 }
 

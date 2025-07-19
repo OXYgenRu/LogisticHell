@@ -11,11 +11,9 @@
 
 class Scene : public Node {
 public:
-    Scene() : Node(nullptr) {
+    Scene(const std::string &node_id) : Node(nullptr,node_id) {}
 
-    }
-
-    static std::shared_ptr<Scene> create(int render_priority_layers);
+    static std::shared_ptr<Scene> create(const std::string &node_id);
 
     int get_node_type() const override;
 

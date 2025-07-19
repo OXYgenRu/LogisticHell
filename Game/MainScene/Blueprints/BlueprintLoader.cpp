@@ -57,7 +57,13 @@ void BlueprintLoader::register_blueprint(const std::string &blueprint_id, Bluepr
         sf::Transform transform;
         transform.rotate(-float(90 * rotation));
         for (auto &to: template_units) {
-            std::shared_ptr<UnitProperties> new_properties = std::make_shared<UnitProperties>(to->get_behavior());
+            std::shared_ptr<UnitProperties> new_properties = std::make_shared<UnitProperties>(to->get_behavior(),
+                                                                                              get_block_position(
+                                                                                                      to->position,
+                                                                                                      blueprint->grid_size,
+                                                                                                      rotation),
+                                                                                              (to->rotation +
+                                                                                               rotation) % 4);
             blueprint->add_unit_properties(new_properties);
             for (auto &revolute_joint: to->get_revolute_joints()) {
                 new_properties->add_revolute_joint(BlueprintJoints::RevoluteJoint(revolute_joint.joint_name,

@@ -12,10 +12,12 @@ class CameraNode;
 class CameraController : public Controller {
 public:
     static std::shared_ptr<CameraController>
-    create(const std::shared_ptr<Node> &parent, const std::shared_ptr<CameraNode> &camera, int render_priority = 0);
+    create(const std::shared_ptr<Node> &parent, const std::shared_ptr<CameraNode> &camera, const std::string &node_id,
+           int render_priority = 0);
 
-    explicit CameraController(const std::shared_ptr<Node> &parent, int render_priority = 0) : Controller(parent,
-                                                                                                         render_priority) {}
+    explicit CameraController(const std::shared_ptr<Node> &parent, const std::string &node_id, int render_priority = 0)
+            : Controller(parent, node_id,
+                         render_priority) {}
 
     void render(EngineContext &ctx, sf::RenderStates &states) override;
 

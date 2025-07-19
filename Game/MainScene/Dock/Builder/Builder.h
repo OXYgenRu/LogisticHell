@@ -51,11 +51,12 @@ public:
 
     void set_unit_id(const std::string &new_unit_id);
 
+    void set_blueprint(const std::shared_ptr<Blueprint> &new_blueprint,EngineContext &ctx);
+
     std::string unit_id;
     std::shared_ptr<Blueprint> blueprint;
     std::weak_ptr<BlueprintLoader> blueprint_loader;
     std::shared_ptr<BuildingGrid> building_grid;
-    int unit_index;
 private:
     std::vector<std::shared_ptr<BlueprintComponent>> blueprint_attachment_components;
     int preview_rotation = 0;

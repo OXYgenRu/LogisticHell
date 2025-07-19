@@ -15,9 +15,9 @@ class BuildingGrid : public Node {
 public:
     static std::shared_ptr<BuildingGrid>
     create(const std::shared_ptr<Node> &parent, EngineContext &ctx, float sf_cell_size,
-           const sf::Vector2i &grid_size, int render_priority = 0);
+           const sf::Vector2i &grid_size,const std::string &node_id, int render_priority = 0);
 
-    explicit BuildingGrid(const std::shared_ptr<Node> &parent, int render_priority = 0) : Node(parent,
+    explicit BuildingGrid(const std::shared_ptr<Node> &parent, const std::string &node_id,int render_priority = 0) : Node(parent,node_id,
                                                                                                render_priority) {};
 
     static void

@@ -7,8 +7,8 @@
 #include "../../../Application.h"
 
 std::shared_ptr<TexturedQuad>
-TexturedQuad::create(const std::shared_ptr<Node> &parent, int render_priority) {
-    auto node = std::make_shared<TexturedQuad>(parent, render_priority);
+TexturedQuad::create(const std::shared_ptr<Node> &parent, const std::string &node_id, int render_priority) {
+    auto node = std::make_shared<TexturedQuad>(parent, node_id, render_priority);
     TexturedQuad::setup(node);
     parent->add_node(node);
     return node;

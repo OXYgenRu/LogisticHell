@@ -7,8 +7,9 @@
 #include "../../Application.h"
 
 std::shared_ptr<UI::Rectangle>
-UI::Rectangle::create(const std::shared_ptr<Node> &parent, EngineContext &ctx, int render_priority) {
-    auto node = std::make_shared<UI::Rectangle>(parent, render_priority);
+UI::Rectangle::create(const std::shared_ptr<Node> &parent, EngineContext &ctx, const std::string &node_id,
+                      int render_priority) {
+    auto node = std::make_shared<UI::Rectangle>(parent, node_id, render_priority);
     parent->add_node(node);
     UI::Rectangle::setup(node, ctx);
     return node;

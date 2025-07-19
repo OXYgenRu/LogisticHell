@@ -11,15 +11,16 @@
 #include "../../Engine/Nodes/Physics/World.h"
 #include "Dock/Dock.h"
 #include "Structure/StructuresSystem.h"
+#include "Dock/DocksSystem.h"
 
 class MainScene : public Scene {
 public:
-    static std::shared_ptr<MainScene> create(int render_priority_layers) {
-        auto node = std::make_shared<MainScene>();
+    static std::shared_ptr<MainScene> create(const std::string &node_id) {
+        auto node = std::make_shared<MainScene>(node_id);
         return node;
     }
 
-    MainScene() : Scene() {}
+    explicit MainScene(const std::string &node_id) : Scene(node_id) {}
 
     void init_tree(EngineContext &ctx) override;
 
@@ -29,9 +30,8 @@ public:
     std::shared_ptr<CameraNode> world_camera;
     std::shared_ptr<World> world;
     std::shared_ptr<StructuresSystem> structures_system;
+    std::shared_ptr<DocksSystem> docks_system;
     std::shared_ptr<BlueprintLoader> blueprint_loader;
-    std::shared_ptr<DockSpawner> dock_spawner;
-
 };
 
 

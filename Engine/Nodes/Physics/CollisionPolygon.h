@@ -11,12 +11,14 @@
 class CollisionPolygon : public Node {
 public:
     static std::shared_ptr<CollisionPolygon>
-    create(const std::shared_ptr<Node> &parent, const std::shared_ptr<RigidBody> &rigid_body, b2ShapeDef &shape_def,
-           b2Polygon &polygon,
+    create(const std::shared_ptr<Node> &parent, const std::shared_ptr<RigidBody> &rigid_body,
+           b2ShapeDef &shape_def,
+           b2Polygon &polygon, const std::string &node_id,
            int render_priority = 0);
 
-    explicit CollisionPolygon(const std::shared_ptr<Node> &parent, int render_priority = 0) : Node(parent,
-                                                                                                   render_priority) {}
+    explicit CollisionPolygon(const std::shared_ptr<Node> &parent, const std::string &node_id, int render_priority = 0)
+            : Node(parent, node_id,
+                   render_priority) {}
 
     ~CollisionPolygon();
 
