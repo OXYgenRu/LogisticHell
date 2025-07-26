@@ -12,7 +12,7 @@
 
 
 int main() {
-    Application app(sf::VideoMode(1600, 900), "LogisticHell", 165);
+    Application app(sf::VideoMode(1600, 900), "SignalsFromTheDepth", 165);
     app.scene_system->registerScene(0, []() { return UIScene::create("UIScene"); });
     app.scene_system->registerScene(1, []() { return MainScene::create("MainScene"); });
     app.set_new_scene(1);

@@ -10,9 +10,11 @@
 
 class Text : public Node {
 public:
-    static std::shared_ptr<Text> create(const std::shared_ptr<Node> &parent,  const std::string &node_id,int render_priority = 0);
+    static std::shared_ptr<Text>
+    create(const std::shared_ptr<Node> &parent, const std::string &node_id, int render_priority = 0);
 
-    explicit Text(const std::shared_ptr<Node> &parent, const std::string &node_id, int render_priority = 0) : Node(parent,node_id, render_priority) {}
+    explicit Text(const std::shared_ptr<Node> &parent, const std::string &node_id, int render_priority = 0) : Node(
+            parent, node_id, render_priority) {}
 
     static void setup(const std::shared_ptr<Text> &node);
 
@@ -29,6 +31,8 @@ public:
     void set_text(const std::string &new_text);
 
     void set_color(const sf::Color &new_color);
+
+    void set_smooth(bool smooth);
 
 private:
     void update_text();

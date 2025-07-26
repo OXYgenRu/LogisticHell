@@ -329,6 +329,15 @@ void Builder::set_blueprint(const std::shared_ptr<Blueprint> &new_blueprint, Eng
         }
     }
     blueprint = std::make_shared<Blueprint>(this->building_grid->grid_size, 0);
+
+    for (int y = 0; y < new_blueprint->grid_size.y; y++) {
+        for (int x = 0; x < new_blueprint->grid_size.x; x++) {
+            if (!new_blueprint->is_block_empty({x, y}) and !blueprint->is_cell_exist({x, y})) {
+                return;
+            }
+        }
+    }
+
     for (auto &component: new_blueprint->components) {
         std::shared_ptr<BlueprintComponent> new_component = this->blueprint->add_component();
         new_component->set_body_type(component->get_body_type());

@@ -47,6 +47,9 @@ void MainScene::init_tree(EngineContext &ctx) {
     auto scene = std::static_pointer_cast<MainScene>(shared_from_this());
     std::weak_ptr<MainScene> weak_scene = scene;
     ctx.app->set_background_color(sf::Color(1, 2, 74));
+    inspector = Inspector::create(scene, ctx, "Inspector", 100);
+    inspector->set_position({-ctx.app->get_window_size().x / 2, -ctx.app->get_window_size().y / 2});
+
     blueprint_loader = std::make_shared<BlueprintLoader>();
 
     Blueprint construction_block_blueprint({1, 1}, 0);
@@ -158,6 +161,7 @@ void MainScene::init_tree(EngineContext &ctx) {
     world = World::create(world_camera, b2Vec2({0, 0}), 120, "World", 1);
     docks_system = DocksSystem::create(scene, scene, "DockSystem");
     docks_system->create_dock_spawner(ctx, {300, 300}, {20, 20}, 0.2);
+    docks_system->create_dock_spawner(ctx, {-300, 300}, {5, 5}, 0.2);
 }
 
 void MainScene::update(EngineContext &ctx) {

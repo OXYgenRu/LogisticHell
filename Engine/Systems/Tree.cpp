@@ -13,6 +13,11 @@ bool compare_by_priority(const Leaf &a, const Leaf &b) {
 }
 
 
+bool compare_bypass_by_priority(const BypassUnit &a, const BypassUnit &b) {
+    return a.global_render_priority < b.global_render_priority;
+}
+
+
 void Tree::add_node(const std::shared_ptr<Node> &node, EngineContext &ctx, const sf::Transform &transform,
                     int render_priority) {
     if (this->free_tree_index == this->flatten_tree.size()) {
@@ -36,9 +41,9 @@ void Tree::drop_tree() {
 void Tree::traverse(std::shared_ptr<Node> &node, EngineContext &ctx, sf::Transform transform, int render_priority) {
     this->add_node(node, ctx, transform, render_priority);
     for (auto &child: node->get_container()) {
-        int new_render_priority = render_priority;
+        int new_render_priority = child->get_render_priority();
         if (child->get_priority_dependency()) {
-            new_render_priority += child->get_render_priority();
+            new_render_priority += render_priority;
         }
         if (child->get_node_type() == 6) {
             this->traverse(child, ctx, transform * child->get_transformable().getInverseTransform(),
@@ -114,22 +119,31 @@ std::vector<Leaf> &Tree::get_flatten_tree() {
     return this->flatten_tree;
 }
 
-
-void Tree::print_tree(std::shared_ptr<Node> &node, EngineContext &ctx) {
-    sf::Transform scene_transform;
-    scene_transform.translate(ctx.app->get_window_size().x / 2, ctx.app->get_window_size().y / 2);
-    this->traverse_print(node, "");
-    traverse(node, ctx, scene_transform, 0);
-    this->prepare_tree();
-    for (int i = 0; i < free_tree_index; i++) {
-        std::cout << Node::get_node_type_str(flatten_tree[i].node) << ' ' << flatten_tree[i].global_render_priority
-                  << '\n';
+void
+Tree::bypass_collection(const std::shared_ptr<Node> &node, int indent,
+                        std::vector<BypassUnit> &bypass, std::vector<std::string> &history, int render_priority) {
+    bypass.emplace_back(node, render_priority, history);
+    for (auto &child: node->get_container()) {
+        history.emplace_back(child->get_node_id());
+        int new_render_priority = child->get_render_priority();
+        if (child->get_priority_dependency()) {
+            new_render_priority += render_priority;
+        }
+        bypass_collection(child, indent + 1, bypass, history, new_render_priority);
+        history.pop_back();
     }
 }
 
-void Tree::traverse_print(std::shared_ptr<Node> &node, const std::string &indent) {
-    std::cout << indent << node->get_node_id() << '\n';
-    for (auto &child: node->get_container()) {
-        this->traverse_print(child, indent + "-");
-    }
+
+std::vector<BypassUnit> Tree::get_tree_bypass(EngineContext &ctx) {
+    std::vector<BypassUnit> bypass;
+    std::vector<std::string> history;
+    bypass_collection(std::static_pointer_cast<Node>(ctx.app->scene_system->currentScene), 0, bypass, history, 0);
+    return bypass;
+}
+
+std::vector<BypassUnit> Tree::get_sorted_tree_bypass(EngineContext &ctx) {
+    std::vector<BypassUnit> sorted_bypass = get_tree_bypass(ctx);
+    std::sort(sorted_bypass.begin(), sorted_bypass.end(), compare_bypass_by_priority);
+    return sorted_bypass;
 }

@@ -28,5 +28,7 @@ void World::destroy() {
     if (!b2World_IsValid(this->world_id)) {
         return;
     }
+    std::cout << "[PhysicalWrapper] " << "World destroying\n";
     b2DestroyWorld(this->world_id);
+    std::cout << "[PhysicalWrapper] " << "World destroyed\n";
 }

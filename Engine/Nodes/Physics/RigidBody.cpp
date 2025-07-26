@@ -42,12 +42,13 @@ RigidBody::~RigidBody() {
 }
 
 void RigidBody::destroy() {
-    std::cout << "Try RigidBody destroyed" << '\n';
+
     if (!b2Body_IsValid(this->body_id)) {
         return;
     }
+    std::cout << "[PhysicalWrapper] " << "Body destroying\n";
     b2DestroyBody(this->body_id);
-    std::cout << "RigidBody destroyed" << '\n';
+    std::cout << "[PhysicalWrapper] " << "Body destroyed\n";
 }
 
 

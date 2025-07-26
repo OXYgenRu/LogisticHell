@@ -42,7 +42,9 @@ void UI::Button::setup(std::shared_ptr<Button> &node, EngineContext &ctx) {
     });
     node->collider->bind_on_mouse_exit([capture_weak_node](EngineContext &ctx, const sf::Vector2f &local_position) {
         auto node = capture_weak_node.lock();
-        node->handle_on_mouse_exit(ctx);
+        if(node){
+            node->handle_on_mouse_exit(ctx);
+        }
     });
 }
 

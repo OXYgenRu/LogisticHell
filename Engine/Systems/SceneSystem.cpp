@@ -41,7 +41,6 @@ void SceneSystem::update_scene_selection(std::shared_ptr<Node> &scene, EngineCon
         currentScene->init_tree(ctx);
         loaded_scenes[selected_scene_id] = currentScene;
         scene = std::static_pointer_cast<Node>(currentScene);
-        ctx.app->tree->print_tree(scene, ctx);
         need_to_set_new_scene = false;
         return;
     }

@@ -26,6 +26,8 @@ public:
 
     void set_locked(bool is_locked);
 
+    float get_zoom();
+
     int get_node_type() const override;
 
     const sf::Transform &get_transform();

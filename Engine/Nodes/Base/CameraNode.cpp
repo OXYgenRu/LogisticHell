@@ -13,7 +13,7 @@ CameraNode::create(const std::shared_ptr<Node> &parent, EngineContext &ctx, cons
     parent->add_node(node);
     node->zoom = 1;
     node->set_zoom(1);
-    node->camera_controller = CameraController::create(node, node, "camera_controller", 0);
+    node->camera_controller = CameraController::create(node, node, "CameraController", 0);
     return node;
 }
 
@@ -37,4 +37,8 @@ const sf::Transform &CameraNode::get_transform() {
 void CameraNode::set_locked(bool is_locked) {
     this->locked = is_locked;
     this->camera_controller->set_update_flag(!is_locked);
+}
+
+float CameraNode::get_zoom() {
+    return zoom;
 }

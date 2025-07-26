@@ -30,12 +30,16 @@ void DocksSystem::spawn_dock(EngineContext &ctx, const sf::Vector2f &position, c
     auto capture_weak_scene = this->weak_scene;
     auto scene = this->weak_scene.lock();
     scene->delete_node(this->dock);
+    scene->world_camera->set_render_flag(false);
+    sf::Vector2f camera_position = scene->world_camera->get_position();
+    float camera_zoom = scene->world_camera->get_zoom();
+
     this->dock = Dock::create(scene, ctx, scene->world, scene->world_camera,
                               scene->structures_system, position,
                               grid_size, b2_block_side_size,
                               scene->blueprint_loader, "Dock", 5);
     this->dock->interface->assemble_blueprint->bind_on_mouse_release(
-            [capture_weak_scene](sf::Event &event, EngineContext &ctx) {
+            [capture_weak_scene, camera_position, camera_zoom](sf::Event &event, EngineContext &ctx) {
                 auto scene = capture_weak_scene.lock();
                 scene->structures_system->create_structure(
                         scene->docks_system->dock->editor_controller->builder->blueprint,
@@ -43,16 +47,22 @@ void DocksSystem::spawn_dock(EngineContext &ctx, const sf::Vector2f &position, c
                 scene->delete_node(scene->docks_system->dock);
                 scene->docks_system->dock = nullptr;
                 scene->world_camera->set_locked(false);
+                scene->world_camera->set_render_flag(true);
+                scene->world_camera->set_camera_target(camera_position);
+                scene->world_camera->set_zoom(camera_zoom);
             });
     this->dock->interface->quit_dock->bind_on_mouse_release(
-            [capture_weak_scene](sf::Event &event, EngineContext &ctx) {
+            [capture_weak_scene, camera_position, camera_zoom](sf::Event &event, EngineContext &ctx) {
                 auto scene = capture_weak_scene.lock();
                 scene->delete_node(scene->docks_system->dock);
                 scene->docks_system->dock = nullptr;
                 scene->world_camera->set_locked(false);
+                scene->world_camera->set_render_flag(true);
+                scene->world_camera->set_camera_target(camera_position);
+                scene->world_camera->set_zoom(camera_zoom);
             });
     if (blueprint != nullptr) {
-        this->dock->editor_controller->builder->set_blueprint(blueprint, ctx);
+        this->dock->set_blueprint(blueprint, ctx);
     }
     scene->world_camera->set_camera_target({0, 0});
     scene->world_camera->set_zoom(1);

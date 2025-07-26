@@ -27,6 +27,7 @@ void CollisionPolygon::destroy() {
     if (!b2Shape_IsValid(this->shape_id)) {
         return;
     }
+    std::cout << "[PhysicalWrapper] " << "Shape destroying\n";
     b2DestroyShape(this->shape_id, true);
-    std::cout << "Shape destroyed" << '\n';
+    std::cout << "[PhysicalWrapper] " << "World destroyed\n";
 }

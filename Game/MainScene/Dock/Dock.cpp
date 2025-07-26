@@ -59,14 +59,18 @@ void Dock::setup(const std::shared_ptr<Dock> &node, EngineContext &ctx, const st
     }
     node->editor_controller = EditorController::create(ctx, node, node->building_grid, blueprint_loader);
 
-    node->interface = EditorInterface::create(node, ctx, node, blueprint_loader, "DockInterface", 20);
+    node->interface = EditorInterface::create(node, ctx, node, blueprint_loader, "DockInterface", 9);
     node->interface->set_position({-ctx.app->get_window_size().x / 2, -ctx.app->get_window_size().y / 2});
 
-    node->background = UI::Button::create(node, ctx, 0);
+    node->background = UI::Button::create(node, ctx, "DockBackgroundButton", 0);
     node->background->set_rectangle(-ctx.app->get_window_size() * 0.5f, ctx.app->get_window_size() * 0.5f);
     node->background->set_color(sf::Color(1, 2, 74));
 }
 
+
+void Dock::set_blueprint(const std::shared_ptr<Blueprint> &blueprint, EngineContext &ctx) {
+    this->editor_controller->builder->set_blueprint(blueprint, ctx);
+}
 
 std::shared_ptr<DockSpawner>
 DockSpawner::create(const std::shared_ptr<Node> &parent, EngineContext &ctx, const std::shared_ptr<MainScene> &scene,

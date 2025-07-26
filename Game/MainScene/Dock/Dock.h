@@ -20,6 +20,8 @@
 
 
 class Dock : public Node {
+private:
+    
 public:
     static std::shared_ptr<Dock>
     create(const std::shared_ptr<Node> &parent, EngineContext &ctx, const std::shared_ptr<World> &world,
@@ -40,6 +42,8 @@ public:
           const std::shared_ptr<StructuresSystem> &structures_system,
           sf::Vector2f position,
           sf::Vector2i grid_size, float b2_cell_size, const std::shared_ptr<BlueprintLoader> &blueprint_loader);
+
+    void set_blueprint(const std::shared_ptr<Blueprint> &blueprint, EngineContext &ctx);
 
     sf::Vector2f position;
     std::shared_ptr<UI::Button> background;
@@ -63,11 +67,13 @@ private:
 public:
     static std::shared_ptr<DockSpawner>
     create(const std::shared_ptr<Node> &parent, EngineContext &ctx, const std::shared_ptr<MainScene> &scene,
-           const sf::Vector2f &position, const sf::Vector2i &grid_size, float b2_block_side_size,     const std::string &node_id,
+           const sf::Vector2f &position, const sf::Vector2i &grid_size, float b2_block_side_size,
+           const std::string &node_id,
            int render_priority = 0);
 
-    explicit DockSpawner(const std::shared_ptr<Node> &parent,     const std::string &node_id, int render_priority = 0) : Node(parent,node_id,
-                                                                                              render_priority) {}
+    explicit DockSpawner(const std::shared_ptr<Node> &parent, const std::string &node_id, int render_priority = 0)
+            : Node(parent, node_id,
+                   render_priority) {}
 
     static void
     setup(const std::shared_ptr<DockSpawner> &node, EngineContext &ctx, const std::shared_ptr<MainScene> &scene,

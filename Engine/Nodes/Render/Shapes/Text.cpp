@@ -18,16 +18,23 @@ Text::create(const std::shared_ptr<Node> &parent, const std::string &node_id, in
 void Text::setup(const std::shared_ptr<Text> &node) {
     node->character_size = 10;
     node->vertices.setPrimitiveType(sf::Quads);
+    node->set_font("Minecraftia-Regular.ttf");
+    node->set_character_size(24);
+    node->font.setSmooth(false);
 }
 
 void Text::render(EngineContext &ctx, sf::RenderStates &states) {
     ctx.app->batch->set_texture(font.getTexture(character_size), ctx);
     ctx.app->batch->add_vertices(vertices, states.transform);
-    font.setSmooth(false);
+
 }
 
 void Text::update(EngineContext &ctx) {
 
+}
+
+void Text::set_smooth(bool smooth) {
+    font.setSmooth(smooth);
 }
 
 void Text::update_text() {

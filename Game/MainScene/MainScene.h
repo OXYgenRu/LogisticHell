@@ -12,6 +12,7 @@
 #include "Dock/Dock.h"
 #include "Structure/StructuresSystem.h"
 #include "Dock/DocksSystem.h"
+#include "../../Engine/Nodes/UI/Inspector.h"
 
 class MainScene : public Scene {
 public:
@@ -26,6 +27,7 @@ public:
 
     void update(EngineContext &ctx) override;
 
+    std::shared_ptr<Inspector> inspector;
     std::shared_ptr<UI::Collider> background_collider;
     std::shared_ptr<CameraNode> world_camera;
     std::shared_ptr<World> world;
