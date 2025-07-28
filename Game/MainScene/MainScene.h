@@ -13,6 +13,7 @@
 #include "Structure/StructuresSystem.h"
 #include "Dock/DocksSystem.h"
 #include "../../Engine/Nodes/UI/Inspector.h"
+#include "World/GameWorld.h"
 
 class MainScene : public Scene {
 public:
@@ -30,10 +31,8 @@ public:
     std::shared_ptr<Inspector> inspector;
     std::shared_ptr<UI::Collider> background_collider;
     std::shared_ptr<CameraNode> world_camera;
-    std::shared_ptr<World> world;
-    std::shared_ptr<StructuresSystem> structures_system;
-    std::shared_ptr<DocksSystem> docks_system;
-    std::shared_ptr<BlueprintLoader> blueprint_loader;
+    std::shared_ptr<GameWorld> world;
+
 };
 
 

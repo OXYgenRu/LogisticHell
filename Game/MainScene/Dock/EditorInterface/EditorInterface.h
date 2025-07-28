@@ -19,7 +19,7 @@ class EditorInterface : public Node {
 public:
     static std::shared_ptr<EditorInterface>
     create(const std::shared_ptr<Node> &parent, EngineContext &ctx, const std::shared_ptr<Dock> &dock,
-           const std::shared_ptr<BlueprintLoader> &blueprint_loader, const std::string &node_id,
+           const std::shared_ptr<GameWorld> &world, const std::string &node_id,
            int render_priority = 0);
 
 
@@ -29,7 +29,7 @@ public:
 
     static void
     setup(const std::shared_ptr<EditorInterface> &node, EngineContext &ctx, const std::shared_ptr<Dock> &dock,
-          const std::shared_ptr<BlueprintLoader> &blueprint_loader);
+          const std::shared_ptr<GameWorld> &world);
 
     void update(EngineContext &ctx) override;
 

@@ -6,10 +6,12 @@
 
 
 std::shared_ptr<Unit>
-Unit::create(const std::shared_ptr<MainScene> &scene, const sf::Vector2i &position, int rotation) {
+Unit::create(const std::shared_ptr<GameWorld> &world, const sf::Vector2i &position, int rotation,
+             const unsigned int &unit_index, const unsigned int &unit_id) {
     auto node = std::make_shared<Unit>();
-    node->api = UnitApi(node);
-    node->scene = scene;
+    node->unit_index = unit_index;
+    node->unit_id = unit_id;
+    node->world = world;
     node->position = position;
     node->rotation = rotation;
     return node;
@@ -19,13 +21,6 @@ void Unit::add_block(const std::shared_ptr<ComponentBlock> &new_block) {
     this->blocks[new_block->get_in_component_position()] = new_block;
 }
 
-void Unit::set_unit_behavior(const std::shared_ptr<UnitBehavior> &behavior) {
-    this->unit_behavior = behavior;
-}
-
-const std::shared_ptr<UnitBehavior> &Unit::get_behavior() {
-    return this->unit_behavior;
-}
 
 void Unit::set_render_feature(const std::string &feature_name, const std::shared_ptr<UnitRenderQuad> &new_feature) {
     this->render_features[feature_name] = new_feature;
@@ -55,4 +50,8 @@ int Unit::get_rotation() const {
 
 const sf::Vector2i &Unit::get_position() {
     return position;
+}
+
+const unsigned int &Unit::get_unit_index() {
+    return this->unit_index;
 }

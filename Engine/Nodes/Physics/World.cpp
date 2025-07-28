@@ -21,7 +21,6 @@ World::create(const std::shared_ptr<Node> &parent, b2Vec2 gravity, float pixel_p
 
 World::~World() {
     this->destroy();
-
 }
 
 void World::destroy() {

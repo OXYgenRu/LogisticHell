@@ -4,8 +4,8 @@
 
 #include "BlueprintLoader.h"
 #include "iostream"
-
 #include <functional>
+#include "../World/GameWorld.h"
 
 
 sf::Vector2i get_block_position(const sf::Vector2i &position, const sf::Vector2i &grid_size, int rotation) {
@@ -36,12 +36,18 @@ sf::Vector2f get_relative_position(const sf::Vector2f &position, const sf::Vecto
     return position;
 }
 
-void BlueprintLoader::register_blueprint(const std::string &blueprint_id, Blueprint template_blueprint) {
+BlueprintLoader::BlueprintLoader(const std::shared_ptr<GameWorld> &world) {
+    this->world = world;
+}
+
+void BlueprintLoader::register_blueprint(const std::string &blueprint_name, Blueprint template_blueprint) {
     sf::Vector2i grid_size = template_blueprint.grid_size;
     std::vector<std::shared_ptr<BlueprintComponent>> components = template_blueprint.components;
-    this->blueprints.push_back(blueprint_id);
+    this->blueprints.push_back(this->world.lock()->get_blueprints_indexer()->get_blueprint_index(blueprint_name));
     std::vector<std::shared_ptr<UnitProperties>> template_units = template_blueprint.get_units_properties();
-    this->loaders[blueprint_id] = [grid_size, components, template_units](int rotation) {
+    this->loaders[this->world.lock()->get_blueprints_indexer()->get_blueprint_index(
+            blueprint_name)] = [grid_size, components, template_units](
+            int rotation) {
         auto blueprint = std::make_shared<Blueprint>(grid_size, rotation);
         for (auto &to: components) {
             std::shared_ptr<BlueprintComponent> component = blueprint->add_component();
@@ -57,13 +63,14 @@ void BlueprintLoader::register_blueprint(const std::string &blueprint_id, Bluepr
         sf::Transform transform;
         transform.rotate(-float(90 * rotation));
         for (auto &to: template_units) {
-            std::shared_ptr<UnitProperties> new_properties = std::make_shared<UnitProperties>(to->get_behavior(),
-                                                                                              get_block_position(
-                                                                                                      to->position,
-                                                                                                      blueprint->grid_size,
-                                                                                                      rotation),
-                                                                                              (to->rotation +
-                                                                                               rotation) % 4);
+            std::shared_ptr<UnitProperties> new_properties = std::make_shared<UnitProperties>(
+                    get_block_position(
+                            to->position,
+                            blueprint->grid_size,
+                            rotation),
+                    (to->rotation +
+                     rotation) % 4);
+            new_properties->set_unit_index(to->get_unit_index());
             blueprint->add_unit_properties(new_properties);
             for (auto &revolute_joint: to->get_revolute_joints()) {
                 new_properties->add_revolute_joint(BlueprintJoints::RevoluteJoint(revolute_joint.joint_name,
@@ -104,15 +111,20 @@ void BlueprintLoader::register_blueprint(const std::string &blueprint_id, Bluepr
     };
 }
 
-void BlueprintLoader::register_structure(const std::string &structure_id, Blueprint template_blueprint) {
-    structures.push_back(structure_id);
-    this->register_blueprint(structure_id, template_blueprint);
+void BlueprintLoader::register_structure(const std::string &structure_name, Blueprint template_blueprint) {
+    this->world.lock()->get_blueprints_indexer()->register_new_blueprint_name(structure_name);
+    structures.push_back(this->world.lock()->get_blueprints_indexer()->get_blueprint_index(structure_name));
+    this->register_blueprint(structure_name, template_blueprint);
 }
 
-void BlueprintLoader::register_unit(const std::string &unit_id, Blueprint template_blueprint,
-                                    const std::shared_ptr<UnitProperties> &properties) {
-    this->units.push_back(unit_id);
+void BlueprintLoader::register_unit(const std::string &unit_name, Blueprint template_blueprint,
+                                    const std::shared_ptr<UnitProperties> &properties,
+                                    const std::shared_ptr<UnitBehavior> &behavior) {
+    unsigned int unit_index = this->world.lock()->get_blueprints_indexer()->register_new_blueprint_name(unit_name);
+    this->units.push_back(unit_index);
+    this->world.lock()->get_behavior_storage()->set_unit_behavior(unit_index, behavior);
     properties->get_unit_blocks().clear();
+    properties->set_unit_index(unit_index);
     template_blueprint.add_unit_properties(properties);
     for (auto &to: template_blueprint.components) {
         for (int i = 0; i < template_blueprint.grid_size.y; i++) {
@@ -131,21 +143,23 @@ void BlueprintLoader::register_unit(const std::string &unit_id, Blueprint templa
             throw std::runtime_error("Render feature anchor block doesnt exist");
         }
     }
-    this->register_blueprint(unit_id, template_blueprint);
+    this->register_blueprint(unit_name, template_blueprint);
 }
 
-std::shared_ptr<Blueprint> BlueprintLoader::create_blueprint(const std::string &blueprint_id, int rotation) {
-    auto it = (this->loaders).find(blueprint_id);
+std::shared_ptr<Blueprint> BlueprintLoader::create_blueprint(const unsigned int &blueprint_index, int rotation) {
+    auto it = (this->loaders).find(blueprint_index);
     if (it == this->loaders.end()) {
         throw std::runtime_error("Unknown blueprint ID");
     }
     return it->second(rotation);
 }
 
-std::vector<std::string> &BlueprintLoader::get_all_blueprints() {
+std::vector<unsigned int> &BlueprintLoader::get_all_blueprints() {
     return this->blueprints;
 }
 
-std::vector<std::string> &BlueprintLoader::get_all_units() {
+std::vector<unsigned int> &BlueprintLoader::get_all_units() {
     return this->units;
 }
+
+

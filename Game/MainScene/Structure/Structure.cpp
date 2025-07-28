@@ -4,10 +4,15 @@
 
 #include "Structure.h"
 
-Structure::Structure(const std::shared_ptr<Blueprint> &blueprint) {
+Structure::Structure(const std::shared_ptr<Blueprint> &blueprint, const unsigned int &structure_id) {
     this->blueprint = blueprint;
+    this->structure_id = structure_id;
 }
 
-Structure::~Structure(){
+Structure::~Structure() {
     std::cout << "Structure destroyed" << '\n';
+}
+
+const unsigned int &Structure::get_structure_id() {
+    return structure_id;
 }

@@ -11,8 +11,6 @@
 
 class Unit;
 
-class UnitBehavior;
-
 namespace BlueprintJoints {
     struct RevoluteJoint {
         sf::Vector2i block_position;
@@ -29,13 +27,13 @@ namespace BlueprintJoints {
     };
 
     struct WeldJoint {
-        
+
     };
 }
 
 class UnitProperties {
 public:
-    UnitProperties(const std::shared_ptr<UnitBehavior> &behavior, const sf::Vector2i &position, int rotation);
+    UnitProperties(const sf::Vector2i &position, int rotation);
 
     UnitProperties(const sf::Vector2i &position, const std::shared_ptr<UnitProperties> &other, int rotation);
 
@@ -45,7 +43,9 @@ public:
 
     void add_render_feature(const UnitRenderFeature &new_feature);
 
-    std::shared_ptr<UnitBehavior> &get_behavior();
+    const unsigned int &get_unit_index();
+
+    void set_unit_index(const unsigned int &new_unit_index);
 
     std::vector<sf::Vector2i> &get_unit_blocks();
 
@@ -56,7 +56,7 @@ public:
     int rotation;
     sf::Vector2i position;
 private:
-    std::shared_ptr<UnitBehavior> behavior;
+    unsigned int unit_index;
     std::vector<BlueprintJoints::RevoluteJoint> revolute_joints;
     std::vector<sf::Vector2i> unit_blocks;
     std::vector<UnitRenderFeature> render_features;

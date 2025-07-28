@@ -13,15 +13,14 @@
 #include "../Blueprints/UnitProperties/UnitProperties.h"
 #include "../Blueprints/Blueprint/Utils.h"
 #include "../../../Engine/Nodes/Physics/RevoluteJoint.h"
-#include "UnitApi.h"
 
-class MainScene;
-
+class GameWorld;
 
 class Unit {
 public:
     static std::shared_ptr<Unit>
-    create(const std::shared_ptr<MainScene> &scene, const sf::Vector2i &position, int rotation);
+    create(const std::shared_ptr<GameWorld> &world, const sf::Vector2i &position, int rotation,
+           const unsigned int &unit_index, const unsigned int &unit_id);
 
     Unit() = default;
 
@@ -31,10 +30,6 @@ public:
 
     std::shared_ptr<ComponentBlock> get_block(const sf::Vector2i &position);
 
-    void set_unit_behavior(const std::shared_ptr<UnitBehavior> &behavior);
-
-    const std::shared_ptr<UnitBehavior> &get_behavior();
-
     void set_render_feature(const std::string &feature_name, const std::shared_ptr<UnitRenderQuad> &new_feature);
 
     void set_joint(const std::string &joint_name, const std::shared_ptr<RevoluteJoint> &new_joint);
@@ -43,12 +38,15 @@ public:
 
     const sf::Vector2i &get_position();
 
-    UnitApi api;
-    std::weak_ptr<MainScene> scene;
+    const unsigned int &get_unit_index();
+
+    std::weak_ptr<GameWorld> world;
 private:
+    unsigned int unit_index;
+    unsigned int unit_id;
+
     int rotation{};
     sf::Vector2i position;
-    std::shared_ptr<UnitBehavior> unit_behavior;
     std::unordered_map<sf::Vector2i, std::shared_ptr<ComponentBlock>> blocks;
     std::unordered_map<std::string, std::shared_ptr<UnitRenderQuad>> render_features;
     std::unordered_map<std::string, std::shared_ptr<RevoluteJoint>> joints;

@@ -12,11 +12,14 @@
 #include "../Blueprints/Blueprint/Blueprint.h"
 
 class Structure {
+private:
+    unsigned int structure_id;
 public:
-    Structure(const std::shared_ptr<Blueprint> &blueprint);
+    Structure(const std::shared_ptr<Blueprint> &blueprint, const unsigned int &structure_id);
 
     ~Structure();
 
+    const unsigned int &get_structure_id();
 
     std::vector<std::shared_ptr<Unit>> units;
     std::vector<std::shared_ptr<Component>> components;

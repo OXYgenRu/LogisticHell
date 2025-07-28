@@ -7,29 +7,31 @@
 #include "../MainScene.h"
 
 std::shared_ptr<StructuresSystem>
-StructuresSystem::create(const std::shared_ptr<Node> &parent, const std::shared_ptr<MainScene> &scene,
+StructuresSystem::create(const std::shared_ptr<Node> &parent, const std::shared_ptr<GameWorld> &world,
                          float block_side_size, const std::string &node_id,
                          int render_priority) {
     auto node = std::make_shared<StructuresSystem>(parent, node_id, render_priority);
-    StructuresSystem::setup(node, scene, block_side_size);
+    StructuresSystem::setup(node, world, block_side_size);
     parent->add_node(node);
     return node;
 }
 
-void StructuresSystem::setup(const std::shared_ptr<StructuresSystem> &node, const std::shared_ptr<MainScene> &scene,
+void StructuresSystem::setup(const std::shared_ptr<StructuresSystem> &node, const std::shared_ptr<GameWorld> &world,
                              float block_side_size) {
-    node->scene = scene;
+    node->world = world;
     node->block_side_size = block_side_size;
 }
 
-void StructuresSystem::create_structure(std::shared_ptr<Blueprint> &blueprint, const sf::Vector2f &dock_position,
-                                        EngineContext &ctx) {
-    std::weak_ptr<MainScene> capture_weak_scene = scene;
-    std::shared_ptr<Structure> new_structure = std::make_shared<Structure>(blueprint);
-    float pixels_per_meter = this->scene.lock()->world->pixel_per_meter;
-    this->structures.push_back(new_structure);
+unsigned int
+StructuresSystem::create_structure(std::shared_ptr<Blueprint> &blueprint, const sf::Vector2f &dock_position,
+                                   EngineContext &ctx) {
+    unsigned int structure_id = max_structure_id++;
+    std::weak_ptr<GameWorld> capture_weak_world = world;
+    std::shared_ptr<Structure> new_structure = std::make_shared<Structure>(blueprint, structure_id);
+    float pixels_per_meter = world.lock()->get_pixel_per_meter();
+    this->structures[structure_id] = new_structure;
     for (auto &blueprint_component: blueprint->components) {
-        std::shared_ptr<Component> new_component = Component::create(scene.lock()->world, new_structure,
+        std::shared_ptr<Component> new_component = Component::create(world.lock(), new_structure,
                                                                      "StructureComponent", 2);
         new_structure->components.push_back(new_component);
         b2BodyDef new_def = b2DefaultBodyDef();
@@ -45,25 +47,27 @@ void StructuresSystem::create_structure(std::shared_ptr<Blueprint> &blueprint, c
                 new_def.type = b2_kinematicBody;
                 break;
         }
-        new_component->rigid_body = RigidBody::create(scene.lock()->world, new_def, "ComponentRigidBody");
+        new_component->rigid_body = RigidBody::create(world.lock()->get_world(), new_def, "ComponentRigidBody");
         for (int i = 0; i < blueprint->grid_size.y; i++) {
             for (int j = 0; j < blueprint->grid_size.x; j++) {
                 if (blueprint_component->get_block({j, i}).type == BlockType::BusyAttachable) {
                     crete_component_block({j, i}, blueprint_component->get_block({j, i}), new_component);
                     std::weak_ptr<Component> capture_component = new_component;
                     new_component->colliders[i][j]->bind_on_key_release(
-                            [capture_weak_scene, capture_component](sf::Event &event, EngineContext &ctx,
+                            [capture_weak_world, capture_component](sf::Event &event, EngineContext &ctx,
                                                                     const sf::Vector2f &local_position) {
                                 if (event.key.code == sf::Keyboard::Key::R) {
-                                    auto locked_scene = capture_weak_scene.lock();
+                                    auto locked_world = capture_weak_world.lock();
                                     std::shared_ptr<Component> component = capture_component.lock();
-                                    std::shared_ptr<DockSpawner> spawner = locked_scene->docks_system->find_nearest_dock(
+                                    std::shared_ptr<DockSpawner> spawner = locked_world->get_docks_system()->find_nearest_dock(
                                             component->get_position());
-                                    locked_scene->docks_system->spawn_dock(ctx, spawner->get_dock_position(),
-                                                                           spawner->get_grid_size(),
-                                                                           spawner->get_block_side_size(),
-                                                                           component->structure.lock()->blueprint);
-                                    locked_scene->structures_system->destroy_structure(component->structure.lock());
+                                    locked_world->get_docks_system()->spawn_dock(ctx,
+                                                                                 spawner->get_dock_position(),
+                                                                                 spawner->get_grid_size(),
+                                                                                 spawner->get_block_side_size(),
+                                                                                 component->structure.lock()->blueprint);
+                                    locked_world->get_structures_system()->destroy_structure(
+                                            component->structure.lock()->get_structure_id());
                                 }
                             });
                 }
@@ -71,8 +75,9 @@ void StructuresSystem::create_structure(std::shared_ptr<Blueprint> &blueprint, c
         }
     }
     for (std::shared_ptr<UnitProperties> &blueprint_unit: blueprint->get_units_properties()) {
-        std::shared_ptr<Unit> new_unit = Unit::create(scene.lock(), blueprint_unit->position, blueprint_unit->rotation);
-        new_unit->set_unit_behavior(blueprint_unit->get_behavior());
+        std::shared_ptr<Unit> new_unit = world.lock()->get_units_system()->create_unit(blueprint_unit->position,
+                                                                                       blueprint_unit->rotation,
+                                                                                       blueprint_unit->get_unit_index());
         new_structure->units.push_back(new_unit);
     }
     for (int i = 0; i < blueprint->components.size(); i++) {
@@ -91,7 +96,7 @@ void StructuresSystem::create_structure(std::shared_ptr<Blueprint> &blueprint, c
                                                             -feature.anchor_block.y},
                                                            feature.position,
                                                            feature.vertices, feature.angle,
-                                                           block_side_size * scene.lock()->world->pixel_per_meter,
+                                                           block_side_size * world.lock()->get_pixel_per_meter(),
                                                            "RenderQuad",
                                                            feature.render_priority);
 
@@ -127,21 +132,22 @@ void StructuresSystem::create_structure(std::shared_ptr<Blueprint> &blueprint, c
         b2Body_SetAngularDamping(component->rigid_body->body_id, 1);
         b2Body_SetLinearDamping(component->rigid_body->body_id, 1);
     }
+    return structure_id;
 }
 
 
 void StructuresSystem::update(EngineContext &ctx) {
-    for (auto &structure: structures) {
-        for (std::shared_ptr<Unit> &unit: structure->units) {
-            unit->get_behavior()->update(ctx, unit->api);
-        }
-    }
+//    for (auto &structure: structures) {
+//        for (std::shared_ptr<Unit> &unit: structure->units) {
+//            unit->get_behavior()->update(ctx, unit->api);
+//        }
+//    }
 }
 
 
 void StructuresSystem::crete_component_block(const sf::Vector2i &position, BlueprintBlock &block,
                                              const std::shared_ptr<Component> &component) const {
-    float pixel_per_meter = scene.lock()->world->pixel_per_meter;
+    float pixel_per_meter = world.lock()->get_pixel_per_meter();
     b2ShapeDef shape_def = b2DefaultShapeDef();
     shape_def.density = block.density;
     shape_def.material.friction = block.friction;
@@ -179,16 +185,16 @@ void StructuresSystem::crete_component_block(const sf::Vector2i &position, Bluep
 }
 
 
-void StructuresSystem::destroy_structure(const std::shared_ptr<Structure> &structure) {
-    for (std::shared_ptr<Component> &component: structure->components) {
-        scene.lock()->world->delete_node(component->rigid_body);
-        scene.lock()->world->delete_node(component);
-    }
-    auto it = std::find(this->structures.begin(),
-                        this->structures.end(), structure);
+void StructuresSystem::destroy_structure(const unsigned int &structure_id) {
+
+    auto it = this->structures.find(structure_id);
     if (it == this->structures.end()) {
         std::cerr << "Destroying structures not found" << '\n';
         return;
+    }
+    for (std::shared_ptr<Component> &component: it->second->components) {
+        world.lock()->get_world()->delete_node(component->rigid_body);
+        world.lock()->delete_node(component);
     }
     this->structures.erase(it);
 }

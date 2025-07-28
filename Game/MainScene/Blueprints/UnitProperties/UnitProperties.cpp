@@ -5,16 +5,15 @@
 #include "UnitProperties.h"
 
 
-UnitProperties::UnitProperties(const std::shared_ptr<UnitBehavior> &behavior, const sf::Vector2i &position,
+UnitProperties::UnitProperties(const sf::Vector2i &position,
                                int rotation) {
-    this->behavior = behavior;
     this->position = position;
     this->rotation = rotation;
 }
 
 UnitProperties::UnitProperties(const sf::Vector2i &position, const std::shared_ptr<UnitProperties> &other,
                                int rotation) {
-    this->behavior = other->behavior;
+    this->unit_index = other->unit_index;
     this->rotation = rotation;
     this->position = position + other->position;
     for (BlueprintJoints::RevoluteJoint &joint: other->get_revolute_joints()) {
@@ -39,9 +38,6 @@ std::vector<BlueprintJoints::RevoluteJoint> &UnitProperties::get_revolute_joints
     return this->revolute_joints;
 }
 
-std::shared_ptr<UnitBehavior> &UnitProperties::get_behavior() {
-    return this->behavior;
-}
 
 std::vector<sf::Vector2i> &UnitProperties::get_unit_blocks() {
     return this->unit_blocks;
@@ -59,3 +55,11 @@ std::vector<UnitRenderFeature> &UnitProperties::get_render_features() {
     return this->render_features;
 }
 
+
+const unsigned int &UnitProperties::get_unit_index() {
+    return this->unit_index;
+}
+
+void UnitProperties::set_unit_index(const unsigned int &new_unit_index) {
+    this->unit_index = new_unit_index;
+}

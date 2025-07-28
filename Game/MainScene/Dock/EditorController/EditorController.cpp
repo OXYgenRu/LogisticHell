@@ -6,18 +6,18 @@
 #include "../../../../Engine/Application.h"
 
 std::shared_ptr<EditorController>
-EditorController::create(EngineContext &ctx, std::shared_ptr<Dock> dock,
+EditorController::create(EngineContext &ctx, const std::shared_ptr<Dock> &dock,
                          const std::shared_ptr<BuildingGrid> &building_grid,
-                         const std::shared_ptr<BlueprintLoader> &blueprint_loader) {
-    auto node = std::make_shared<EditorController>(ctx, dock, building_grid, blueprint_loader);
+                         const std::shared_ptr<GameWorld> &world) {
+    auto node = std::make_shared<EditorController>(ctx, dock, building_grid, world);
     return node;
 }
 
-EditorController::EditorController(EngineContext &ctx, std::shared_ptr<Dock> dock,
-                                   std::shared_ptr<BuildingGrid> building_grid,
-                                   std::shared_ptr<BlueprintLoader> blueprint_loader) {
+EditorController::EditorController(EngineContext &ctx, const std::shared_ptr<Dock> &dock,
+                                   const std::shared_ptr<BuildingGrid> &building_grid,
+                                   const std::shared_ptr<GameWorld> &world) {
     this->dock = dock;
-    this->builder = Builder::create(building_grid, blueprint_loader);
+    this->builder = Builder::create(building_grid, world);
     this->builder->set_default_blueprint(ctx);
     this->editor_mode = EditorMode::Attachment;
     this->is_preview_active = false;
@@ -139,7 +139,7 @@ sf::Vector2i EditorController::get_grid_cell_position(EngineContext &ctx, const 
             abs(builder->building_grid->grid_size.y - int((local_position.y) / sf_cell_size) - 1)};
 }
 
-void EditorController::set_unit(const std::string &new_unit_id, EngineContext &ctx) {
-    this->builder->set_unit_id(new_unit_id);
+void EditorController::set_unit(const unsigned int &unit_index, EngineContext &ctx) {
+    this->builder->set_unit_index(unit_index);
     this->editor_mode = EditorMode::Attachment;
 }

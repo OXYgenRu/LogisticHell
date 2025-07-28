@@ -13,13 +13,15 @@
 #include "../../../../Engine/Nodes/Base/Node.h"
 #include "BuildingGrid.h"
 
+class GameWorld;
+
 class Builder {
 public:
 
     static std::shared_ptr<Builder>
-    create(std::shared_ptr<BuildingGrid> building_grid, std::shared_ptr<BlueprintLoader> blueprint_loader);
+    create(const std::shared_ptr<BuildingGrid> &building_grid, const std::shared_ptr<GameWorld> &world);
 
-    explicit Builder(std::shared_ptr<BuildingGrid> building_grid, std::shared_ptr<BlueprintLoader> blueprint_loader);
+    explicit Builder(const std::shared_ptr<BuildingGrid> &building_grid, const std::shared_ptr<GameWorld> &world);
 
     void set_default_blueprint(EngineContext &ctx);
 
@@ -49,15 +51,15 @@ public:
 
     void draw_destroying_preview(EngineContext &ctx);
 
-    void set_unit_id(const std::string &new_unit_id);
+    void set_unit_index(const unsigned int &new_unit_index);
 
-    void set_blueprint(const std::shared_ptr<Blueprint> &new_blueprint,EngineContext &ctx);
+    void set_blueprint(const std::shared_ptr<Blueprint> &new_blueprint, EngineContext &ctx);
 
-    std::string unit_id;
+    unsigned int unit_index;
     std::shared_ptr<Blueprint> blueprint;
-    std::weak_ptr<BlueprintLoader> blueprint_loader;
     std::shared_ptr<BuildingGrid> building_grid;
 private:
+    std::weak_ptr<GameWorld> world;
     std::vector<std::shared_ptr<BlueprintComponent>> blueprint_attachment_components;
     int preview_rotation = 0;
     sf::Vector2i preview_position;

@@ -34,18 +34,16 @@ void DocksSystem::spawn_dock(EngineContext &ctx, const sf::Vector2f &position, c
     sf::Vector2f camera_position = scene->world_camera->get_position();
     float camera_zoom = scene->world_camera->get_zoom();
 
-    this->dock = Dock::create(scene, ctx, scene->world, scene->world_camera,
-                              scene->structures_system, position,
-                              grid_size, b2_block_side_size,
-                              scene->blueprint_loader, "Dock", 5);
+    this->dock = Dock::create(scene, ctx, scene->world, scene->world_camera, position,
+                              grid_size, b2_block_side_size, "Dock", 5);
     this->dock->interface->assemble_blueprint->bind_on_mouse_release(
             [capture_weak_scene, camera_position, camera_zoom](sf::Event &event, EngineContext &ctx) {
                 auto scene = capture_weak_scene.lock();
-                scene->structures_system->create_structure(
-                        scene->docks_system->dock->editor_controller->builder->blueprint,
-                        scene->docks_system->dock->position, ctx);
-                scene->delete_node(scene->docks_system->dock);
-                scene->docks_system->dock = nullptr;
+                scene->world->get_structures_system()->create_structure(
+                        scene->world->get_docks_system()->dock->editor_controller->builder->blueprint,
+                        scene->world->get_docks_system()->dock->position, ctx);
+                scene->delete_node(scene->world->get_docks_system()->dock);
+                scene->world->get_docks_system()->dock = nullptr;
                 scene->world_camera->set_locked(false);
                 scene->world_camera->set_render_flag(true);
                 scene->world_camera->set_camera_target(camera_position);
@@ -54,8 +52,8 @@ void DocksSystem::spawn_dock(EngineContext &ctx, const sf::Vector2f &position, c
     this->dock->interface->quit_dock->bind_on_mouse_release(
             [capture_weak_scene, camera_position, camera_zoom](sf::Event &event, EngineContext &ctx) {
                 auto scene = capture_weak_scene.lock();
-                scene->delete_node(scene->docks_system->dock);
-                scene->docks_system->dock = nullptr;
+                scene->delete_node(scene->world->get_docks_system()->dock);
+                scene->world->get_docks_system()->dock = nullptr;
                 scene->world_camera->set_locked(false);
                 scene->world_camera->set_render_flag(true);
                 scene->world_camera->set_camera_target(camera_position);
@@ -71,7 +69,7 @@ void DocksSystem::spawn_dock(EngineContext &ctx, const sf::Vector2f &position, c
 
 std::shared_ptr<DockSpawner> DocksSystem::find_nearest_dock(const sf::Vector2f &position) {
     auto scene = weak_scene.lock();
-    float pixel_per_meter = scene->world->pixel_per_meter;
+    float pixel_per_meter = scene->world->get_pixel_per_meter();
     std::vector<std::pair<float, std::shared_ptr<DockSpawner>>> distances;
     for (auto &spawner: spawners) {
         sf::Vector2f spawner_center_position = spawner->get_dock_position();

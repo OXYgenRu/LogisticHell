@@ -8,17 +8,17 @@
 
 std::shared_ptr<EditorInterface>
 EditorInterface::create(const std::shared_ptr<Node> &parent, EngineContext &ctx, const std::shared_ptr<Dock> &dock,
-                        const std::shared_ptr<BlueprintLoader> &blueprint_loader, const std::string &node_id,
+                        const std::shared_ptr<GameWorld> &world, const std::string &node_id,
                         int render_priority) {
     auto node = std::make_shared<EditorInterface>(parent, node_id, render_priority);
-    EditorInterface::setup(node, ctx, dock, blueprint_loader);
+    EditorInterface::setup(node, ctx, dock, world);
     parent->add_node(node);
     return node;
 }
 
 void EditorInterface::setup(const std::shared_ptr<EditorInterface> &node, EngineContext &ctx,
                             const std::shared_ptr<Dock> &dock,
-                            const std::shared_ptr<BlueprintLoader> &blueprint_loader) {
+                            const std::shared_ptr<GameWorld> &world) {
 
     std::weak_ptr<Dock> weak_dock = dock;
 
@@ -67,7 +67,7 @@ void EditorInterface::setup(const std::shared_ptr<EditorInterface> &node, Engine
             weak_dock.lock()->editor_controller->set_mode(EditorMode::Destroying, ctx);
         });
     }
-    node->inventory = BlocksInventory::create(node, ctx, dock, {300, 800}, blueprint_loader, "Inventory", 3);
+    node->inventory = BlocksInventory::create(node, ctx, dock, {300, 800}, world, "Inventory", 3);
     node->inventory->set_position({ctx.app->get_window_size().x - 300, 0});
 }
 

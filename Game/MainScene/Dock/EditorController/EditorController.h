@@ -7,7 +7,6 @@
 
 #include "memory"
 #include "../Builder/BuildingGrid.h"
-#include "../../Blueprints/BlueprintLoader.h"
 #include "../Builder/Builder.h"
 #include "DockController.h"
 #include "../EditorInterface/EditorInterface.h"
@@ -22,13 +21,13 @@ enum class EditorMode : int {
 class EditorController {
 public:
     static std::shared_ptr<EditorController>
-    create(EngineContext &ctx, std::shared_ptr<Dock> dock,
+    create(EngineContext &ctx,  const std::shared_ptr<Dock> &dock,
            const std::shared_ptr<BuildingGrid> &building_grid,
-           const std::shared_ptr<BlueprintLoader>& blueprint_loader);
+           const std::shared_ptr<GameWorld>& world);
 
-    explicit EditorController(EngineContext &ctx, std::shared_ptr<Dock> dock,
-                              std::shared_ptr<BuildingGrid> building_grid,
-                              std::shared_ptr<BlueprintLoader> blueprint_loader);
+    explicit EditorController(EngineContext &ctx, const std::shared_ptr<Dock> &dock,
+                              const std::shared_ptr<BuildingGrid> &building_grid,
+                              const std::shared_ptr<GameWorld> &world);
 
     void on_mouse_release(sf::Event &event, EngineContext &ctx, const sf::Vector2f &local_position);
 
@@ -42,7 +41,7 @@ public:
 
     void set_mode(const EditorMode &new_mode, EngineContext &ctx);
 
-    void set_unit(const std::string &new_unit_id, EngineContext &ctx);
+    void set_unit(const unsigned int &unit_index, EngineContext &ctx);
 
     std::shared_ptr<Builder> builder;
     std::shared_ptr<EditorInterface> interface;

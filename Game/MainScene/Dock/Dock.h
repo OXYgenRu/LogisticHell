@@ -18,17 +18,17 @@
 #include "../Structure/StructuresSystem.h"
 #include "../../../Engine/Nodes/Base/CameraNode.h"
 
+class MainScene;
 
 class Dock : public Node {
 private:
     
 public:
     static std::shared_ptr<Dock>
-    create(const std::shared_ptr<Node> &parent, EngineContext &ctx, const std::shared_ptr<World> &world,
+    create(const std::shared_ptr<Node> &parent, EngineContext &ctx, const std::shared_ptr<GameWorld> &world,
            const std::shared_ptr<CameraNode> &world_camera,
-           const std::shared_ptr<StructuresSystem> &structures_system,
            sf::Vector2f position,
-           sf::Vector2i grid_size, float b2_cell_size, const std::shared_ptr<BlueprintLoader> &blueprint_loader,
+           sf::Vector2i grid_size, float b2_cell_size,
            const std::string &node_id,
            int render_priority = 0);
 
@@ -37,11 +37,10 @@ public:
             : Node(parent, node_id, render_priority) {}
 
     static void
-    setup(const std::shared_ptr<Dock> &node, EngineContext &ctx, const std::shared_ptr<World> &world,
+    setup(const std::shared_ptr<Dock> &node, EngineContext &ctx, const std::shared_ptr<GameWorld> &world,
           const std::shared_ptr<CameraNode> &world_camera,
-          const std::shared_ptr<StructuresSystem> &structures_system,
           sf::Vector2f position,
-          sf::Vector2i grid_size, float b2_cell_size, const std::shared_ptr<BlueprintLoader> &blueprint_loader);
+          sf::Vector2i grid_size, float b2_cell_size);
 
     void set_blueprint(const std::shared_ptr<Blueprint> &blueprint, EngineContext &ctx);
 
@@ -52,8 +51,7 @@ public:
     std::shared_ptr<DockController> controller;
     std::shared_ptr<EditorInterface> interface;
     std::shared_ptr<CameraNode> camera;
-    std::weak_ptr<StructuresSystem> structures_system;
-    std::weak_ptr<World> world;
+    std::weak_ptr<GameWorld> world;
 };
 
 class DockSpawner : public Node {

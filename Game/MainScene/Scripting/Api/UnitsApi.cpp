@@ -1,11 +1,14 @@
 //
+// Created by EgorRychkov on 28.07.2025.
+//
+
+#include "UnitsApi.h"
+
+//
 // Created by EgorRychkov on 01.07.2025.
 //
 
-#include "UnitApi.h"
-#include "StructuresSystem.h"
-#include "Unit.h"
-#include "../MainScene.h"
+#include "../../World/GameWorld.h"
 
 sf::Vector2i get_grid_vector(const sf::Vector2i &vector, int rotation) {
     switch (rotation % 4) {
@@ -36,25 +39,21 @@ sf::Vector2f get_force_vector(const sf::Vector2f &vector, int rotation) {
 }
 
 
-UnitApi::UnitApi(const std::shared_ptr<Unit> &unit) {
-    this->weak_unit = unit;
+UnitsApi::UnitsApi(const std::shared_ptr<GameWorld> &world) {
+    this->world = world;
 }
 
-UnitApi::UnitApi() {
-}
-
-
-void UnitApi::apply_force(const sf::Vector2i &block_position, const sf::Vector2f &relative_position,
-                          const sf::Vector2f &force) {
-
-    auto unit = this->weak_unit.lock();
+void UnitsApi::apply_force(const unsigned int &unit_id, const sf::Vector2i &block_position,
+                           const sf::Vector2f &relative_position,
+                           const sf::Vector2f &force) {
+    auto unit = world.lock()->get_units_system()->get_unit(unit_id);
     sf::Vector2i relative_block_position = get_grid_vector(block_position, unit->get_rotation()) + unit->get_position();
     std::shared_ptr<ComponentBlock> block = unit->get_block(relative_block_position);
     if (block == nullptr) {
         return;
     }
     std::shared_ptr<Component> component = block->get_component();
-    float block_side_size = unit->scene.lock()->structures_system->block_side_size;
+    float block_side_size = world.lock()->get_structures_system()->block_side_size;
 
     sf::Vector2f force_point = {float(relative_block_position.x) * block_side_size,
                                 float(relative_block_position.y) * block_side_size};
