@@ -19,22 +19,21 @@ void PlayerInput::setup(const std::shared_ptr<PlayerInput> &node, const unsigned
                         const std::shared_ptr<GameWorld> &world) {
     node->player_id = player_id;
     node->world = world;
-    node->last_key = sf::Keyboard::Key::Unknown;
 }
 
 void PlayerInput::on_key_press(sf::Event &event, EngineContext &ctx) {
-    this->last_key = event.key.code;
+    this->key_pressed[event.key.code] = true;
     world.lock()->get_player_input_system()->handle_key_press(player_id, event.key.code);
 }
 
 void PlayerInput::on_key_release(sf::Event &event, EngineContext &ctx) {
-    this->last_key = sf::Keyboard::Key::Unknown;
+    this->key_pressed.erase(event.key.code);
     world.lock()->get_player_input_system()->handle_key_release(player_id, event.key.code);
 }
 
 void PlayerInput::update(EngineContext &ctx) {
-    if (this->last_key != sf::Keyboard::Key::Unknown) {
-        world.lock()->get_player_input_system()->handle_while_key_pressed(player_id, this->last_key);
+    for (auto &to: key_pressed) {
+        world.lock()->get_player_input_system()->handle_while_key_pressed(player_id, to.first);
     }
 }
 

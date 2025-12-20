@@ -11,7 +11,10 @@
 
 class TestWPusherInput : public InputListener {
 public:
-    void on_key_press(const unsigned int &observer, const sf::Keyboard::Key &key, Api &api) override {
+    void while_key_pressed(const unsigned int &observer, const sf::Keyboard::Key &key, Api &api) override {
+        if (key != sf::Keyboard::Key::W) {
+            return;
+        }
         api.units->apply_local_force(observer, {0, 0}, {0, 0}, {0, 1000});
     }
 };
@@ -37,7 +40,7 @@ public:
 };
 
 std::vector<ContentPacks::Dependence> BasePack::get_dependencies() {
-    return {ContentPacks::Dependence("test", ContentPacks::DependenceType::Presence)};
+    return {};
 }
 
 void BasePack::on_world_open(Api &api) {

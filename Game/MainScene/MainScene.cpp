@@ -210,7 +210,6 @@ void MainScene::init_tree(EngineContext &ctx) {
 //    quad->set_texture("white", 0, ctx);
 //    quad->set_quad(Tools::get_rectangle({0, 0}, {2, 2}, world->get_pixel_per_meter()));
     world->get_content_packs_system()->register_content_pack<BasePack>("base_pack");
-    world->get_content_packs_system()->register_content_pack<Test>("test");
     world->open();
 }
 

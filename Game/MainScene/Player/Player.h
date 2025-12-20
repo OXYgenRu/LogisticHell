@@ -15,7 +15,7 @@ class PlayerInput : public Controller {
 private:
     unsigned int player_id;
     std::weak_ptr<GameWorld> world;
-    sf::Keyboard::Key last_key;
+    std::unordered_map<sf::Keyboard::Key, bool> key_pressed;
 public:
     static std::shared_ptr<PlayerInput>
     create(const std::shared_ptr<Node> &parent, const unsigned int &player_id, const std::shared_ptr<GameWorld> &world,
