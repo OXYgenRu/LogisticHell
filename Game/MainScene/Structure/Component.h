@@ -18,24 +18,30 @@
 class Structure;
 
 class Component : public Node {
+private:
+    unsigned int component_id;
 public:
     static std::shared_ptr<Component>
-    create(const std::shared_ptr<Node> &parent, const std::shared_ptr<Structure> &structure, const std::string &node_id,
+    create(const std::shared_ptr<Node> &parent, const std::shared_ptr<Structure> &structure,
+           const unsigned int &component_id, const std::string &node_id,
            int render_priority = 0);
 
     explicit Component(const std::shared_ptr<Node> &parent, const std::string &node_id, int render_priority = 0)
             : Node(parent, node_id, render_priority) {}
 
-    static void setup(std::shared_ptr<Component> &node, const std::shared_ptr<Structure> &structure);
+    static void setup(std::shared_ptr<Component> &node, const std::shared_ptr<Structure> &structure,
+                      const unsigned int &component_id);
 
     void update(EngineContext &ctx) override;
+
+    void delete_block(const sf::Vector2i &position);
+
+    unsigned int &get_component_id();
 
     ~Component();
 
     sf::Vector2i grid_size;
     std::shared_ptr<RigidBody> rigid_body;
-    std::vector<std::vector<std::shared_ptr<CollisionPolygon>>> collision_blocks;
-    std::vector<std::vector<std::shared_ptr<UI::Collider>>> colliders;
     std::vector<std::vector<std::shared_ptr<ComponentBlock>>> blocks;
     std::weak_ptr<Structure> structure;
 };

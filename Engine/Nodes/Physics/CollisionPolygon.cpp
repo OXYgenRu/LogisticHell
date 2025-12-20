@@ -15,6 +15,7 @@ CollisionPolygon::create(const std::shared_ptr<Node> &parent, const std::shared_
     node->rigid_body = rigid_body;
     node->shape_id = b2CreatePolygonShape(rigid_body->body_id, &node->shape_def, &node->polygon);
     parent->add_node(node);
+    std::cout << "[PhysicalWrapper] " << "Shape created\n";
     return node;
 }
 

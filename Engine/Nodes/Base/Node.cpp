@@ -85,6 +85,9 @@ float Node::get_rotation() {
 
 
 std::string Node::get_node_type_str(std::shared_ptr<Node> node) {
+
+    // TODO yandere dev is crying at this
+
     if (node->get_node_type() == 1) {
         return "ContentNode";
     }
@@ -151,6 +154,14 @@ int Node::get_node_type() const {
 
 std::vector<std::shared_ptr<Node>> &Node::get_container() {
     return this->container;
+}
+
+void Node::set_cached_recursive_transform(const sf::Transform &recursive_transform) {
+    this->cashed_recursive_transform = recursive_transform;
+}
+
+const sf::Transform &Node::get_cashed_recursive_transform() {
+    return this->cashed_recursive_transform;
 }
 
 void Node::render(EngineContext &ctx, sf::RenderStates &states) {

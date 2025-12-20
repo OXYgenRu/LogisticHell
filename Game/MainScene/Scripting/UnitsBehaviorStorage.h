@@ -13,7 +13,11 @@
 
 class UnitBehavior {
 public:
+    virtual void on_spawn(const unsigned int &unit_id, Api &api) {}
+
     virtual void update(const unsigned int &unit_id, float last_frame_delta_time, Api &api) {}
+
+    virtual void on_destroy(const unsigned int &unit_id, Api &api) {}
 };
 
 class UnitsBehaviorStorage {

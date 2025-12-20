@@ -6,16 +6,17 @@
 #include "../Blueprints/BlueprintLoader.h"
 
 std::shared_ptr<GameWorld>
-GameWorld::create(const std::shared_ptr<Node> &parent, const std::shared_ptr<MainScene> &scene,
+GameWorld::create(const std::shared_ptr<Node> &parent, EngineContext &ctx, const std::shared_ptr<MainScene> &scene,
                   const std::string &node_id,
                   int render_priority) {
     auto node = std::make_shared<GameWorld>(parent, node_id, render_priority);
-    GameWorld::setup(node, scene);
+    GameWorld::setup(node, ctx, scene);
     parent->add_node(node);
     return node;
 }
 
-void GameWorld::setup(const std::shared_ptr<GameWorld> &node, const std::shared_ptr<MainScene> &scene) {
+void
+GameWorld::setup(const std::shared_ptr<GameWorld> &node, EngineContext &ctx, const std::shared_ptr<MainScene> &scene) {
     node->extended_world = World::create(node, b2Vec2({0, 0}), 120, "World", 0);
 
     node->docks_system = DocksSystem::create(node, scene, "DockSystem");
@@ -24,7 +25,19 @@ void GameWorld::setup(const std::shared_ptr<GameWorld> &node, const std::shared_
     node->behavior_storage = std::make_shared<UnitsBehaviorStorage>();
     node->blueprint_loader = std::make_shared<BlueprintLoader>(node);
     node->units_system = UnitsSystem::create(node, node, "UnitsSystem");
-    node->api = std::make_shared<Api>(node);
+    node->blocks_system = BlocksSystem::create(node, node, 0.2, "BlocksSystem");
+    node->component_system = ComponentsSystem::create(node, node, "ComponentsSystem");
+    node->entity_system = EntitySystem::create(node, node, "EntitySystem");
+    node->player_system = PlayerSystem::create(node, node, "PlayersSystem");
+    node->input_listeners_system = InputListenersSystem::create(node, node, "InputListenersSystem");
+    node->player_input_system = PlayerInputSystem::create(node, node, "PlayerInputSystem");
+    node->content_packs_system = ContentPacksSystem::create(node, node, "ContentPacksSystem");
+    node->values_global_storage = std::make_shared<ValuesGlobalStorage>();
+    node->api = std::make_shared<Api>(node, ctx);
+}
+
+void GameWorld::open() {
+    this->content_packs_system->on_world_open();
 }
 
 const std::shared_ptr<World> &GameWorld::get_world() {
@@ -61,6 +74,38 @@ const std::shared_ptr<UnitsBehaviorStorage> &GameWorld::get_behavior_storage() {
 
 const std::shared_ptr<UnitsSystem> &GameWorld::get_units_system() {
     return units_system;
+}
+
+const std::shared_ptr<BlocksSystem> &GameWorld::get_blocks_system() {
+    return blocks_system;
+}
+
+const std::shared_ptr<ComponentsSystem> &GameWorld::get_components_system() {
+    return component_system;
+}
+
+const std::shared_ptr<EntitySystem> &GameWorld::get_entity_system() {
+    return entity_system;
+}
+
+const std::shared_ptr<PlayerSystem> &GameWorld::get_player_system() {
+    return player_system;
+}
+
+const std::shared_ptr<InputListenersSystem> &GameWorld::get_input_listeners_system() {
+    return input_listeners_system;
+}
+
+const std::shared_ptr<PlayerInputSystem> &GameWorld::get_player_input_system() {
+    return player_input_system;
+}
+
+const std::shared_ptr<ContentPacksSystem> &GameWorld::get_content_packs_system() {
+    return content_packs_system;
+}
+
+const std::shared_ptr<ValuesGlobalStorage> &GameWorld::get_values_global_storage() {
+    return values_global_storage;
 }
 
 const std::shared_ptr<Api> &GameWorld::get_api() {

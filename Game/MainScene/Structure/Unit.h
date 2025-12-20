@@ -30,15 +30,23 @@ public:
 
     std::shared_ptr<ComponentBlock> get_block(const sf::Vector2i &position);
 
+    void delete_block(const sf::Vector2i &position);
+
     void set_render_feature(const std::string &feature_name, const std::shared_ptr<UnitRenderQuad> &new_feature);
 
+    void delete_render_feature(const std::string &feature_name);
+
     void set_joint(const std::string &joint_name, const std::shared_ptr<RevoluteJoint> &new_joint);
+
+    std::unordered_map<sf::Vector2i, std::shared_ptr<ComponentBlock>> &get_blocks();
 
     int get_rotation() const;
 
     const sf::Vector2i &get_position();
 
     const unsigned int &get_unit_index();
+
+    const unsigned int &get_unit_id();
 
     std::weak_ptr<GameWorld> world;
 private:

@@ -27,7 +27,7 @@ void UICollidersSystem::update(EngineContext &ctx) {
                 sf::Vector2f pixelPos = ctx.app->window->mapPixelToCoords(sf::Mouse::getPosition(*ctx.app->window));
                 sf::Vector2f localPos = ctx.app->tree->get_flatten_tree()[i].transform.getInverse().transformPoint(
                         pixelPos);
-                if (!is_point_in_polygon(localPos, node->get_vertices())) {
+                if (!Tools::is_point_in_polygon(localPos, node->get_vertices())) {
                     continue;
                 }
                 if (node != this->last_used_collider) {

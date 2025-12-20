@@ -8,23 +8,22 @@
 
 std::shared_ptr<Component>
 Component::create(const std::shared_ptr<Node> &parent, const std::shared_ptr<Structure> &structure,
+                  const unsigned int &component_id,
                   const std::string &node_id,
                   int render_priority) {
     std::shared_ptr<Component> node = std::make_shared<Component>(parent, node_id, render_priority);
-    Component::setup(node, structure);
+    Component::setup(node, structure, component_id);
     parent->add_node(node);
     return node;
 }
 
-void Component::setup(std::shared_ptr<Component> &node, const std::shared_ptr<Structure> &structure) {
+void Component::setup(std::shared_ptr<Component> &node, const std::shared_ptr<Structure> &structure,
+                      const unsigned int &component_id) {
     node->structure = structure;
     node->grid_size = structure->blueprint->grid_size;
-    node->collision_blocks.resize(node->grid_size.y,
-                                  std::vector<std::shared_ptr<CollisionPolygon>>(node->grid_size.x));
     node->blocks.resize(node->grid_size.y,
                         std::vector<std::shared_ptr<ComponentBlock>>(node->grid_size.x));
-    node->colliders.resize(node->grid_size.y,
-                           std::vector<std::shared_ptr<UI::Collider>>(node->grid_size.x));
+    node->component_id = component_id;
 }
 
 void Component::update(EngineContext &ctx) {
@@ -33,6 +32,14 @@ void Component::update(EngineContext &ctx) {
     this->set_origin(this->rigid_body->get_origin());
 }
 
+void Component::delete_block(const sf::Vector2i &position) {
+    this->blocks[position.y][position.x] = nullptr;
+}
+
+
+unsigned int &Component::get_component_id() {
+    return this->component_id;
+}
 
 Component::~Component() {
     std::cout << "Component destroyed" << '\n';

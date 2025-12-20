@@ -22,7 +22,7 @@ void StructuresSystem::setup(const std::shared_ptr<StructuresSystem> &node, cons
     node->block_side_size = block_side_size;
 }
 
-unsigned int
+std::shared_ptr<Structure>
 StructuresSystem::create_structure(std::shared_ptr<Blueprint> &blueprint, const sf::Vector2f &dock_position,
                                    EngineContext &ctx) {
     unsigned int structure_id = max_structure_id++;
@@ -31,8 +31,9 @@ StructuresSystem::create_structure(std::shared_ptr<Blueprint> &blueprint, const 
     float pixels_per_meter = world.lock()->get_pixel_per_meter();
     this->structures[structure_id] = new_structure;
     for (auto &blueprint_component: blueprint->components) {
-        std::shared_ptr<Component> new_component = Component::create(world.lock(), new_structure,
-                                                                     "StructureComponent", 2);
+        std::shared_ptr<Component> new_component = world.lock()->get_components_system()->create_component(
+                new_structure);
+        new_component->set_render_priority(2);
         new_structure->components.push_back(new_component);
         b2BodyDef new_def = b2DefaultBodyDef();
         new_def.position = {float(dock_position.x) / pixels_per_meter, -(float(dock_position.y) / pixels_per_meter)};
@@ -51,9 +52,10 @@ StructuresSystem::create_structure(std::shared_ptr<Blueprint> &blueprint, const 
         for (int i = 0; i < blueprint->grid_size.y; i++) {
             for (int j = 0; j < blueprint->grid_size.x; j++) {
                 if (blueprint_component->get_block({j, i}).type == BlockType::BusyAttachable) {
-                    crete_component_block({j, i}, blueprint_component->get_block({j, i}), new_component);
+                    world.lock()->get_blocks_system()->create_block({j, i}, blueprint_component->get_block({j, i}),
+                                                                    new_component);
                     std::weak_ptr<Component> capture_component = new_component;
-                    new_component->colliders[i][j]->bind_on_key_release(
+                    new_component->blocks[i][j]->collider->bind_on_key_release(
                             [capture_weak_world, capture_component](sf::Event &event, EngineContext &ctx,
                                                                     const sf::Vector2f &local_position) {
                                 if (event.key.code == sf::Keyboard::Key::R) {
@@ -67,7 +69,7 @@ StructuresSystem::create_structure(std::shared_ptr<Blueprint> &blueprint, const 
                                                                                  spawner->get_block_side_size(),
                                                                                  component->structure.lock()->blueprint);
                                     locked_world->get_structures_system()->destroy_structure(
-                                            component->structure.lock()->get_structure_id());
+                                            component->structure.lock());
                                 }
                             });
                 }
@@ -91,7 +93,8 @@ StructuresSystem::create_structure(std::shared_ptr<Blueprint> &blueprint, const 
             }
             for (UnitRenderFeature &feature: blueprint_unit->get_render_features()) {
                 if (new_structure->components[i]->blocks[feature.anchor_block.y][feature.anchor_block.x] != nullptr) {
-                    auto new_quad = UnitRenderQuad::create(new_structure->components[i], ctx, feature.texture_name,
+                    auto new_quad = UnitRenderQuad::create(new_structure->components[i], ctx, feature.feature_name,
+                                                           feature.texture_name,
                                                            {feature.anchor_block.x,
                                                             -feature.anchor_block.y},
                                                            feature.position,
@@ -110,9 +113,9 @@ StructuresSystem::create_structure(std::shared_ptr<Blueprint> &blueprint, const 
     for (int j = 0; j < blueprint->get_units_properties().size(); j++) {
         for (BlueprintJoints::RevoluteJoint &joint: blueprint->get_units_properties()[j]->get_revolute_joints()) {
             std::shared_ptr<RigidBody> body_a = new_structure->units[j]->get_block(
-                    joint.component_block_a)->get_component()->rigid_body;
+                    joint.component_block_a)->get_weak_component().lock()->rigid_body;
             std::shared_ptr<RigidBody> body_b = new_structure->units[j]->get_block(
-                    joint.component_block_b)->get_component()->rigid_body;
+                    joint.component_block_b)->get_weak_component().lock()->rigid_body;
             b2RevoluteJointDef joint_def = b2DefaultRevoluteJointDef();
             b2Vec2 world_point = {dock_position.x / pixels_per_meter, -dock_position.y / pixels_per_meter};
             world_point += {float(joint.block_position.x) * block_side_size,
@@ -132,7 +135,7 @@ StructuresSystem::create_structure(std::shared_ptr<Blueprint> &blueprint, const 
         b2Body_SetAngularDamping(component->rigid_body->body_id, 1);
         b2Body_SetLinearDamping(component->rigid_body->body_id, 1);
     }
-    return structure_id;
+    return new_structure;
 }
 
 
@@ -145,56 +148,29 @@ void StructuresSystem::update(EngineContext &ctx) {
 }
 
 
-void StructuresSystem::crete_component_block(const sf::Vector2i &position, BlueprintBlock &block,
-                                             const std::shared_ptr<Component> &component) const {
-    float pixel_per_meter = world.lock()->get_pixel_per_meter();
-    b2ShapeDef shape_def = b2DefaultShapeDef();
-    shape_def.density = block.density;
-    shape_def.material.friction = block.friction;
-
-    b2Polygon polygon;
-    b2Vec2 vertices[4];
-    vertices[0] = {float(position.x) * block_side_size - block_side_size / 2,
-                   float(position.y) * block_side_size + block_side_size / 2};
-    vertices[1] = {float(position.x) * block_side_size - block_side_size / 2,
-                   float(position.y) * block_side_size - block_side_size / 2};
-    vertices[2] = {float(position.x) * block_side_size + block_side_size / 2,
-                   float(position.y) * block_side_size - block_side_size / 2};
-    vertices[3] = {float(position.x) * block_side_size + block_side_size / 2,
-                   float(position.y) * block_side_size + block_side_size / 2};
-    b2Hull hull = b2ComputeHull(vertices, 4);
-    polygon = b2MakePolygon(&hull, 0);
-
-    component->collision_blocks[position.y][position.x] = CollisionPolygon::create(component, component->rigid_body,
-                                                                                   shape_def,
-                                                                                   polygon, "BlockCollisionPolygon");
-    component->blocks[position.y][position.x] = std::make_shared<ComponentBlock>(position, component);
-    component->colliders[position.y][position.x] = UI::Collider::create(component, "BlockCollider");
-
-    std::vector<sf::Vector2f> collider_vertices({{-block_side_size / 2, -block_side_size / 2},
-                                                 {block_side_size / 2,  -block_side_size / 2},
-                                                 {block_side_size / 2,  block_side_size / 2},
-                                                 {-block_side_size / 2, block_side_size / 2}});
-    for (int i = 0; i < 4; i++) {
-        collider_vertices[i] *= pixel_per_meter;
-    }
-    component->colliders[position.y][position.x]->set_vertices(collider_vertices);
-    component->colliders[position.y][position.x]->set_position(
-            {float(position.x) * block_side_size * pixel_per_meter,
-             -float(position.y) * block_side_size * pixel_per_meter});
-}
-
-
-void StructuresSystem::destroy_structure(const unsigned int &structure_id) {
-
-    auto it = this->structures.find(structure_id);
-    if (it == this->structures.end()) {
-        std::cerr << "Destroying structures not found" << '\n';
-        return;
-    }
-    for (std::shared_ptr<Component> &component: it->second->components) {
+void StructuresSystem::destroy_structure(const std::shared_ptr<Structure> &structure) {
+    this->delete_structure(structure);
+    for (std::shared_ptr<Component> &component: structure->components) {
+        for (int y = 0; y < component->grid_size.y; y++) {
+            for (int x = 0; x < component->grid_size.x; x++) {
+                if (component->blocks[y][x] != nullptr) {
+                    world.lock()->get_blocks_system()->delete_block(component->blocks[y][x]);
+                }
+            }
+        }
+        world.lock()->get_components_system()->delete_component(component);
         world.lock()->get_world()->delete_node(component->rigid_body);
         world.lock()->delete_node(component);
+    }
+    for (std::shared_ptr<Unit> &unit: structure->units) {
+        world.lock()->get_units_system()->destroy_unit(unit);
+    }
+}
+
+void StructuresSystem::delete_structure(const std::shared_ptr<Structure> &structure) {
+    auto it = this->structures.find(structure->get_structure_id());
+    if (it == this->structures.end()) {
+        throw std::runtime_error("Deleting structures not found");
     }
     this->structures.erase(it);
 }

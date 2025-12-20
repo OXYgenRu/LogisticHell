@@ -47,10 +47,13 @@ public:
     create(const std::shared_ptr<Node> &parent, const std::shared_ptr<Inspector> &inspector, const std::string &node_id,
            int render_priority = 0);
 
-    explicit InspectorController(const std::shared_ptr<Node> &parent, const std::string &node_id,
-                                 int render_priority = 0)
-            : Controller(parent, node_id,
-                         render_priority) {}
+    explicit InspectorController(
+        const std::shared_ptr<Node> &parent,
+        const std::string &node_id,
+        int render_priority = 0
+    )
+        : Controller(parent, node_id, render_priority)
+    {}
 
     void on_key_release(sf::Event &event, EngineContext &ctx) override;
 };

@@ -31,6 +31,10 @@ public:
                                       const unsigned int &unit_index);
 
     std::shared_ptr<Unit> get_unit(const unsigned int &unit_id);
+
+    void destroy_unit(const std::shared_ptr<Unit> &unit);
+
+    void delete_unit(const std::shared_ptr<Unit> &unit);
 };
 
 #endif //LOGISTICHELL_UNITSSYSTEM_H

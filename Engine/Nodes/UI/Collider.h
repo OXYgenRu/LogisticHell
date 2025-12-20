@@ -5,6 +5,7 @@
 #ifndef LOGISTICHELL_COLLIDER_H
 #define LOGISTICHELL_COLLIDER_H
 
+#include <functional>
 #include "../Base/Node.h"
 #include "SFML/Graphics.hpp"
 

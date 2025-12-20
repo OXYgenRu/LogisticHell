@@ -21,6 +21,10 @@ public:
 
     const unsigned int &get_structure_id();
 
+    void delete_component(const std::shared_ptr<Component> &component);
+
+    void delete_unit(const std::shared_ptr<Unit> &unit);
+
     std::vector<std::shared_ptr<Unit>> units;
     std::vector<std::shared_ptr<Component>> components;
     std::shared_ptr<Blueprint> blueprint;

@@ -28,11 +28,11 @@ public:
 
     void update(EngineContext &ctx) override;
 
+    // TODO fields in public access?
     std::shared_ptr<Inspector> inspector;
     std::shared_ptr<UI::Collider> background_collider;
     std::shared_ptr<CameraNode> world_camera;
     std::shared_ptr<GameWorld> world;
-
 };
 
 

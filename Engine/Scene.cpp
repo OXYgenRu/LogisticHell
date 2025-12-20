@@ -14,5 +14,5 @@ int Scene::get_node_type() const {
 }
 
 void Scene::init_tree(EngineContext &ctx) {
-
+    // FIXME empty method
 }

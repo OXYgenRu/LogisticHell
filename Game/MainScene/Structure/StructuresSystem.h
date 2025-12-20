@@ -29,16 +29,14 @@ public:
     static void setup(const std::shared_ptr<StructuresSystem> &node, const std::shared_ptr<GameWorld> &world,
                       float block_side_size);
 
-    unsigned int
+    std::shared_ptr<Structure>
     create_structure(std::shared_ptr<Blueprint> &blueprint, const sf::Vector2f &dock_position, EngineContext &ctx);
 
-    void crete_component_block(const sf::Vector2i &position, BlueprintBlock &block,
-                               const std::shared_ptr<Component> &component) const;
+    void destroy_structure(const std::shared_ptr<Structure> &structure);
 
-    void destroy_structure(const unsigned int &structure_id);
+    void delete_structure(const std::shared_ptr<Structure> &structure);
 
     void update(EngineContext &ctx) override;
-
 
     std::weak_ptr<GameWorld> world;
     float block_side_size;

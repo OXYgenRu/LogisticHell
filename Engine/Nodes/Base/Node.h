@@ -44,12 +44,13 @@ public:
     bool get_update_flag() const;
 
 
-    [[nodiscard]] virtual int get_node_type() const;
+    [[nodiscard]] virtual int get_node_type() const; // TODO think about where else should you put [[nodiscard]
 
-    static std::string get_node_type_str(std::shared_ptr<Node> node);
+    static std::string get_node_type_str(std::shared_ptr<Node> node); // TODO method const
+                                                                      // method unused
 
 
-    virtual sf::Transformable &get_transformable();
+    virtual sf::Transformable &get_transformable(); // FIXME getter returning modifiable reference is BS
 
     void set_position(const sf::Vector2f &position);
 
@@ -57,13 +58,13 @@ public:
 
     void set_scale(float new_scale);
 
-    const sf::Vector2f &get_origin();
+    const sf::Vector2f &get_origin(); // TODO method const
 
-    const sf::Vector2f &get_position();
+    const sf::Vector2f &get_position(); // TODO method const
 
     void set_rotation(float angle);
 
-    float get_rotation();
+    float get_rotation(); // TODO method const
 
     void clear_container();
 
@@ -71,14 +72,17 @@ public:
 
     void delete_node(const std::shared_ptr<Node> &node);
 
-    std::string &get_node_id();
+    std::string &get_node_id(); // FIXME getter returning modifiable reference is BS
 
     int get_container_volume() const;
 
-    std::vector<std::shared_ptr<Node>> &get_container();
+    std::vector<std::shared_ptr<Node>> &get_container(); // FIXME getter returning modifiable reference is BS
 
+    void set_cached_recursive_transform(const sf::Transform &recursive_transform);
 
-    std::weak_ptr<Node> parent;
+    const sf::Transform &get_cashed_recursive_transform(); // TODO method const
+
+    std::weak_ptr<Node> parent; // TODO this field looks suspicious in public access
 
 private:
     int render_priority;
@@ -89,6 +93,7 @@ private:
     std::vector<std::shared_ptr<Node>> container;
 protected:
     std::string node_id;
+    sf::Transform cashed_recursive_transform;
     sf::Transformable transform;
 };
 

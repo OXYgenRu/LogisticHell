@@ -34,6 +34,8 @@ RigidBody::setup(const std::shared_ptr<RigidBody> &node, const std::shared_ptr<W
     node->set_origin(origin_sf);
     node->set_position(sf_position);
     node->set_rotation(-angle * 180.f / B2_PI);
+
+    std::cout << "[PhysicalWrapper] " << "Body created\n";
 }
 
 
@@ -68,4 +70,19 @@ void RigidBody::update(EngineContext &ctx) {
         this->set_position(sf_position);
         this->set_rotation(-angle * 180.f / B2_PI);
     }
+}
+
+std::optional<sf::Vector2f> RigidBody::get_b2_position() const {
+    if (!b2Body_IsValid(this->body_id)) {
+        return std::nullopt;
+    }
+    b2Vec2 body_center_of_mass = b2Body_GetWorldCenterOfMass(this->body_id);
+    return sf::Vector2f(body_center_of_mass.x, body_center_of_mass.y);
+}
+
+std::optional<float> RigidBody::get_b2_rotation() const {
+    if (!b2Body_IsValid(this->body_id)) {
+        return std::nullopt;
+    }
+    return b2Rot_GetAngle(b2Body_GetTransform(body_id).q);
 }

@@ -25,6 +25,12 @@ EditorController::EditorController(EngineContext &ctx, const std::shared_ptr<Doc
 
 void EditorController::on_mouse_release(sf::Event &event, EngineContext &ctx, const sf::Vector2f &local_position) {
     sf::Vector2i cell_position = this->get_grid_cell_position(ctx, local_position);
+//    if (event.mouseButton.button == sf::Mouse::Button::Middle) {
+//        this->editor_mode = EditorMode::Attachment;
+//        this->builder->find_blueprint_attachment_components();
+//        this->builder->clear_preview(ctx);
+//        this->builder->draw_building_preview(ctx);
+//    }
     switch (this->editor_mode) {
         case EditorMode::Attachment:
             this->builder->attach_unit(cell_position, ctx);

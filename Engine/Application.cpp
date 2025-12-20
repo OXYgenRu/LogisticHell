@@ -30,6 +30,7 @@ void Application::start() {
     sf::Event event{};
     std::shared_ptr<Node> scene = this->scene_system->currentScene;
     this->window->setFramerateLimit(this->frame_limit);
+    this->window->setKeyRepeatEnabled(false);
     this->texture_atlas->build();
     this->batch->set_texture(*this->texture_atlas->get_texture(), ctx);
     sf::Transform scene_transform;

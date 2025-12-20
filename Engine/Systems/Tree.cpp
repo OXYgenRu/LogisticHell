@@ -20,6 +20,7 @@ bool compare_bypass_by_priority(const BypassUnit &a, const BypassUnit &b) {
 
 void Tree::add_node(const std::shared_ptr<Node> &node, EngineContext &ctx, const sf::Transform &transform,
                     int render_priority) {
+    node->set_cached_recursive_transform(transform);
     if (this->free_tree_index == this->flatten_tree.size()) {
         this->flatten_tree.emplace_back(node, node->get_render_flag(), node->get_update_flag(), transform,
                                         render_priority);

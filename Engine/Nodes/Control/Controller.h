@@ -30,9 +30,6 @@ public:
     virtual void on_mouse_moved(sf::Event &event, EngineContext &ctx);
 
     virtual void on_mouse_wheel_scrolled(sf::Event &event, EngineContext &ctx);
-
-private:
-
 };
 
 

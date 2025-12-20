@@ -55,6 +55,7 @@ public:
 
     void set_blueprint(const std::shared_ptr<Blueprint> &new_blueprint, EngineContext &ctx);
 
+
     unsigned int unit_index;
     std::shared_ptr<Blueprint> blueprint;
     std::shared_ptr<BuildingGrid> building_grid;

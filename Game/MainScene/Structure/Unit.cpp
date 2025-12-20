@@ -26,6 +26,14 @@ void Unit::set_render_feature(const std::string &feature_name, const std::shared
     this->render_features[feature_name] = new_feature;
 }
 
+void Unit::delete_render_feature(const std::string &feature_name) {
+    auto it = (this->render_features).find(feature_name);
+    if (it == this->render_features.end()) {
+        return;
+    }
+    this->render_features.erase(it);
+}
+
 std::shared_ptr<ComponentBlock> Unit::get_block(const sf::Vector2i &position) {
     auto it = (this->blocks).find(position);
     if (it == this->blocks.end()) {
@@ -35,12 +43,24 @@ std::shared_ptr<ComponentBlock> Unit::get_block(const sf::Vector2i &position) {
 }
 
 
+void Unit::delete_block(const sf::Vector2i &position) {
+    auto it = (this->blocks).find(position);
+    if (it == this->blocks.end()) {
+        return;
+    }
+    (this->blocks).erase(it);
+}
+
 void Unit::set_joint(const std::string &joint_name, const std::shared_ptr<RevoluteJoint> &new_joint) {
     this->joints[joint_name] = new_joint;
 }
 
+std::unordered_map<sf::Vector2i, std::shared_ptr<ComponentBlock>> &Unit::get_blocks() {
+    return this->blocks;
+}
+
 Unit::~Unit() {
-    std::cout << "dest_unit" << '\n';
+    std::cout << "Unit destroyed" << '\n';
 }
 
 
@@ -54,4 +74,8 @@ const sf::Vector2i &Unit::get_position() {
 
 const unsigned int &Unit::get_unit_index() {
     return this->unit_index;
+}
+
+const unsigned int &Unit::get_unit_id() {
+    return this->unit_id;
 }

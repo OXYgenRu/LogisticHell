@@ -9,6 +9,7 @@
 //
 
 #include "../../World/GameWorld.h"
+#include "optional"
 
 sf::Vector2i get_grid_vector(const sf::Vector2i &vector, int rotation) {
     switch (rotation % 4) {
@@ -43,16 +44,16 @@ UnitsApi::UnitsApi(const std::shared_ptr<GameWorld> &world) {
     this->world = world;
 }
 
-void UnitsApi::apply_force(const unsigned int &unit_id, const sf::Vector2i &block_position,
-                           const sf::Vector2f &relative_position,
-                           const sf::Vector2f &force) {
+void UnitsApi::apply_local_force(const unsigned int &unit_id, const sf::Vector2i &block_position,
+                                 const sf::Vector2f &relative_position,
+                                 const sf::Vector2f &force) {
     auto unit = world.lock()->get_units_system()->get_unit(unit_id);
     sf::Vector2i relative_block_position = get_grid_vector(block_position, unit->get_rotation()) + unit->get_position();
     std::shared_ptr<ComponentBlock> block = unit->get_block(relative_block_position);
     if (block == nullptr) {
         return;
     }
-    std::shared_ptr<Component> component = block->get_component();
+    std::shared_ptr<Component> component = block->get_weak_component().lock();
     float block_side_size = world.lock()->get_structures_system()->block_side_size;
 
     sf::Vector2f force_point = {float(relative_block_position.x) * block_side_size,
@@ -66,3 +67,65 @@ void UnitsApi::apply_force(const unsigned int &unit_id, const sf::Vector2i &bloc
                   component->get_transformable().getTransform().transformPoint({0.f, 0.f});
     b2Body_ApplyForce(component->rigid_body->body_id, {world_force.x, -world_force.y}, b2_force_point, true);
 }
+
+
+void UnitsApi::apply_global_force(const unsigned int &unit_id, const sf::Vector2i &block_position,
+                                  const sf::Vector2f &relative_position,
+                                  const sf::Vector2f &force) {
+    auto unit = world.lock()->get_units_system()->get_unit(unit_id);
+    sf::Vector2i relative_block_position = get_grid_vector(block_position, unit->get_rotation()) + unit->get_position();
+    std::shared_ptr<ComponentBlock> block = unit->get_block(relative_block_position);
+    if (block == nullptr) {
+        return;
+    }
+    std::shared_ptr<Component> component = block->get_weak_component().lock();
+    float block_side_size = world.lock()->get_structures_system()->block_side_size;
+
+    sf::Vector2f force_point = {float(relative_block_position.x) * block_side_size,
+                                float(relative_block_position.y) * block_side_size};
+    force_point += {relative_position.x * block_side_size,
+                    relative_position.y * block_side_size};
+    b2Vec2 b2_force_point = b2Body_GetWorldPoint(component->rigid_body->body_id, {force_point.x, force_point.y});
+    b2Body_ApplyForce(component->rigid_body->body_id, {force.x, force.y}, b2_force_point, true);
+}
+
+void UnitsApi::set_unit_behavior(const unsigned int &unit_index, const std::shared_ptr<UnitBehavior> &behavior) {
+    world.lock()->get_behavior_storage()->set_unit_behavior(unit_index, behavior);
+}
+
+const std::string &UnitsApi::get_unit_name(unsigned int unit_index) {
+    return world.lock()->get_blueprints_indexer()->get_blueprint_name(unit_index);
+}
+
+unsigned int UnitsApi::get_unit_index(const std::string &unit_name) {
+    return world.lock()->get_blueprints_indexer()->get_blueprint_index(unit_name);
+}
+
+std::optional<unsigned int> UnitsApi::get_block(const unsigned int &unit_id, const sf::Vector2i &block_position) {
+    auto unit = world.lock()->get_units_system()->get_unit(unit_id);
+    sf::Vector2i relative_block_position = get_grid_vector(block_position, unit->get_rotation()) + unit->get_position();
+    std::shared_ptr<ComponentBlock> block = unit->get_block(relative_block_position);
+    if (block == nullptr) {
+        return std::nullopt;
+    }
+    return block->get_block_id();
+}
+
+//sf::Vector2f UnitsApi::get_world_point(const unsigned int &unit_id, const sf::Vector2i &block_position,
+//                                       const sf::Vector2f &relative_position) {
+//    auto unit = world.lock()->get_units_system()->get_unit(unit_id);
+//    sf::Vector2i relative_block_position = get_grid_vector(block_position, unit->get_rotation()) + unit->get_position();
+//    std::shared_ptr<ComponentBlock> block = unit->get_block(relative_block_position);
+//    if (block == nullptr) {
+//        return;
+//    }
+//    std::shared_ptr<Component> component = block->get_weak_component().lock();
+//    float block_side_size = world.lock()->get_structures_system()->block_side_size;
+//
+//    sf::Vector2f force_point = {float(relative_block_position.x) * block_side_size,
+//                                float(relative_block_position.y) * block_side_size};
+//    force_point += {relative_position.x * block_side_size,
+//                    relative_position.y * block_side_size};
+//    b2Vec2 b2_force_point = b2Body_GetWorldPoint(component->rigid_body->body_id, {force_point.x, force_point.y});
+//    return {b2_force_point.x, b2_force_point.y};
+//}

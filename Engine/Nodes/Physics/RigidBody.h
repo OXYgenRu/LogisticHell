@@ -6,10 +6,10 @@
 #define LOGISTICHELL_RIGIDBODY_H
 
 #include <box2d/box2d.h>
+#include <optional>
 #include "../Base/Node.h"
 #include "World.h"
 #include "RevoluteJoint.h"
-
 
 class RigidBody : public Node {
 public:
@@ -28,6 +28,9 @@ public:
 
     void update(EngineContext &ctx);
 
+    std::optional<sf::Vector2f> get_b2_position() const;
+
+    std::optional<float> get_b2_rotation() const;
 
     b2BodyId body_id;
 

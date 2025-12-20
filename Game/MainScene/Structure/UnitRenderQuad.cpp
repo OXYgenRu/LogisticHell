@@ -6,20 +6,23 @@
 #include "../../../Engine/Application.h"
 
 std::shared_ptr<UnitRenderQuad>
-UnitRenderQuad::create(const std::shared_ptr<Node> &parent, EngineContext &ctx, const std::string &texture_name,
+UnitRenderQuad::create(const std::shared_ptr<Node> &parent, EngineContext &ctx, const std::string &feature_name,
+                       const std::string &texture_name,
                        const sf::Vector2i &anchor_block,
                        const sf::Vector2f &position, const std::vector<sf::Vector2f> &vertices, float angle,
                        float sf_block_side_size, const std::string &node_id,
                        int render_priority) {
     auto node = std::make_shared<UnitRenderQuad>(parent, node_id, render_priority);
     TexturedQuad::setup(node);
-    UnitRenderQuad::setup(node, ctx, texture_name, anchor_block, position, vertices, angle, sf_block_side_size);
+    UnitRenderQuad::setup(node, ctx, feature_name, texture_name, anchor_block, position, vertices, angle,
+                          sf_block_side_size);
     parent->add_node(node);
     return node;
 }
 
 void
-UnitRenderQuad::setup(const std::shared_ptr<UnitRenderQuad> &node, EngineContext &ctx, const std::string &texture_name,
+UnitRenderQuad::setup(const std::shared_ptr<UnitRenderQuad> &node, EngineContext &ctx, const std::string &feature_name,
+                      const std::string &texture_name,
                       const sf::Vector2i &anchor_block, const sf::Vector2f &position,
                       const std::vector<sf::Vector2f> &vertices, float angle, float sf_block_side_size) {
     node->set_texture(texture_name, 0, ctx);
@@ -31,9 +34,14 @@ UnitRenderQuad::setup(const std::shared_ptr<UnitRenderQuad> &node, EngineContext
     node->feature_transform.translate({position.x * sf_block_side_size, -position.y * sf_block_side_size});
     node->feature_transform.rotate(angle);
     node->set_position({float(anchor_block.x) * sf_block_side_size, float(anchor_block.y) * sf_block_side_size});
+    node->feature_name = feature_name;
 }
 
 void UnitRenderQuad::render(EngineContext &ctx, sf::RenderStates &states) {
     ctx.app->batch->set_texture(*ctx.app->texture_atlas->get_texture(), ctx);
     ctx.app->batch->add_vertices(this->quad, states.transform * this->feature_transform);
+}
+
+const std::string &UnitRenderQuad::get_feature_name() const {
+    return this->feature_name;
 }

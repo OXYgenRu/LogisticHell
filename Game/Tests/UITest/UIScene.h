@@ -13,8 +13,8 @@
 
 class UIScene : public Scene {
 public:
-    static std::shared_ptr<UIScene> create(const std::string &node_id) {
-        auto node = std::make_shared<UIScene>(node_id);
+    static std::shared_ptr<UIScene> create(const std::string &node_id) { // TODO override
+        auto node = std::make_shared<UIScene>(node_id); // TODO maybe move definition to .cpp
         return node;
     }
 

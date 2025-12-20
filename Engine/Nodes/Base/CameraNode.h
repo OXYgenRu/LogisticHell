@@ -12,7 +12,7 @@
 
 class CameraNode : public Node {
 public:
-    static std::shared_ptr<CameraNode>
+    static std::shared_ptr<CameraNode> // TODO make singleton, e.g. for EngineContext
     create(const std::shared_ptr<Node> &parent, EngineContext &ctx, const std::string &node_id,
            int render_priority = 0);
 
@@ -26,14 +26,14 @@ public:
 
     void set_locked(bool is_locked);
 
-    float get_zoom();
+    float get_zoom(); // TODO method const
 
     int get_node_type() const override;
 
-    const sf::Transform &get_transform();
+    const sf::Transform &get_transform(); // TODO method const
 
-    std::shared_ptr<CameraController> camera_controller;
-    float zoom;
+    std::shared_ptr<CameraController> camera_controller; // TODO field in public access?
+    float zoom; // TODO field in public access?
 private:
     bool locked;
 };

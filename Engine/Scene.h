@@ -11,9 +11,9 @@
 
 class Scene : public Node {
 public:
-    Scene(const std::string &node_id) : Node(nullptr,node_id) {}
+    Scene(const std::string &node_id) : Node(nullptr, node_id) {}
 
-    static std::shared_ptr<Scene> create(const std::string &node_id);
+    static std::shared_ptr<Scene> create(const std::string &node_id); // TODO override
 
     int get_node_type() const override;
 

@@ -5,18 +5,18 @@
 #include "SceneSystem.h"
 #include "../Application.h"
 
-void SceneSystem::registerScene(int id, SceneFactory factory) {
+void SceneSystem::registerScene(int id, SceneFactory factory) { // TODO const and const&
     factories[id] = factory;
 }
 
 void SceneSystem::set_new_scene(int id, EngineContext &ctx) {
     auto it = factories.find(id);
-    if (it != factories.end()) {
-        need_to_set_new_scene = true;
-        selected_scene_id = id;
-    } else {
+    if (it == factories.end()) {
         std::cout << "TestScene ID " << id << " not found\n";
+        return;
     }
+    this->need_to_set_new_scene = true;
+    this->selected_scene_id = id;
 }
 
 void SceneSystem::set_loaded_scene(int id, EngineContext &ctx) {
