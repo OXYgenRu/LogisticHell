@@ -33,6 +33,8 @@ public:
 
     void update(EngineContext &ctx) override;
 
+    unsigned int get_id();
+
     std::optional<sf::Vector2f> get_b2_position() const;
 
     std::optional<float> get_b2_rotation() const;

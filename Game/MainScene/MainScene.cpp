@@ -10,6 +10,8 @@
 #include "../../Engine/Tools.h"
 #include "Player/Player.h"
 #include "../ContentPacks/BasePack.h"
+#include "../ContentPacks/LocalPlayer.h"
+
 
 //class TestWPusherInput : public InputListener {
 //public:
@@ -209,7 +211,7 @@ void MainScene::init_tree(EngineContext &ctx) {
 //    auto quad = TexturedQuad::create(entity, "EntityQuad");
 //    quad->set_texture("white", 0, ctx);
 //    quad->set_quad(Tools::get_rectangle({0, 0}, {2, 2}, world->get_pixel_per_meter()));
-    world->get_content_packs_system()->register_content_pack<BasePack>("base_pack");
+    world->get_content_packs_system()->register_content_pack<LocalPlayer>("LocalPlayer");
     world->open();
 }
 

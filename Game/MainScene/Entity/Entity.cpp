@@ -60,6 +60,9 @@ void Entity::update(EngineContext &ctx) {
     this->set_origin(this->rigid_body->get_origin());
 }
 
+unsigned int Entity::get_id() {
+    return entity_id;
+}
 
 std::optional<sf::Vector2f> Entity::get_b2_position() const {
     return this->rigid_body->get_b2_position();
