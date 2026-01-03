@@ -36,8 +36,17 @@ GameWorld::setup(const std::shared_ptr<GameWorld> &node, EngineContext &ctx, con
     node->api = std::make_shared<Api>(node, ctx);
 }
 
-void GameWorld::open() {
-    this->content_packs_system->on_world_open();
+void GameWorld::open(EngineContext &ctx) {
+    this->content_packs_system->load_content_packs(ctx);
+    try {
+        this->behavior_storage->on_world_open();
+    }
+    catch (const SystemsExceptions::UnitBehaviorIsNull &e) {
+        std::cerr << "[World::open]::UnitBehaviorStorage: behavior of unit '" +
+                     blueprints_indexer->get_blueprint_name(e.unit_index()) +
+                     "' not found, check behavior loading in content pack.\n";
+        exit(0);
+    }
 }
 
 const std::shared_ptr<World> &GameWorld::get_world() {

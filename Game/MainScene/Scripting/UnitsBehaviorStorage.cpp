@@ -17,3 +17,11 @@ std::shared_ptr<UnitBehavior> &UnitsBehaviorStorage::get_unit_behavior(const uns
     }
     return it->second;
 }
+
+void UnitsBehaviorStorage::on_world_open() {
+    for (auto &to: this->units) {
+        if (to.second == nullptr) {
+            throw SystemsExceptions::UnitBehaviorIsNull(to.first, "");
+        }
+    }
+}

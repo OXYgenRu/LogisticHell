@@ -7,10 +7,14 @@
 
 
 #include <optional>
+#include <filesystem>
 #include "../../../Engine/Nodes/Base/Node.h"
 #include "ContentPack.h"
+#include "../../../Engine/json.hpp"
 
 class GameWorld;
+
+enum class BlockType : uint8_t;
 
 namespace ContentPacks {
     enum class DependenciesResolutionStatus {
@@ -51,8 +55,48 @@ namespace ContentPacks {
             return loading_order;
         }
     };
+    namespace Load {
+        void require_condition(bool condition, const std::string &message);
+
+        const nlohmann::json &get_json_field(const nlohmann::json &root, const char *field);
+
+        int get_json_int(const nlohmann::json &root, const char *field);
+
+        float get_json_float(const nlohmann::json &root, const char *field);
+
+        std::string get_json_string(const nlohmann::json &root, const char *field);
+
+        template<typename T, size_t N>
+        std::array<T, N> get_json_array(const nlohmann::json &root, const char *field) {
+            const auto &array = root.at(field);
+            require_condition(array.is_array(), "'" + std::string(field) + "' must be an array.");
+            require_condition(array.size() == N,
+                              "array at '" + std::string(field) + "' must have size " + std::to_string(N) + ".");
+            std::array<T, N> out{};
+            for (size_t i = 0; i < N; i++) {
+                require_condition(array[i].is_number(),
+                                  "array at '" + std::string(field) + "', element at index " + std::to_string(i) +
+                                  " must be a number.");
+                out[i] = array[i].get<T>();
+            }
+            return out;
+        }
+
+        namespace Unit {
+            const std::vector<std::string> available_block_types = {"BusyAttachable", "BusyLocked", "Empty"};
+
+            bool validate_block_type(const std::string &type);
+
+            BlockType parse_block_type(const std::string &type);
+
+            bool validate_block_position(const std::string &key);
+
+            std::pair<int, int> parse_block_position(const std::string &key);
+        }
+    }
 
 }
+
 
 class ContentPacksSystem : public Node {
 private:
@@ -64,6 +108,10 @@ private:
     void register_namespace(const std::string &pack_name);
 
     ContentPacks::DependenciesResolutionResult resolve_dependencies();
+
+    void link_pack_data(const std::shared_ptr<ContentPacks::ContentPack> &pack);
+
+    void load_unit(const std::string &pack_name, const std::filesystem::path &unit);
 
 public:
     static std::shared_ptr<ContentPacksSystem>
@@ -91,7 +139,7 @@ public:
 
     void update(EngineContext &ctx) override;
 
-    void on_world_open();
+    void load_content_packs(EngineContext &ctx);
 };
 
 

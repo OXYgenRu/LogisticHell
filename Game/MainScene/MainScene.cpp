@@ -11,6 +11,8 @@
 #include "Player/Player.h"
 #include "../ContentPacks/BasePack.h"
 #include "../ContentPacks/LocalPlayer.h"
+#include "../ContentPacks/PlayerEntity.h"
+#include "../ContentPacks/JointPack.h"
 
 
 //class TestWPusherInput : public InputListener {
@@ -151,36 +153,51 @@ void MainScene::init_tree(EngineContext &ctx) {
                                                   test_a_pusher_properties, std::make_shared<TestAPusher>());
 
 
-    Blueprint joint({1, 3}, 0);
-    joint.add_component()->set_block({0, 0},
-                                     BlueprintBlock(BlockType::BusyAttachable, 1000, 0.3));
-    joint.components[0]->set_block({0, 1},
-                                   BlueprintBlock(BlockType::BusyLocked, 1000, 0.3));
-    joint.components[0]->set_body_type(ComponentBodyType::Static);
-    joint.add_component()->set_block({0, 2},
-                                     BlueprintBlock(BlockType::BusyAttachable, 1000, 0.3));
-    joint.components[1]->set_block({0, 1},
-                                   BlueprintBlock(BlockType::BusyLocked, 1000, 0.3));
-    joint.components[1]->set_body_type(ComponentBodyType::Dynamic);
-    std::shared_ptr<UnitProperties> joint_properties = std::make_shared<UnitProperties>(sf::Vector2i(0, 0), 0);
-    joint_properties->add_render_feature(UnitRenderFeature("0_0", "joint-0_0", {0, 0}, 1, {-0.5, -0.5}, {1, 1}, 0));
-    joint_properties->add_render_feature(UnitRenderFeature("0_1", "joint-0_1", {0,
-                                                                                0}, 1, {-0.5, 0.5}, {1, 1}, 0
-    ));
-    joint_properties->add_render_feature(UnitRenderFeature("0_2", "joint-0_2", {0,
-                                                                                2}, 1, {-0.5, -0.5}, {1, 1}, 0));
-    joint_properties->add_render_feature(
-            UnitRenderFeature("0_0-background", "joint-background-0_0", {0, 0}, 0, {-0.5, -0.5}, {1, 1}, 0));
-    joint_properties->add_render_feature(UnitRenderFeature("0_1-background", "joint-background-0_1", {0,
-                                                                                                      2}, 0,
-                                                           {-0.5, -1.5}, {1, 1}, 0
-    ));
-    joint_properties->add_render_feature(UnitRenderFeature("0_2-background", "joint-background-0_2", {0,
-                                                                                                      2}, 0,
-                                                           {-0.5, -0.5}, {1, 1}, 0));
-    joint_properties->add_revolute_joint(BlueprintJoints::RevoluteJoint("1", {0, 1}, {0, 0}, {0, 2}));
 
-    world->get_blueprints_loader()->register_unit("joint", joint, joint_properties, std::make_shared<UnitBehavior>());
+
+
+
+
+
+
+
+
+
+//    Blueprint joint({1, 3}, 0);
+//    joint.add_component()->set_block({0, 0},
+//                                     BlueprintBlock(BlockType::BusyAttachable, 1000, 0.3));
+//    joint.components[0]->set_block({0, 1},
+//                                   BlueprintBlock(BlockType::BusyLocked, 1000, 0.3));
+//    joint.components[0]->set_body_type(ComponentBodyType::Static);
+//    joint.add_component()->set_block({0, 2},
+//                                     BlueprintBlock(BlockType::BusyAttachable, 1000, 0.3));
+//    joint.components[1]->set_block({0, 1},
+//                                   BlueprintBlock(BlockType::BusyLocked, 1000, 0.3));
+//    joint.components[1]->set_body_type(ComponentBodyType::Dynamic);
+//    std::shared_ptr<UnitProperties> joint_properties = std::make_shared<UnitProperties>(sf::Vector2i(0, 0), 0);
+//    joint_properties->add_render_feature(UnitRenderFeature("0_0", "joint-0_0", {0, 0}, 1, {-0.5, -0.5}, {1, 1}, 0));
+//    joint_properties->add_render_feature(UnitRenderFeature("0_1", "joint-0_1", {0,
+//                                                                                0}, 1, {-0.5, 0.5}, {1, 1}, 0
+//    ));
+//    joint_properties->add_render_feature(UnitRenderFeature("0_2", "joint-0_2", {0,
+//                                                                                2}, 1, {-0.5, -0.5}, {1, 1}, 0));
+//    joint_properties->add_render_feature(
+//            UnitRenderFeature("0_0-background", "joint-background-0_0", {0, 0}, 0, {-0.5, -0.5}, {1, 1}, 0));
+//    joint_properties->add_render_feature(UnitRenderFeature("0_1-background", "joint-background-0_1", {0,
+//                                                                                                      2}, 0,
+//                                                           {-0.5, -1.5}, {1, 1}, 0
+//    ));
+//    joint_properties->add_render_feature(UnitRenderFeature("0_2-background", "joint-background-0_2", {0,
+//                                                                                                      2}, 0,
+//                                                           {-0.5, -0.5}, {1, 1}, 0));
+//    joint_properties->add_revolute_joint(BlueprintJoints::RevoluteJoint("1", {0, 1}, {0, 0}, {0, 2}));
+//
+//    world->get_blueprints_loader()->register_unit("joint", joint, joint_properties, std::make_shared<UnitBehavior>());
+//
+
+
+
+
 
 
     Blueprint construction_block_static_blueprint({1, 1}, 0);
@@ -211,8 +228,10 @@ void MainScene::init_tree(EngineContext &ctx) {
 //    auto quad = TexturedQuad::create(entity, "EntityQuad");
 //    quad->set_texture("white", 0, ctx);
 //    quad->set_quad(Tools::get_rectangle({0, 0}, {2, 2}, world->get_pixel_per_meter()));
-    world->get_content_packs_system()->register_content_pack<LocalPlayer>("LocalPlayer");
-    world->open();
+    world->get_content_packs_system()->register_content_pack<BasePack>("BasePack");
+    world->get_content_packs_system()->register_content_pack<JointPack>("JointPack");
+//    world->get_content_packs_system()->register_content_pack<PlayerEntity>("PlayerEntity");
+    world->open(ctx);
 }
 
 void MainScene::update(EngineContext &ctx) {

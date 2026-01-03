@@ -9,7 +9,7 @@
 #include "memory"
 
 
-enum class BlockType {
+enum class BlockType : uint8_t {
     Empty,
     BusyAttachable,
     BusyLocked

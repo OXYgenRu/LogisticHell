@@ -24,6 +24,7 @@ Application::Application(const sf::VideoMode &videoMode, const std::string &titl
 }
 
 void Application::start() {
+    std::cerr.tie(&std::cout);
     this->window = new sf::RenderWindow(this->video_mode, this->title, sf::Style::Titlebar | sf::Style::Close);
     this->window->setVerticalSyncEnabled(true);
     sf::Clock clock;

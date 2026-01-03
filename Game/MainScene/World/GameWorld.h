@@ -52,7 +52,7 @@ public:
     static void
     setup(const std::shared_ptr<GameWorld> &node, EngineContext &ctx, const std::shared_ptr<MainScene> &scene);
 
-    void open();
+    void open(EngineContext &ctx);
 
     const std::shared_ptr<World> &get_world();
 
